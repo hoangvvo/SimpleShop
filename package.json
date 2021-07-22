@@ -1,0 +1,74 @@
+{
+  "name": "simpleshop",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint .",
+    "format": "prettier . -w --ignore-path ./.eslintignore"
+  },
+  "dependencies": {
+    "@gorhom/bottom-sheet": "^4.0.0-alpha.20",
+    "@react-native-async-storage/async-storage": "^1.15.5",
+    "@react-native-clipboard/clipboard": "^1.8.2",
+    "@react-native-picker/picker": "^1.16.3",
+    "@react-navigation/material-bottom-tabs": "^6.0.0-next.16",
+    "@react-navigation/native": "^6.0.0-next.15",
+    "@react-navigation/stack": "^6.0.0-next.29",
+    "deepmerge": "^4.2.2",
+    "i18next": "^20.3.3",
+    "react": "17.0.2",
+    "react-hook-form": "^7.11.0",
+    "react-i18next": "^11.11.2",
+    "react-native": "0.64.2",
+    "react-native-document-picker": "^5.2.0",
+    "react-native-fs": "^2.18.0",
+    "react-native-gesture-handler": "^1.10.3",
+    "react-native-localize": "^2.1.1",
+    "react-native-paper": "^4.9.2",
+    "react-native-reanimated": "^2.2.0",
+    "react-native-restart": "^0.0.22",
+    "react-native-safe-area-context": "^3.2.0",
+    "react-native-screens": "^3.4.0",
+    "react-native-sqlite-storage": "^5.0.0",
+    "react-native-vector-icons": "^8.1.0",
+    "react-query": "^3.19.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/runtime": "^7.14.6",
+    "@react-native-community/eslint-config": "^3.0.0",
+    "@types/jest": "^26.0.24",
+    "@types/react-native": "^0.64.12",
+    "@types/react-native-sqlite-storage": "^5.0.1",
+    "@types/react-native-vector-icons": "^6.4.8",
+    "@types/react-test-renderer": "^17.0.1",
+    "babel-jest": "^27.0.6",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "eslint": "^7.30.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^27.0.6",
+    "metro-react-native-babel-preset": "^0.66.1",
+    "prettier": "^2.3.2",
+    "react-test-renderer": "17.0.2",
+    "typescript": "^4.3.5"
+  },
+  "resolutions": {
+    "@types/react": "^17"
+  },
+  "jest": {
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}

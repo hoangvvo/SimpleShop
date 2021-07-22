@@ -1,0 +1,95 @@
+{
+  "dashboard": {
+    "title": "Dashboard"
+  },
+  "order": {
+    "title": "Order",
+    "title_plural": "Orders",
+    "order_number_num": "Order #{{id}}",
+    "per_price": "Price",
+    "amount": "Amount",
+    "loc_text": "Location",
+    "note": "Note",
+    "has_paid": "Paid",
+    "has_delivered": "Delivered",
+    "created_at": "Created at",
+    "total": "Total",
+    "sell": "Sell",
+    "buy": "Buy"
+  },
+  "order_editor": {
+    "title_edit": "Edit Order",
+    "title_create": "New Order",
+    "select_product": "Select Product",
+    "order_no_products": "This order has no products",
+    "product_list": "Product List"
+  },
+  "product": {
+    "title": "Product",
+    "title_plural": "Products",
+    "name": "Name",
+    "description": "Description",
+    "default_sell_price": "Default Sell Price",
+    "default_buy_price": "Default Buy Price"
+  },
+  "product_editor": {
+    "title_edit": "Edit Product",
+    "title_create": "New Product"
+  },
+  "error": {
+    "something_went_wrong": "Something went wrong",
+    "general_description": "Sorry, an error has occurred. Please restart this application and try again."
+  },
+  "entity": {
+    "has_been_created": "{{ name }} has been created",
+    "has_been_updated": "{{ name }} has been updated",
+    "has_been_deleted": "{{ name }} has been deleted",
+    "create": "Create",
+    "update": "Update",
+    "delete": "Delete",
+    "delete_name": "Delete {{ name }}"
+  },
+  "form": {
+    "validate_messages": {
+      "default": "Validation error on field '{{ name }}'",
+      "required": "'{{ name }}' is required",
+      "pattern": "This field is not valid",
+      "min": "'{{ name }}' cannot be less than {{ min }}",
+      "max": "'{{ name }}' cannot be greater than {{ max }}",
+      "minLength": "'{{ name }}' must be at least {{ minLength }} characters",
+      "maxLength": "'{{ name }}' cannot be longer than {{ maxLength }} characters"
+    },
+    "form_is_invalid": "The inputs are invalid"
+  },
+  "action": {
+    "no": "No",
+    "yes": "Yes",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "select": "Select",
+    "done": "Done",
+    "not_undoable": "This action cannot be undone."
+  },
+  "stats": {
+    "profit": "Profit"
+  },
+  "time": {
+    "today": "Today"
+  },
+  "settings": {
+    "title": "Settings",
+    "import": {
+      "title": "Import data",
+      "prompt": "The database will be imported and the app will restart."
+    },
+    "export": {
+      "title": "Export data",
+      "ok_message": "Database has been exported to {{ path }}"
+    }
+  },
+  "language": {
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}

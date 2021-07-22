@@ -1,0 +1,95 @@
+{
+  "dashboard": {
+    "title": "Tổng quan"
+  },
+  "order": {
+    "title": "Đơn hàng",
+    "title_plural": "Đơn hàng",
+    "order_number_num": "Đơn hàng #{{id}}",
+    "per_price": "Giá",
+    "amount": "Số lượng",
+    "loc_text": "Địa chỉ",
+    "note": "Ghi chú",
+    "has_paid": "Đã thanh toán",
+    "has_delivered": "Đã giao hàng",
+    "created_at": "Tạo lúc",
+    "total": "Tổng",
+    "sell": "Bán",
+    "buy": "Mua"
+  },
+  "order_editor": {
+    "title_edit": "Chỉnh sửa đơn hàng",
+    "title_create": "Tạo đơn hàng",
+    "select_product": "Chọn sản phẩm",
+    "order_no_products": "Đơn hàng này không có sản phẩm",
+    "product_list": "Danh sách sản phẩm"
+  },
+  "product": {
+    "title": "Sản phẩm",
+    "title_plural": "Sản phẩm",
+    "name": "Tên",
+    "description": "Mô tả",
+    "default_sell_price": "Giá bán mặc định",
+    "default_buy_price": "Giá mua mặc định"
+  },
+  "product_editor": {
+    "title_edit": "Chỉnh sửa sản phẩm",
+    "title_create": "Tạo sản phẩm"
+  },
+  "error": {
+    "something_went_wrong": "Có gì đó đã xảy ra",
+    "general_description": "Đã có lỗi xảy ra. Vui lòng khởi động lại ứng dụng."
+  },
+  "entity": {
+    "has_been_created": "{{ name }} đã được tạo",
+    "has_been_updated": "{{ name }} đã được cập nhật",
+    "has_been_deleted": "{{ name }} đã được xóa",
+    "create": "Tạo",
+    "update": "Cập nhật",
+    "delete": "Xóa",
+    "delete_name": "Xóa {{ name }}"
+  },
+  "form": {
+    "validate_messages": {
+      "default": "Lỗi xảy ra ở trường '{{ name }}'",
+      "required": "'{{ name }}' là bắt buộc",
+      "pattern": "Trường này không hợp lệ",
+      "min": "'{{ name }}' không thể thấp hơn {{ min }}",
+      "max": "'{{ name }}' Không thể cao hơn {{ max }}",
+      "minLength": "'{{ name }}' không thể ngắn hơn {{ minLength }} kí tự",
+      "maxLength": "'{{ name }}' không thể dài hơn {{ maxLength }} kí tự"
+    },
+    "form_is_invalid": "Các trường không hợp lệ"
+  },
+  "action": {
+    "no": "Không",
+    "yes": "Có",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "cancel": "Hủy bỏ",
+    "select": "Chọn",
+    "done": "Xong",
+    "not_undoable": "Hành động này không thể được hoàn tác."
+  },
+  "stats": {
+    "profit": "Lợi nhuận"
+  },
+  "time": {
+    "today": "Hôm nay"
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "import": {
+      "title": "Nhập dữ liệu",
+      "prompt": "Cơ sở dữ liệu sẽ được nhập và ứng dụng sẽ khởi động lại."
+    },
+    "export": {
+      "title": "Xuất dữ liệu",
+      "ok_message": "Cơ sở dữ liệu đã được xuất ra tại {{ path }}"
+    }
+  },
+  "language": {
+    "en": "English",
+    "vi": "Tiếng Việt"
+  }
+}
