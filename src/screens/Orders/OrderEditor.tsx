@@ -11,9 +11,8 @@ import {
 } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import { Appbar } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamList, RouteName } from "screens/types";
 import { Order } from "services/order";
 import {
@@ -147,7 +146,7 @@ export const OrderEditorScreen: FC<
   return statusGetEdit === "loading" ? (
     <LoadingScreen />
   ) : (
-    <SafeAreaView style={screenStyles.root}>
+    <View style={screenStyles.root}>
       <ErrorSnackbar error={errorCreate || errorEdit} onDismiss={resetMutate} />
       <ScrollView style={screenStyles.content}>
         <OrderDetailEditor
@@ -162,6 +161,6 @@ export const OrderEditorScreen: FC<
         setOrderProducts={setOrderProducts}
         isBuyOrder={isBuyOrder}
       />
-    </SafeAreaView>
+    </View>
   );
 };

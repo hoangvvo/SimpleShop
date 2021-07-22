@@ -5,13 +5,17 @@ import { useLanguageInit } from "i18n";
 import { FC, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { useTheme } from "react-native-paper";
+import {
+  ColorSchemeContext,
+  useColorSchemaSettingsInit,
+} from "styles/colorScheme";
 import { styles as screenStyles } from "styles/screens";
 
 export const InitComponent: FC = ({ children }) => {
   const [error, setError] = useState<Error | null>(null);
   const [loadingSqlite, sqlite] = useSQLiteInit(setError);
   const [loadingLanguage] = useLanguageInit(setError);
-
+  const [, colorSchemeValue] = useColorSchemaSettingsInit();
   const loading = loadingSqlite || loadingLanguage;
   const theme = useTheme();
 
@@ -40,6 +44,10 @@ export const InitComponent: FC = ({ children }) => {
     );
 
   return (
-    <SQLiteContext.Provider value={sqlite!}>{children}</SQLiteContext.Provider>
+    <ColorSchemeContext.Provider value={colorSchemeValue}>
+      <SQLiteContext.Provider value={sqlite!}>
+        {children}
+      </SQLiteContext.Provider>
+    </ColorSchemeContext.Provider>
   );
 };

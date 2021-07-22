@@ -79,6 +79,8 @@
   },
   "settings": {
     "title": "Cài đặt",
+    "title_general": "Chung",
+    "title_data": "Dữ liệu",
     "import": {
       "title": "Nhập dữ liệu",
       "prompt": "Cơ sở dữ liệu sẽ được nhập và ứng dụng sẽ khởi động lại."
@@ -86,9 +88,16 @@
     "export": {
       "title": "Xuất dữ liệu",
       "ok_message": "Cơ sở dữ liệu đã được xuất ra tại {{ path }}"
+    },
+    "color_scheme": {
+      "title": "Chủ đề",
+      "follow_system": "Theo hệ thống",
+      "light": "Sáng",
+      "dark": "Tối"
     }
   },
   "language": {
+    "title": "Ngôn ngữ",
     "en": "English",
     "vi": "Tiếng Việt"
   }

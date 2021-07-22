@@ -79,6 +79,8 @@
   },
   "settings": {
     "title": "Settings",
+    "title_general": "General",
+    "title_data": "Data",
     "import": {
       "title": "Import data",
       "prompt": "The database will be imported and the app will restart."
@@ -86,9 +88,16 @@
     "export": {
       "title": "Export data",
       "ok_message": "Database has been exported to {{ path }}"
+    },
+    "color_scheme": {
+      "title": "Theme",
+      "follow_system": "Follow system",
+      "light": "Light",
+      "dark": "Dark"
     }
   },
   "language": {
+    "title": "Language",
     "en": "English",
     "vi": "Tiếng Việt"
   }

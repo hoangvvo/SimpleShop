@@ -7,7 +7,6 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
 import { Appbar, TextInput } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamList, RouteName } from "screens/types";
 import { Product } from "services/product";
 import {
@@ -115,7 +114,7 @@ export const ProductEditorScreen: FC<
   }, [editingId, navigation, t, disableEditing, onSubmit]);
 
   return (
-    <SafeAreaView style={screenStyles.root}>
+    <View style={screenStyles.root}>
       <ErrorSnackbar error={errorCreate || errorEdit} onDismiss={resetMutate} />
       {statusGetEdit === "loading" ? (
         <LoadingScreen />
@@ -229,6 +228,6 @@ export const ProductEditorScreen: FC<
           {dataGetEdit && <ProductDelete product={dataGetEdit} />}
         </ScrollView>
       )}
-    </SafeAreaView>
+    </View>
   );
 };

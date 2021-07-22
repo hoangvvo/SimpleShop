@@ -1,5 +1,8 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { CustomBackdropModal } from "components/BottomSheet";
+import {
+  CustomBackdropModal,
+  CustomBackgroundComponent,
+} from "components/BottomSheet";
 import { LoadingScreen } from "components/Loading";
 import {
   Dispatch,
@@ -17,27 +20,25 @@ import { BackHandler, ListRenderItem, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import {
   Button,
-  Colors,
   Divider,
   List,
   Surface,
   Text,
   TextInput,
+  useTheme,
 } from "react-native-paper";
 import { OrderProduct, OrderProductWithoutOrderId } from "services/order/types";
 import { Product } from "services/product";
 import { useProductsQuery } from "services/product/api";
 import { toast } from "utils/toasts";
 
-const snapPoints = ["95%"];
+const snapPoints = ["85%"];
 
 const styles = StyleSheet.create({
-  sheet: {},
   container: {
     padding: 12,
     backgroundColor: "transparent",
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: Colors.grey400,
   },
   list: {
     flex: 1,
@@ -252,9 +253,13 @@ export const OrderProductEditor: FC<{
     [isBuyOrder]
   );
 
+  const theme = useTheme();
+
   return (
     <>
-      <Surface style={styles.container}>
+      <Surface
+        style={[styles.container, { borderColor: theme.colors.surface }]}
+      >
         <View style={styles.totalContainer}>
           <Text style={styles.totalText}>{t("order.total")}</Text>
           <Text style={styles.totalText}>{totalPrice}</Text>
@@ -266,7 +271,7 @@ export const OrderProductEditor: FC<{
       <BottomSheetModal
         backdropComponent={CustomBackdropModal}
         snapPoints={snapPoints}
-        style={styles.sheet}
+        backgroundComponent={CustomBackgroundComponent}
         ref={sheetRef}
         handleComponent={null}
         onChange={(index) => (sheetIndexRef.current = index)}

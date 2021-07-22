@@ -1,3 +1,4 @@
+import { useTheme } from "@react-navigation/native";
 import { StackHeaderProps } from "@react-navigation/stack";
 import { FC } from "react";
 import { StatusBar, StyleSheet } from "react-native";
@@ -15,9 +16,16 @@ export const NavigationBar: FC<StackHeaderProps> = ({
   back,
   options,
 }) => {
+  const theme = useTheme();
+
   return (
     <Appbar.Header
-      style={[styles.root, { backgroundColor: options.headerTintColor }]}
+      style={[
+        styles.root,
+        {
+          backgroundColor: !theme.dark ? options.headerTintColor : undefined,
+        },
+      ]}
       statusBarHeight={StatusBar.currentHeight}
     >
       {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}

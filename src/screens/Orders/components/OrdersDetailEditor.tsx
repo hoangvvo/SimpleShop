@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     elevation: 2,
     padding: 12,
-    backgroundColor: Colors.grey300,
   },
   toggleLabel: {
     fontSize: 16,

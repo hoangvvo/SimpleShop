@@ -1,19 +1,22 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import {
+  DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
   NavigationContainer,
+  useTheme,
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationBar } from "components/NavigationBar";
 import merge from "deepmerge";
 import { InitComponent } from "InitComponent";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { LogBox, StatusBar } from "react-native";
 import "react-native-gesture-handler";
 import {
   Colors,
+  DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperDefaultTheme,
   Portal,
   Provider as PaperProvider,
@@ -26,22 +29,24 @@ import { ProductEditorScreen, ProductsScreen } from "screens/Products";
 import { SettingsScreen } from "screens/Settings";
 import { RouteName } from "screens/types";
 import { TabThemeColor } from "styles/Colors";
+import { useColorSchemeSettings } from "styles/colorScheme";
 
 LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
-const OverrideTheme = { colors: { primary: Colors.blue500 } };
-const CombinedDefaultTheme = merge(
-  merge(PaperDefaultTheme, NavigationDefaultTheme),
-  OverrideTheme
-) as any;
+const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
+const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
+
+CombinedDefaultTheme.colors.primary = CombinedDarkTheme.colors.primary =
+  Colors.blue500;
 
 const Main: FC = () => {
   const { t } = useTranslation();
+  const theme = useTheme();
   return (
-    <Tab.Navigator shifting>
+    <Tab.Navigator shifting={!theme.dark}>
       <Tab.Screen
         name={RouteName.Dashboard}
         component={DashboardScreen}
@@ -75,63 +80,71 @@ const Main: FC = () => {
 
 const queryClient = new QueryClient();
 
-const App: FC = () => {
+const AppInner: FC = () => {
   const { t } = useTranslation();
+  const { colorScheme } = useColorSchemeSettings();
+  const theme = useMemo(
+    () => (colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme),
+    [colorScheme]
+  );
+
   return (
-    <PaperProvider theme={CombinedDefaultTheme}>
-      <InitComponent>
-        <QueryClientProvider client={queryClient}>
-          <SafeAreaProvider
-            style={{ backgroundColor: CombinedDefaultTheme.colors.background }}
-          >
-            <StatusBar translucent backgroundColor="transparent" />
-            <Portal.Host>
-              <BottomSheetModalProvider>
-                <NavigationContainer theme={CombinedDefaultTheme}>
-                  <Stack.Navigator
-                    screenOptions={{
-                      header(props) {
-                        return <NavigationBar {...props} />;
-                      },
+    <PaperProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <SafeAreaProvider style={{ backgroundColor: theme.colors.background }}>
+          <StatusBar translucent backgroundColor="transparent" />
+          <Portal.Host>
+            <BottomSheetModalProvider>
+              <NavigationContainer theme={theme}>
+                <Stack.Navigator
+                  screenOptions={{
+                    header(props) {
+                      return <NavigationBar {...props} />;
+                    },
+                  }}
+                >
+                  <Stack.Screen
+                    name={RouteName.Main}
+                    component={Main}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name={RouteName.OrderEditor}
+                    component={OrderEditorScreen}
+                    options={{
+                      headerTitle: "",
+                      headerTintColor: TabThemeColor.order,
                     }}
-                  >
-                    <Stack.Screen
-                      name={RouteName.Main}
-                      component={Main}
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name={RouteName.OrderEditor}
-                      component={OrderEditorScreen}
-                      options={{
-                        headerTitle: "",
-                        headerTintColor: TabThemeColor.order,
-                      }}
-                    />
-                    <Stack.Screen
-                      name={RouteName.ProductEditor}
-                      component={ProductEditorScreen}
-                      options={{
-                        headerTitle: "",
-                        headerTintColor: TabThemeColor.product,
-                      }}
-                    />
-                    <Stack.Screen
-                      name={RouteName.Settings}
-                      component={SettingsScreen}
-                      options={{
-                        headerTitle: t("settings.title"),
-                      }}
-                    />
-                  </Stack.Navigator>
-                </NavigationContainer>
-              </BottomSheetModalProvider>
-            </Portal.Host>
-          </SafeAreaProvider>
-        </QueryClientProvider>
-      </InitComponent>
+                  />
+                  <Stack.Screen
+                    name={RouteName.ProductEditor}
+                    component={ProductEditorScreen}
+                    options={{
+                      headerTitle: "",
+                      headerTintColor: TabThemeColor.product,
+                    }}
+                  />
+                  <Stack.Screen
+                    name={RouteName.Settings}
+                    component={SettingsScreen}
+                    options={{
+                      headerTitle: t("settings.title"),
+                    }}
+                  />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </BottomSheetModalProvider>
+          </Portal.Host>
+        </SafeAreaProvider>
+      </QueryClientProvider>
     </PaperProvider>
   );
 };
 
-export default App;
+export default function App() {
+  return (
+    <InitComponent>
+      <AppInner />
+    </InitComponent>
+  );
+}

@@ -4,17 +4,26 @@ import { dbName, dbPath, deleteDb } from "db/sqlite";
 import { changeLanguage, supportedLngs } from "i18n";
 import { FC, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, Platform, StyleSheet, View } from "react-native";
+import {
+  Alert,
+  ColorSchemeName,
+  Linking,
+  Platform,
+  StyleSheet,
+  View,
+} from "react-native";
 import DocumentPicker from "react-native-document-picker";
 import RNFS from "react-native-fs";
 import { ScrollView } from "react-native-gesture-handler";
-import { Button, Colors } from "react-native-paper";
+import { Caption, Colors, List, Text, useTheme } from "react-native-paper";
 // @ts-ignore
 import RNRestart from "react-native-restart";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamList, RouteName } from "screens/types";
+import { useColorSchemeSettings } from "styles/colorScheme";
 import { styles as screenStyles } from "styles/screens";
 import { toast } from "utils/toasts";
+import { githubUrl, name as appName } from "../../../app.json";
+import { version as appVersion } from "../../../package.json";
 
 const styles = StyleSheet.create({
   button: {
@@ -22,13 +31,16 @@ const styles = StyleSheet.create({
   },
   picker: {
     marginBottom: 12,
-    backgroundColor: Colors.grey200,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.grey500,
-    borderRadius: 4,
   },
-  pickerItem: {
-    color: Colors.grey900,
+  pickerLabel: {
+    marginBottom: 2,
+    paddingHorizontal: 15,
+  },
+  footer: {
+    textAlign: "center",
+  },
+  footerLink: {
+    color: Colors.blue500,
   },
 });
 
@@ -104,46 +116,103 @@ export const SettingsScreen: FC<
       /* noop */
     }
   }, [t]);
+
+  const theme = useTheme();
+  const { preferredColorScheme, setColorScheme } = useColorSchemeSettings();
   return (
-    <SafeAreaView style={screenStyles.root}>
-      <ScrollView style={screenStyles.content}>
-        <View style={styles.picker}>
+    <ScrollView style={screenStyles.root}>
+      <List.Section>
+        <List.Subheader>{t("settings.title_general")}</List.Subheader>
+        <View
+          style={[
+            styles.picker,
+            {
+              backgroundColor: theme.colors.background,
+            },
+          ]}
+        >
+          <Caption style={styles.pickerLabel}>{t("language.title")}</Caption>
           <Picker
             selectedValue={i18n.language}
             onValueChange={(itemValue) => changeLanguage(itemValue)}
-            itemStyle={styles.pickerItem}
+            accessibilityLabel={t("language.title")}
+            dropdownIconColor={theme.colors.text}
           >
             {supportedLngs.map((lng) => (
-              <Picker.Item key={lng} label={t(`language.${lng}`)} value={lng} />
+              <Picker.Item
+                style={{ color: theme.colors.text }}
+                key={lng}
+                label={t(`language.${lng}`)}
+                value={lng}
+              />
             ))}
           </Picker>
         </View>
-        <Button
-          disabled={loading}
-          style={styles.button}
-          mode="contained"
+        <View
+          style={[
+            styles.picker,
+            {
+              backgroundColor: theme.colors.background,
+            },
+          ]}
+        >
+          <Caption style={styles.pickerLabel}>
+            {t("settings.color_scheme.title")}
+          </Caption>
+          <Picker
+            selectedValue={preferredColorScheme || ""}
+            onValueChange={(itemValue: ColorSchemeName | "") =>
+              setColorScheme(itemValue || null)
+            }
+            accessibilityLabel={t("settings.color_scheme.title")}
+            dropdownIconColor={theme.colors.text}
+          >
+            <Picker.Item
+              style={{ color: theme.colors.text }}
+              label={t("settings.color_scheme.follow_system")}
+              value=""
+            />
+            <Picker.Item
+              style={{ color: theme.colors.text }}
+              label={t("settings.color_scheme.light")}
+              value="light"
+            />
+            <Picker.Item
+              style={{ color: theme.colors.text }}
+              label={t("settings.color_scheme.dark")}
+              value="dark"
+            />
+          </Picker>
+        </View>
+      </List.Section>
+      <List.Section>
+        <List.Subheader>{t("settings.title_data")}</List.Subheader>
+        <List.Item
           onPress={onExport}
-        >
-          {t("settings.export.title")}
-        </Button>
-        <Button
           disabled={loading}
-          style={styles.button}
-          mode="outlined"
+          title={t("settings.export.title")}
+        />
+        <List.Item
           onPress={onImport}
-        >
-          {t("settings.import.title")}
-        </Button>
-        <Button
           disabled={loading}
-          style={styles.button}
-          mode="outlined"
-          color={Colors.red400}
+          title={t("settings.import.title")}
+        />
+        <List.Item
+          titleStyle={{ color: Colors.red400 }}
           onPress={onDelete}
+          disabled={loading}
+          title="Reset"
+        />
+      </List.Section>
+      <Caption style={styles.footer}>
+        {appName} v{appVersion}{" "}
+        <Text
+          onPress={() => Linking.openURL(githubUrl)}
+          style={styles.footerLink}
         >
-          Reset
-        </Button>
-      </ScrollView>
-    </SafeAreaView>
+          GitHub
+        </Text>
+      </Caption>
+    </ScrollView>
   );
 };
