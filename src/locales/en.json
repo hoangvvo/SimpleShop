@@ -40,7 +40,8 @@
   },
   "error": {
     "something_went_wrong": "Something went wrong",
-    "general_description": "Sorry, an error has occurred. Please restart this application and try again."
+    "general_description": "Sorry, an error has occurred. Please restart this application and try again.",
+    "negative_stock": "Some products' sell amounts are greater than their buy amounts. This will lead to invalid calculations."
   },
   "entity": {
     "has_been_created": "{{ name }} has been created",
@@ -72,7 +73,8 @@
     "select": "Select",
     "done": "Done",
     "save": "Save",
-    "not_undoable": "This action cannot be undone."
+    "not_undoable": "This action cannot be undone.",
+    "see_more": "See more"
   },
   "stats": {
     "profit": "Profit",

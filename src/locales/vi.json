@@ -40,7 +40,8 @@
   },
   "error": {
     "something_went_wrong": "Có gì đó đã xảy ra",
-    "general_description": "Đã có lỗi xảy ra. Vui lòng khởi động lại ứng dụng."
+    "general_description": "Đã có lỗi xảy ra. Vui lòng khởi động lại ứng dụng.",
+    "negative_stock": "Một số sản phẩm có số lượng bán ra nhiều hơn mua vào. Điều này sẽ dẫn đến tính toán sai lệch."
   },
   "entity": {
     "has_been_created": "{{ name }} đã được tạo",
@@ -72,7 +73,8 @@
     "select": "Chọn",
     "done": "Xong",
     "save": "Lưu",
-    "not_undoable": "Hành động này không thể được hoàn tác."
+    "not_undoable": "Hành động này không thể được hoàn tác.",
+    "see_more": "Xem thêm"
   },
   "stats": {
     "profit": "Lợi nhuận",

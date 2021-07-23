@@ -4,7 +4,15 @@ import { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { ListRenderItem, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { Caption, Divider, FAB, List, Text, Title } from "react-native-paper";
+import {
+  Caption,
+  Colors,
+  Divider,
+  FAB,
+  List,
+  Text,
+  Title,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamList, RouteName } from "screens/types";
 import { useProductsStockQuery } from "services/calculate";
@@ -20,7 +28,7 @@ const styles = StyleSheet.create({
   list: { flex: 1 },
   listHeadQuantity: {
     lineHeight: 12,
-    width: 52,
+    width: 56,
   },
   listHeader: {
     flexDirection: "row",
@@ -29,7 +37,7 @@ const styles = StyleSheet.create({
   },
   listQuantityText: {
     textAlign: "center",
-    width: 52,
+    width: 56,
   },
   listSide: {
     justifyContent: "center",
@@ -49,12 +57,21 @@ const ProductItem: FC<{ product: Product }> = ({ product }) => {
 
   const { data: stocks } = useProductsStockQuery();
 
+  const stockCount = stocks?.[product.id] || 0;
+
   return (
     <List.Item
       title={<Text style={styles.listTitle}>{product.name}</Text>}
       right={({ style }) => (
         <View style={[style, styles.listSide]}>
-          <Text style={styles.listQuantityText}>{stocks?.[product.id]}</Text>
+          <Text
+            style={[
+              styles.listQuantityText,
+              stockCount < 0 && { color: Colors.red500 },
+            ]}
+          >
+            {stockCount}
+          </Text>
         </View>
       )}
       description={product.description}

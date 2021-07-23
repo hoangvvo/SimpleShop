@@ -2,10 +2,17 @@ import { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-
 import { FC, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
-import { Card, Colors, IconButton, Text, Title } from "react-native-paper";
+import {
+  Banner,
+  Card,
+  Colors,
+  IconButton,
+  Text,
+  Title,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamList, RouteName } from "screens/types";
-import { useProfitQuery } from "services/calculate";
+import { useProductsStockQuery, useProfitQuery } from "services/calculate";
 import { useOrdersCountQuery } from "services/order/api";
 import { styles as screenStyles } from "styles/screens";
 
@@ -17,7 +24,6 @@ const styles = StyleSheet.create({
   },
   stat: {
     flex: 1,
-    margin: 4,
     padding: 12,
   },
   statLabel: {
@@ -36,7 +42,10 @@ const styles = StyleSheet.create({
   },
   stats: {
     flexDirection: "row",
-    paddingVertical: 4,
+    paddingVertical: 8,
+  },
+  gutter: {
+    width: 8,
   },
 });
 
@@ -76,6 +85,12 @@ export const DashboardScreen: FC<
     [navigation]
   );
 
+  const { data: stocks } = useProductsStockQuery();
+  const hasNegativeStock = useMemo(
+    () => !!stocks && Object.values(stocks).some((stock) => stock < 0),
+    [stocks]
+  );
+
   return (
     <SafeAreaView style={screenStyles.root}>
       <View style={[screenStyles.content, screenStyles.contentRoot]}>
@@ -93,12 +108,25 @@ export const DashboardScreen: FC<
             <Text style={styles.statTime}>{t("time.today")}</Text>
             <Text style={styles.statValue}>{profit}</Text>
           </Card>
+          <View style={styles.gutter} />
           <Card style={styles.stat} onPress={onPressCardOrders}>
             <Text style={styles.statLabel}>{t("order.title_plural")}</Text>
             <Text style={styles.statTime}>{t("time.today")}</Text>
             <Text style={styles.statValue}>{ordersCount}</Text>
           </Card>
         </View>
+        <Banner
+          visible={hasNegativeStock}
+          icon="alert"
+          actions={[
+            {
+              label: t("action.see_more"),
+              onPress: () => navigation.navigate(RouteName.Products),
+            },
+          ]}
+        >
+          {t("error.negative_stock")}
+        </Banner>
       </View>
     </SafeAreaView>
   );
