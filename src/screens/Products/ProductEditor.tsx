@@ -15,6 +15,7 @@ import {
   useProductUpdateMutation,
 } from "services/product/api";
 import { styles as screenStyles } from "styles/screens";
+import { isNumeric } from "utils/number";
 import { toast } from "utils/toasts";
 import { ProductDelete } from "./components/ProductDelete";
 
@@ -26,7 +27,7 @@ const rules = {
     required: true,
     min: 0,
     max: 1000000000,
-    pattern: /^[0-9]+$/i,
+    validate: isNumeric,
   },
 };
 

@@ -22,6 +22,7 @@ import {
 } from "services/calculate";
 import { useProductQuery } from "services/product/api";
 import { styles as screenStyles } from "styles/screens";
+import { useNumberFormatCurrency } from "utils/currency";
 
 const styles = StyleSheet.create({
   dateButton: {
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   listProfitWidth: {
-    width: 76,
+    width: 88,
   },
   listRank: {
     fontSize: 16,
@@ -81,6 +82,8 @@ const styles = StyleSheet.create({
 const OrderProductStatItem: FC<{ stats: OrderProductsStats; index: number }> =
   ({ stats, index }) => {
     const { data: product } = useProductQuery(stats.product_id);
+    const numberFormatProfit = useNumberFormatCurrency();
+
     return (
       <List.Item
         left={({ style }) => (
@@ -96,7 +99,9 @@ const OrderProductStatItem: FC<{ stats: OrderProductsStats; index: number }> =
               <Text style={styles.listAmount}>{stats.amount}</Text>
             </View>
             <View style={[styles.listSide, styles.listProfitWidth, style]}>
-              <Text style={styles.listProfit}>{stats.profit}</Text>
+              <Text style={styles.listProfit}>
+                {numberFormatProfit.format(stats.profit)}
+              </Text>
             </View>
           </>
         )}
@@ -165,6 +170,8 @@ export const DashboardProfitScreen: FC<
     []
   );
 
+  const numberFormatProfit = useNumberFormatCurrency();
+
   return (
     <View style={screenStyles.content}>
       <Button
@@ -191,7 +198,9 @@ export const DashboardProfitScreen: FC<
       />
       <Card style={styles.stat}>
         <Text style={styles.statLabel}>{t("stats.profit")}</Text>
-        <Text style={styles.statValue}>{profit}</Text>
+        <Text style={styles.statValue}>
+          {numberFormatProfit.format(profit || 0)}
+        </Text>
       </Card>
       <FlatList
         style={styles.list}

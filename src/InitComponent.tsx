@@ -4,18 +4,20 @@ import { useLanguageInit } from "i18n";
 import { FC, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { Colors } from "react-native-paper";
-import {
-  ColorSchemeContext,
-  useColorSchemaSettingsInit,
-} from "styles/colorScheme";
+import { useCurrentColorScheme } from "styles/colorScheme";
 import { styles as screenStyles } from "styles/screens";
+import { SettingsContext, useSettingsProvider } from "./utils/settings";
 
 export const InitComponent: FC = ({ children }) => {
   const [error, setError] = useState<Error | null>(null);
   const [loadingSqlite, sqlite] = useSQLiteInit(setError);
-  const [loadingLanguage] = useLanguageInit(setError);
-  const [, colorSchemeValue] = useColorSchemaSettingsInit();
-  const loading = loadingSqlite || loadingLanguage;
+  const loading = loadingSqlite;
+
+  const settingsProvided = useSettingsProvider();
+
+  useLanguageInit(settingsProvided.value);
+
+  const colorScheme = useCurrentColorScheme();
 
   if (error) throw error;
 
@@ -26,7 +28,7 @@ export const InitComponent: FC = ({ children }) => {
           screenStyles.root,
           {
             backgroundColor:
-              colorSchemeValue.colorScheme === "dark"
+              (settingsProvided.value.colorScheme || colorScheme) === "dark"
                 ? Colors.black
                 : Colors.white,
           },
@@ -37,10 +39,10 @@ export const InitComponent: FC = ({ children }) => {
     );
 
   return (
-    <ColorSchemeContext.Provider value={colorSchemeValue}>
+    <SettingsContext.Provider value={settingsProvided}>
       <SQLiteContext.Provider value={sqlite!}>
         {children}
       </SQLiteContext.Provider>
-    </ColorSchemeContext.Provider>
+    </SettingsContext.Provider>
   );
 };

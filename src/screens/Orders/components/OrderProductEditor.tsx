@@ -30,6 +30,8 @@ import {
 import { OrderProduct, OrderProductWithoutOrderId } from "services/order/types";
 import { Product } from "services/product";
 import { useProductsQuery } from "services/product/api";
+import { useNumberFormatCurrency } from "utils/currency";
+import { isNumeric } from "utils/number";
 import { toast } from "utils/toasts";
 
 const snapPoints = ["85%"];
@@ -72,13 +74,13 @@ const rules = {
     required: true,
     min: 0,
     max: 1000000,
-    validate: (v: number) => Number.isInteger(Number(v)),
+    validate: (v: number) => isNumeric(v) && Number.isInteger(Number(v)),
   },
   perPrice: {
     required: true,
     min: 0,
     max: 1000000000,
-    pattern: /^[0-9]+$/i,
+    validate: isNumeric,
   },
 };
 
@@ -258,6 +260,8 @@ export const OrderProductEditor: FC<{
 
   const theme = useTheme();
 
+  const numberFormatProfit = useNumberFormatCurrency();
+
   return (
     <>
       <Surface
@@ -265,7 +269,9 @@ export const OrderProductEditor: FC<{
       >
         <View style={styles.totalRow}>
           <Text style={styles.totalText}>{t("order.total")}</Text>
-          <Text style={styles.totalText}>{totalPrice}</Text>
+          <Text style={styles.totalText}>
+            {numberFormatProfit.format(totalPrice)}
+          </Text>
         </View>
         <Button icon="pencil" mode="outlined" onPress={onPressButton}>
           {t("order_editor.product_list")}

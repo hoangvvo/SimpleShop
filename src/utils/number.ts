@@ -1,8 +1,6 @@
-export const defaultFormatLongNumberSeperator = " ";
-
-export function formatLongNumber(
-  x: number,
-  seperator = defaultFormatLongNumberSeperator
-) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, seperator);
+export function isNumeric(str: any) {
+  return (
+    !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+    !isNaN(parseFloat(str))
+  ); // ...and ensure strings of whitespace fail
 }

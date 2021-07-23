@@ -15,6 +15,7 @@ import { ParamList, RouteName } from "screens/types";
 import { useProductsStockQuery, useProfitQuery } from "services/calculate";
 import { useOrdersCountQuery } from "services/order/api";
 import { styles as screenStyles } from "styles/screens";
+import { useNumberFormatCurrency } from "utils/currency";
 
 const styles = StyleSheet.create({
   header: {
@@ -58,6 +59,12 @@ const todayTiemstampsInit = () => {
   return [startDate.getTime(), endDate.getTime()];
 };
 
+const profitFormatOptions: Intl.NumberFormatOptions = {
+  // @ts-ignore
+  notation: "compact",
+  compactDisplay: "short",
+};
+
 export const DashboardScreen: FC<
   MaterialBottomTabScreenProps<ParamList, RouteName.Dashboard>
 > = ({ navigation }) => {
@@ -91,6 +98,8 @@ export const DashboardScreen: FC<
     [stocks]
   );
 
+  const numberFormatProfit = useNumberFormatCurrency(profitFormatOptions);
+
   return (
     <SafeAreaView style={screenStyles.root}>
       <View style={[screenStyles.content, screenStyles.contentRoot]}>
@@ -106,7 +115,9 @@ export const DashboardScreen: FC<
           <Card style={styles.stat} onPress={onPressCardProfit}>
             <Text style={styles.statLabel}>{t("stats.profit")}</Text>
             <Text style={styles.statTime}>{t("time.today")}</Text>
-            <Text style={styles.statValue}>{profit}</Text>
+            <Text style={styles.statValue}>
+              {numberFormatProfit.format(profit || 0)}
+            </Text>
           </Card>
           <View style={styles.gutter} />
           <Card style={styles.stat} onPress={onPressCardOrders}>

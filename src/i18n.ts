@@ -1,12 +1,11 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import i18n from "i18next";
+import { supportedLngs } from "locales/constants";
 import en from "locales/en.json";
 import vi from "locales/vi.json";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { initReactI18next } from "react-i18next";
 import * as RNLocalize from "react-native-localize";
-
-export const supportedLngs = ["en", "vi"];
+import { SettingsValues } from "utils/settings";
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -27,23 +26,12 @@ i18n.use(initReactI18next).init({
   supportedLngs,
 });
 
-export const changeLanguage = async (lng: string) => {
-  AsyncStorage.setItem("language", lng);
-  i18n.changeLanguage(lng);
-};
-
-export const useLanguageInit = (onError: (error: Error) => void) => {
-  const [loading, setLoading] = useState(true);
+export const useLanguageInit = (settingsValue: SettingsValues) => {
   useEffect(() => {
-    AsyncStorage.getItem("language")
-      .then((lng) => {
-        i18n.changeLanguage(lng || RNLocalize.getLocales()[0].languageCode);
-      })
-      .catch(onError)
-      .finally(() => setLoading(false));
-  }, [onError]);
-
-  return [loading];
+    const language =
+      settingsValue.language || RNLocalize.getLocales()[0].languageCode;
+    i18n.changeLanguage(language);
+  }, [settingsValue]);
 };
 
 export default i18n;

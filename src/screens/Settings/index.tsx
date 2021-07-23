@@ -1,7 +1,7 @@
 import { Picker } from "@react-native-picker/picker";
 import { StackScreenProps } from "@react-navigation/stack";
 import { dbName, dbPath, deleteDb } from "db/sqlite";
-import { changeLanguage, supportedLngs } from "i18n";
+import { supportedLngs } from "locales/constants";
 import { FC, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -19,8 +19,9 @@ import { Caption, Colors, List, Text, useTheme } from "react-native-paper";
 // @ts-ignore
 import RNRestart from "react-native-restart";
 import { ParamList, RouteName } from "screens/types";
-import { useColorSchemeSettings } from "styles/colorScheme";
 import { styles as screenStyles } from "styles/screens";
+import { supportedCurrencies } from "utils/currency";
+import { SettingsValues, useSettings } from "utils/settings";
 import { toast } from "utils/toasts";
 // @ts-ignore
 import { githubUrl, name as appName } from "../../../app.json";
@@ -48,7 +49,7 @@ export const SettingsScreen: FC<
   StackScreenProps<ParamList, RouteName.Settings>
 > = () => {
   const [loading, setLoading] = useState(false);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const onDelete = useCallback(() => {
     Alert.alert(
       "Reset all data?",
@@ -118,16 +119,30 @@ export const SettingsScreen: FC<
   }, [t]);
 
   const theme = useTheme();
-  const { preferredColorScheme, setColorScheme } = useColorSchemeSettings();
+  const { value: settingsValues, changeSetting } = useSettings();
 
   const onPickerChangeColorScheme = useCallback(
-    (itemValue: ColorSchemeName | "") => setColorScheme(itemValue || null),
-    [setColorScheme]
+    (itemValue: ColorSchemeName | "") =>
+      changeSetting("colorScheme", itemValue || null),
+    [changeSetting]
   );
 
   const onPickerChangeLanguage = useCallback(
-    (itemValue: string) => changeLanguage(itemValue),
-    []
+    (itemValue: string) =>
+      changeSetting(
+        "language",
+        (itemValue || null) as SettingsValues["language"]
+      ),
+    [changeSetting]
+  );
+
+  const onPickerChangeCurrency = useCallback(
+    (itemValue: string) =>
+      changeSetting(
+        "currency",
+        (itemValue || null) as SettingsValues["currency"]
+      ),
+    [changeSetting]
   );
 
   return (
@@ -144,11 +159,16 @@ export const SettingsScreen: FC<
         >
           <Caption style={styles.pickerLabel}>{t("language.title")}</Caption>
           <Picker
-            selectedValue={i18n.language}
+            selectedValue={settingsValues.language || ""}
             onValueChange={onPickerChangeLanguage}
             accessibilityLabel={t("language.title")}
             dropdownIconColor={theme.colors.text}
           >
+            <Picker.Item
+              color={theme.colors.text}
+              label={t("settings.follow_system")}
+              value=""
+            />
             {supportedLngs.map((lng) => (
               <Picker.Item
                 key={lng}
@@ -171,14 +191,14 @@ export const SettingsScreen: FC<
             {t("settings.color_scheme.title")}
           </Caption>
           <Picker
-            selectedValue={preferredColorScheme || ""}
+            selectedValue={settingsValues.colorScheme || ""}
             onValueChange={onPickerChangeColorScheme}
             accessibilityLabel={t("settings.color_scheme.title")}
             dropdownIconColor={theme.colors.text}
           >
             <Picker.Item
               color={theme.colors.text}
-              label={t("settings.color_scheme.follow_system")}
+              label={t("settings.follow_system")}
               value=""
             />
             <Picker.Item
@@ -191,6 +211,38 @@ export const SettingsScreen: FC<
               label={t("settings.color_scheme.dark")}
               value="dark"
             />
+          </Picker>
+        </View>
+        <View
+          style={[
+            styles.picker,
+            {
+              backgroundColor: theme.colors.background,
+            },
+          ]}
+        >
+          <Caption style={styles.pickerLabel}>
+            {t("settings.currency.title")}
+          </Caption>
+          <Picker
+            selectedValue={settingsValues.currency || ""}
+            onValueChange={onPickerChangeCurrency}
+            accessibilityLabel={t("settings.currency.title")}
+            dropdownIconColor={theme.colors.text}
+          >
+            <Picker.Item
+              color={theme.colors.text}
+              label={t("settings.follow_system")}
+              value=""
+            />
+            {supportedCurrencies.map((currency) => (
+              <Picker.Item
+                key={currency}
+                label={currency}
+                value={currency}
+                color={theme.colors.text}
+              />
+            ))}
           </Picker>
         </View>
       </List.Section>

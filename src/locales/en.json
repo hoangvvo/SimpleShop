@@ -54,9 +54,8 @@
   },
   "form": {
     "validate_messages": {
-      "default": "Validation error on field '{{ name }}'",
+      "default": "'{{ name }}' is not valid",
       "required": "'{{ name }}' is required",
-      "pattern": "This field is not valid",
       "min": "'{{ name }}' cannot be less than {{ min }}",
       "max": "'{{ name }}' cannot be greater than {{ max }}",
       "minLength": "'{{ name }}' must be at least {{ minLength }} characters",
@@ -100,10 +99,13 @@
     },
     "color_scheme": {
       "title": "Theme",
-      "follow_system": "Follow system",
       "light": "Light",
       "dark": "Dark"
-    }
+    },
+    "currency": {
+      "title": "Currency"
+    },
+    "follow_system": "Follow system"
   },
   "language": {
     "title": "Language",

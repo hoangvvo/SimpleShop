@@ -54,9 +54,8 @@
   },
   "form": {
     "validate_messages": {
-      "default": "Lỗi xảy ra ở trường '{{ name }}'",
+      "default": "'{{ name }}' không hợp lệ",
       "required": "'{{ name }}' là bắt buộc",
-      "pattern": "Trường này không hợp lệ",
       "min": "'{{ name }}' không thể thấp hơn {{ min }}",
       "max": "'{{ name }}' Không thể cao hơn {{ max }}",
       "minLength": "'{{ name }}' không thể ngắn hơn {{ minLength }} kí tự",
@@ -100,10 +99,13 @@
     },
     "color_scheme": {
       "title": "Chủ đề",
-      "follow_system": "Theo hệ thống",
       "light": "Sáng",
       "dark": "Tối"
-    }
+    },
+    "currency": {
+      "title": "Tiền tệ"
+    },
+    "follow_system": "Theo hệ thống"
   },
   "language": {
     "title": "Ngôn ngữ",

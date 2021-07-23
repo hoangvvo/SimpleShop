@@ -30,7 +30,7 @@ import { ProductEditorScreen, ProductsScreen } from "screens/Products";
 import { SettingsScreen } from "screens/Settings";
 import { RouteName } from "screens/types";
 import { TabThemeColor } from "styles/Colors";
-import { useColorSchemeSettings } from "styles/colorScheme";
+import { useCurrentColorScheme } from "styles/colorScheme";
 
 LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 
@@ -82,7 +82,9 @@ const queryClient = new QueryClient();
 
 const AppInner: FC = () => {
   const { t } = useTranslation();
-  const { colorScheme } = useColorSchemeSettings();
+
+  const colorScheme = useCurrentColorScheme();
+
   const theme = useMemo(
     () => (colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme),
     [colorScheme]
