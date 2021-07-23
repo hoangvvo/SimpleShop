@@ -2,7 +2,7 @@ import { useSQLite } from "db";
 import { useQuery } from "react-query";
 import { CalculateService } from "./service";
 
-export function useProfit(fromTimestamp: number, toTimestamp: number) {
+export function useProfitQuery(fromTimestamp: number, toTimestamp: number) {
   const db = useSQLite();
   return useQuery(
     ["calculate", "profit", { fromTimestamp, toTimestamp }],
@@ -13,7 +13,7 @@ export function useProfit(fromTimestamp: number, toTimestamp: number) {
   );
 }
 
-export function useOrderProductsStats(
+export function useOrderProductsStatsQuery(
   fromTimestamp: number,
   toTimestamp: number
 ) {
@@ -22,6 +22,17 @@ export function useOrderProductsStats(
     ["calculate", "order-products-stats", { fromTimestamp, toTimestamp }],
     () =>
       CalculateService.getOrderProductsStats(db, fromTimestamp, toTimestamp),
+    {
+      cacheTime: 0,
+    }
+  );
+}
+
+export function useProductsStockQuery() {
+  const db = useSQLite();
+  return useQuery(
+    ["calculate", "products-stock"],
+    () => CalculateService.getProductsStock(db),
     {
       cacheTime: 0,
     }

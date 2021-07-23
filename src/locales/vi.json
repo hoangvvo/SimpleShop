@@ -30,7 +30,8 @@
     "name": "Tên",
     "description": "Mô tả",
     "default_sell_price": "Giá bán mặc định",
-    "default_buy_price": "Giá mua mặc định"
+    "default_buy_price": "Giá mua mặc định",
+    "stock": "Tồn kho"
   },
   "product_editor": {
     "title_edit": "Chỉnh sửa sản phẩm",

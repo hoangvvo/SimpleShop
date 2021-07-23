@@ -82,4 +82,27 @@ export class CalculateService {
       0
     );
   }
+
+  static async getProductsStock(db: SQLiteDatabase) {
+    const [allOrders, allOrderProducts] = await Promise.all([
+      OrderService.findAll(db),
+      OrderService.findAllProducts(db),
+    ]);
+    const ordersMap = new Map<Order["id"], Order>();
+    const productsMap = Object.create({}) as {
+      [key: number]: number;
+    };
+    for (const order of allOrders) {
+      ordersMap.set(order.id, order);
+    }
+    for (const orderProduct of allOrderProducts) {
+      const order = ordersMap.get(orderProduct.order_id);
+      if (typeof productsMap[orderProduct.product_id] !== "number")
+        productsMap[orderProduct.product_id] = 0;
+      if (order?.is_buy_order)
+        productsMap[orderProduct.product_id] += orderProduct.amount;
+      else productsMap[orderProduct.product_id] -= orderProduct.amount;
+    }
+    return productsMap;
+  }
 }

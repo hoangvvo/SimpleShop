@@ -17,8 +17,7 @@ const invalidateCache = (client: QueryClient, orderId?: Order["id"]) => {
   client.invalidateQueries("orders");
   client.invalidateQueries("orders-count");
   if (orderId) client.invalidateQueries(["order", orderId]);
-  client.invalidateQueries(["calculate"]);
-  client.invalidateQueries(["calculate"]);
+  client.invalidateQueries("calculate");
 };
 
 export const useOrdersQuery = () => {
@@ -79,7 +78,10 @@ export const useOrderDeleteMutation = () => {
   });
 };
 
-export const useOrdersCount = (fromTimestamp: number, toTimestamp: number) => {
+export const useOrdersCountQuery = (
+  fromTimestamp: number,
+  toTimestamp: number
+) => {
   const db = useSQLite();
   return useQuery(
     ["orders-count", { fromTimestamp, toTimestamp }],

@@ -30,7 +30,8 @@
     "name": "Name",
     "description": "Description",
     "default_sell_price": "Default Sell Price",
-    "default_buy_price": "Default Buy Price"
+    "default_buy_price": "Default Buy Price",
+    "stock": "Inventory"
   },
   "product_editor": {
     "title_edit": "Edit Product",

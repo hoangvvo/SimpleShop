@@ -5,8 +5,8 @@ import { StyleSheet, View } from "react-native";
 import { Card, Colors, IconButton, Text, Title } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamList, RouteName } from "screens/types";
-import { useProfit } from "services/calculate";
-import { useOrdersCount } from "services/order/api";
+import { useProfitQuery } from "services/calculate";
+import { useOrdersCountQuery } from "services/order/api";
 import { styles as screenStyles } from "styles/screens";
 
 const styles = StyleSheet.create({
@@ -54,8 +54,11 @@ export const DashboardScreen: FC<
 > = ({ navigation }) => {
   const todayTimestamps = useMemo(todayTiemstampsInit, []);
   const { t } = useTranslation();
-  const { data: profit } = useProfit(todayTimestamps[0], todayTimestamps[1]);
-  const { data: ordersCount } = useOrdersCount(
+  const { data: profit } = useProfitQuery(
+    todayTimestamps[0],
+    todayTimestamps[1]
+  );
+  const { data: ordersCount } = useOrdersCountQuery(
     todayTimestamps[0],
     todayTimestamps[1]
   );

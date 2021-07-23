@@ -4,9 +4,10 @@ import { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { ListRenderItem, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { Divider, FAB, List, Text, Title } from "react-native-paper";
+import { Caption, Divider, FAB, List, Text, Title } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamList, RouteName } from "screens/types";
+import { useProductsStockQuery } from "services/calculate";
 import { Product } from "services/product";
 import { useProductsQuery } from "services/product/api";
 import { TabThemeColor } from "styles/Colors";
@@ -20,6 +21,21 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: "bold",
   },
+  quantityTextHeader: {
+    lineHeight: 12,
+  },
+  quantityText: {
+    textAlign: "center",
+    width: 52,
+  },
+  statHeader: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingHorizontal: 8,
+  },
+  listCenter: {
+    justifyContent: "center",
+  },
 });
 
 const ProductItem: FC<{ product: Product }> = ({ product }) => {
@@ -28,9 +44,16 @@ const ProductItem: FC<{ product: Product }> = ({ product }) => {
   const onEdit = () =>
     navigation.navigate(RouteName.ProductEditor, { id: product.id });
 
+  const { data: stocks } = useProductsStockQuery();
+
   return (
     <List.Item
       title={<Text style={styles.text}>{product.name}</Text>}
+      right={({ style }) => (
+        <View style={[style, styles.listCenter]}>
+          <Text style={styles.quantityText}>{stocks?.[product.id]}</Text>
+        </View>
+      )}
       description={product.description}
       descriptionNumberOfLines={1}
       onPress={onEdit}
@@ -62,6 +85,14 @@ export const ProductsScreen: FC<
         <FlatList
           style={styles.list}
           ItemSeparatorComponent={Divider}
+          stickyHeaderIndices={[0]}
+          ListHeaderComponent={
+            <View style={styles.statHeader}>
+              <Caption style={[styles.quantityText, styles.quantityTextHeader]}>
+                {t("product.stock")}
+              </Caption>
+            </View>
+          }
           data={data}
           renderItem={renderItem}
           keyExtractor={keyExtractor}

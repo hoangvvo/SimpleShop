@@ -16,8 +16,8 @@ import { DatePickerModal } from "react-native-paper-dates";
 import { ParamList, RouteName } from "screens/types";
 import {
   OrderProductsStats,
-  useOrderProductsStats,
-  useProfit,
+  useOrderProductsStatsQuery,
+  useProfitQuery,
 } from "services/calculate";
 import { useProductQuery } from "services/product/api";
 import { styles as screenStyles } from "styles/screens";
@@ -135,12 +135,12 @@ export const DashboardProfitScreen: FC<
 
   const [openDate, setOpenDate] = useState(false);
 
-  const { data: profit } = useProfit(
+  const { data: profit } = useProfitQuery(
     range.startDate.getTime(),
     range.endDate.getTime()
   );
 
-  const { data: orderProductsStats } = useOrderProductsStats(
+  const { data: orderProductsStats } = useOrderProductsStatsQuery(
     range.startDate.getTime(),
     range.endDate.getTime()
   );
@@ -187,6 +187,7 @@ export const DashboardProfitScreen: FC<
       </Card>
       <FlatList
         style={styles.list}
+        stickyHeaderIndices={[0]}
         ListHeaderComponent={
           <View>
             <Title>{t("stats.top_products")}</Title>
