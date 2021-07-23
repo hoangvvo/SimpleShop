@@ -10,10 +10,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export const LoadingScreen: FC = () => {
+export const LoadingScreen: FC<{ color?: string }> = ({ color }) => {
   return (
     <View style={styles.root}>
-      <ActivityIndicator size="large" animating={true} color={Colors.blue400} />
+      <ActivityIndicator
+        size="large"
+        animating={true}
+        color={color || Colors.blue400}
+      />
     </View>
   );
 };

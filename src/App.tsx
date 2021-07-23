@@ -6,10 +6,12 @@ import {
   NavigationContainer,
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { ErrorScreen } from "components/Error";
 import { NavigationBar } from "components/NavigationBar";
 import merge from "deepmerge";
 import { InitComponent } from "InitComponent";
 import { FC, useMemo } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { useTranslation } from "react-i18next";
 import { LogBox, StatusBar } from "react-native";
 import "react-native-gesture-handler";
@@ -148,8 +150,10 @@ const AppInner: FC = () => {
 
 export default function App() {
   return (
-    <InitComponent>
-      <AppInner />
-    </InitComponent>
+    <ErrorBoundary FallbackComponent={ErrorScreen}>
+      <InitComponent>
+        <AppInner />
+      </InitComponent>
+    </ErrorBoundary>
   );
 }
