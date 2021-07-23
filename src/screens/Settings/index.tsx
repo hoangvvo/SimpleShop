@@ -27,8 +27,11 @@ import { githubUrl, name as appName } from "../../../app.json";
 import { version as appVersion } from "../../../package.json";
 
 const styles = StyleSheet.create({
-  button: {
-    marginBottom: 12,
+  footer: {
+    textAlign: "center",
+  },
+  footerLink: {
+    color: Colors.blue500,
   },
   picker: {
     marginBottom: 12,
@@ -37,13 +40,9 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     paddingHorizontal: 15,
   },
-  footer: {
-    textAlign: "center",
-  },
-  footerLink: {
-    color: Colors.blue500,
-  },
 });
+
+const onPressGHLink = () => Linking.openURL(githubUrl);
 
 export const SettingsScreen: FC<
   StackScreenProps<ParamList, RouteName.Settings>
@@ -120,6 +119,17 @@ export const SettingsScreen: FC<
 
   const theme = useTheme();
   const { preferredColorScheme, setColorScheme } = useColorSchemeSettings();
+
+  const onPickerChangeColorScheme = useCallback(
+    (itemValue: ColorSchemeName | "") => setColorScheme(itemValue || null),
+    [setColorScheme]
+  );
+
+  const onPickerChangeLanguage = useCallback(
+    (itemValue: string) => changeLanguage(itemValue),
+    []
+  );
+
   return (
     <ScrollView style={screenStyles.root}>
       <List.Section>
@@ -135,7 +145,7 @@ export const SettingsScreen: FC<
           <Caption style={styles.pickerLabel}>{t("language.title")}</Caption>
           <Picker
             selectedValue={i18n.language}
-            onValueChange={(itemValue) => changeLanguage(itemValue)}
+            onValueChange={onPickerChangeLanguage}
             accessibilityLabel={t("language.title")}
             dropdownIconColor={theme.colors.text}
           >
@@ -162,9 +172,7 @@ export const SettingsScreen: FC<
           </Caption>
           <Picker
             selectedValue={preferredColorScheme || ""}
-            onValueChange={(itemValue: ColorSchemeName | "") =>
-              setColorScheme(itemValue || null)
-            }
+            onValueChange={onPickerChangeColorScheme}
             accessibilityLabel={t("settings.color_scheme.title")}
             dropdownIconColor={theme.colors.text}
           >
@@ -207,10 +215,7 @@ export const SettingsScreen: FC<
       </List.Section>
       <Caption style={styles.footer}>
         {appName} v{appVersion}{" "}
-        <Text
-          onPress={() => Linking.openURL(githubUrl)}
-          style={styles.footerLink}
-        >
+        <Text onPress={onPressGHLink} style={styles.footerLink}>
           GitHub
         </Text>
       </Caption>

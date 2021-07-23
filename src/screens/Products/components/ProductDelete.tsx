@@ -24,12 +24,15 @@ export const ProductDelete: FC<{
   const onDismiss = useCallback(() => setDeleteVisible(false), []);
   const onPress = useCallback(() => setDeleteVisible(true), []);
 
-  const onDelete = () =>
-    mutateAsync({ id: product.id }).then(() => {
-      toast(t("entity.has_been_deleted", { name: `'${product.name}'` }));
-      setDeleteVisible(false);
-      navigation.goBack();
-    });
+  const onDelete = useCallback(
+    () =>
+      mutateAsync({ id: product.id }).then(() => {
+        toast(t("entity.has_been_deleted", { name: `'${product.name}'` }));
+        setDeleteVisible(false);
+        navigation.goBack();
+      }),
+    [navigation, t, product, mutateAsync]
+  );
 
   return (
     <>

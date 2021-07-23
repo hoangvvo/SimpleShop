@@ -26,32 +26,32 @@ const styles = StyleSheet.create({
   fab: {
     backgroundColor: TabThemeColor.order,
   },
-  statusText: {
-    fontSize: 12,
-  },
-  statusIcon: {
-    marginRight: 4,
-  },
-  itemDone: {
+  listOpaque: {
     opacity: 0.4,
   },
-  buySellTag: {
+  listSide: {
+    justifyContent: "center",
+  },
+  listStatusIcon: {
+    marginRight: 4,
+  },
+  listStatusText: {
+    fontSize: 12,
+  },
+  listTitle: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  typeTag: {
+    borderRadius: 4,
     justifyContent: "center",
     marginRight: 4,
-    borderRadius: 4,
     paddingHorizontal: 4,
     paddingVertical: 2,
   },
-  buySellTagText: {
+  typeTagText: {
     color: Colors.white,
     fontSize: 12,
-  },
-  orderTitle: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  status: {
-    justifyContent: "center",
   },
 });
 
@@ -63,26 +63,69 @@ const OrderItem: FC<{ order: Order }> = ({ order }) => {
 
   const swipeableRef = useRef<Swipeable>(null);
 
-  const onEdit = () =>
-    navigation.navigate(RouteName.OrderEditor, {
-      id: order.id,
-      isBuyOrder: false,
-    });
+  const onEdit = useCallback(
+    () =>
+      navigation.navigate(RouteName.OrderEditor, {
+        id: order.id,
+        isBuyOrder: false,
+      }),
+    [navigation, order.id]
+  );
+
+  const listRight = useCallback(
+    () => (
+      <View style={styles.listSide}>
+        <Text
+          style={[
+            styles.listStatusText,
+            { color: order.has_paid ? Colors.green400 : Colors.red400 },
+          ]}
+        >
+          <Icon
+            accessibilityLabel={
+              order.has_delivered ? t("action.yes") : t("action.no")
+            }
+            style={styles.listStatusIcon}
+            name={order.has_paid ? "check" : "close"}
+          />
+          {t("order.has_paid")}
+        </Text>
+        <Text
+          style={[
+            styles.listStatusText,
+            {
+              color: order.has_delivered ? Colors.green400 : Colors.red400,
+            },
+          ]}
+        >
+          <Icon
+            accessibilityLabel={
+              order.has_delivered ? t("action.yes") : t("action.no")
+            }
+            style={styles.listStatusIcon}
+            name={order.has_delivered ? "check" : "close"}
+          />
+          {t("order.has_delivered")}
+        </Text>
+      </View>
+    ),
+    [t, order]
+  );
 
   return (
     <Swipeable
       ref={swipeableRef}
       containerStyle={
-        order.has_delivered && order.has_paid ? styles.itemDone : undefined
+        order.has_delivered && order.has_paid ? styles.listOpaque : undefined
       }
     >
       <List.Item
         style={{ backgroundColor: theme.colors.background }}
         title={
-          <View style={styles.orderTitle}>
+          <View style={styles.listTitle}>
             <View
               style={[
-                styles.buySellTag,
+                styles.typeTag,
                 {
                   backgroundColor: order.is_buy_order
                     ? Colors.red400
@@ -90,7 +133,7 @@ const OrderItem: FC<{ order: Order }> = ({ order }) => {
                 },
               ]}
             >
-              <Text style={styles.buySellTagText}>
+              <Text style={styles.typeTagText}>
                 {order.is_buy_order ? t("order.buy") : t("order.sell")}
               </Text>
             </View>
@@ -98,42 +141,7 @@ const OrderItem: FC<{ order: Order }> = ({ order }) => {
           </View>
         }
         description={order.loc_text || " "}
-        right={() => (
-          <View style={styles.status}>
-            <Text
-              style={[
-                styles.statusText,
-                { color: order.has_paid ? Colors.green400 : Colors.red400 },
-              ]}
-            >
-              <Icon
-                accessibilityLabel={
-                  order.has_delivered ? t("action.yes") : t("action.no")
-                }
-                style={styles.statusIcon}
-                name={order.has_paid ? "check" : "close"}
-              />
-              {t("order.has_paid")}
-            </Text>
-            <Text
-              style={[
-                styles.statusText,
-                {
-                  color: order.has_delivered ? Colors.green400 : Colors.red400,
-                },
-              ]}
-            >
-              <Icon
-                accessibilityLabel={
-                  order.has_delivered ? t("action.yes") : t("action.no")
-                }
-                style={styles.statusIcon}
-                name={order.has_delivered ? "check" : "close"}
-              />
-              {t("order.has_delivered")}
-            </Text>
-          </View>
-        )}
+        right={listRight}
         onPress={onEdit}
       />
     </Swipeable>

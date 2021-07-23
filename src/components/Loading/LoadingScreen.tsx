@@ -5,8 +5,8 @@ import { Colors } from "react-native-paper";
 const styles = StyleSheet.create({
   root: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
   },
 });
 

@@ -18,40 +18,43 @@ const styles = StyleSheet.create({
     backgroundColor: TabThemeColor.product,
   },
   list: { flex: 1 },
-  text: {
-    fontWeight: "bold",
-  },
-  quantityTextHeader: {
+  listHeadQuantity: {
     lineHeight: 12,
-  },
-  quantityText: {
-    textAlign: "center",
     width: 52,
   },
-  statHeader: {
+  listHeader: {
     flexDirection: "row",
     justifyContent: "flex-end",
     paddingHorizontal: 8,
   },
-  listCenter: {
+  listQuantityText: {
+    textAlign: "center",
+    width: 52,
+  },
+  listSide: {
     justifyContent: "center",
+  },
+  listTitle: {
+    fontWeight: "bold",
   },
 });
 
 const ProductItem: FC<{ product: Product }> = ({ product }) => {
   const navigation = useNavigation();
 
-  const onEdit = () =>
-    navigation.navigate(RouteName.ProductEditor, { id: product.id });
+  const onEdit = useCallback(
+    () => navigation.navigate(RouteName.ProductEditor, { id: product.id }),
+    [navigation, product.id]
+  );
 
   const { data: stocks } = useProductsStockQuery();
 
   return (
     <List.Item
-      title={<Text style={styles.text}>{product.name}</Text>}
+      title={<Text style={styles.listTitle}>{product.name}</Text>}
       right={({ style }) => (
-        <View style={[style, styles.listCenter]}>
-          <Text style={styles.quantityText}>{stocks?.[product.id]}</Text>
+        <View style={[style, styles.listSide]}>
+          <Text style={styles.listQuantityText}>{stocks?.[product.id]}</Text>
         </View>
       )}
       description={product.description}
@@ -87,8 +90,8 @@ export const ProductsScreen: FC<
           ItemSeparatorComponent={Divider}
           stickyHeaderIndices={[0]}
           ListHeaderComponent={
-            <View style={styles.statHeader}>
-              <Caption style={[styles.quantityText, styles.quantityTextHeader]}>
+            <View style={styles.listHeader}>
+              <Caption style={styles.listHeadQuantity}>
                 {t("product.stock")}
               </Caption>
             </View>

@@ -1,5 +1,5 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import { FC, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, ListRenderItem, StyleSheet, View } from "react-native";
 import {
@@ -13,6 +13,7 @@ import {
   Title,
 } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
+import type { RangeChange } from "react-native-paper-dates/lib/typescript/src/Date/Calendar";
 import { ParamList, RouteName } from "screens/types";
 import {
   OrderProductsStats,
@@ -26,54 +27,54 @@ const styles = StyleSheet.create({
   dateButton: {
     marginBottom: 12,
   },
-  statsHeader: {
-    fontSize: 21,
-    fontWeight: "bold",
-    marginBottom: 0,
-  },
-  statsValue: {
-    fontSize: 40,
-    color: Colors.blue400,
-    fontWeight: "bold",
-  },
-  stat: {
-    padding: 12,
-  },
-  statHeader: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingHorizontal: 8,
-  },
-  statRank: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  statProfit: {
-    color: Colors.green400,
-    textAlign: "center",
-  },
-  statProfitWidth: {
-    width: 76,
-  },
-  statAmount: {
-    textAlign: "center",
-    color: Colors.blue400,
-  },
-  statAmountWidth: {
-    width: 48,
-  },
-  statHeaderText: {
-    fontWeight: "bold",
-    textAlign: "center",
-    lineHeight: 12,
-    textAlignVertical: "center",
-  },
   list: {
     flex: 1,
     marginTop: 16,
   },
-  listCenter: {
+  listAmount: {
+    color: Colors.blue400,
+    textAlign: "center",
+  },
+  listAmountWidth: {
+    width: 48,
+  },
+  listColHead: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingHorizontal: 8,
+  },
+  listColHeadText: {
+    fontWeight: "bold",
+    lineHeight: 12,
+    textAlign: "center",
+    textAlignVertical: "center",
+  },
+  listProfit: {
+    color: Colors.green400,
+    textAlign: "center",
+  },
+  listProfitWidth: {
+    width: 76,
+  },
+  listRank: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  listSide: {
     justifyContent: "center",
+  },
+  stat: {
+    padding: 12,
+  },
+  statLabel: {
+    fontSize: 21,
+    fontWeight: "bold",
+    marginBottom: 0,
+  },
+  statValue: {
+    color: Colors.blue400,
+    fontSize: 40,
+    fontWeight: "bold",
   },
 });
 
@@ -83,19 +84,19 @@ const OrderProductStatItem: FC<{ stats: OrderProductsStats; index: number }> =
     return (
       <List.Item
         left={({ style }) => (
-          <View style={[styles.listCenter, style]}>
-            <Caption style={styles.statRank}>#{index + 1}</Caption>
+          <View style={[styles.listSide, style]}>
+            <Caption style={styles.listRank}>#{index + 1}</Caption>
           </View>
         )}
         title={<Text>{product?.name}</Text>}
         descriptionNumberOfLines={1}
         right={({ style }) => (
           <>
-            <View style={[styles.listCenter, styles.statAmountWidth, style]}>
-              <Text style={styles.statAmount}>{stats.amount}</Text>
+            <View style={[styles.listSide, styles.listAmountWidth, style]}>
+              <Text style={styles.listAmount}>{stats.amount}</Text>
             </View>
-            <View style={[styles.listCenter, styles.statProfitWidth, style]}>
-              <Text style={styles.statProfit}>{stats.profit}</Text>
+            <View style={[styles.listSide, styles.listProfitWidth, style]}>
+              <Text style={styles.listProfit}>{stats.profit}</Text>
             </View>
           </>
         )}
@@ -153,12 +154,23 @@ export const DashboardProfitScreen: FC<
     [orderProductsStats]
   );
 
+  const openDatePicker = useCallback(() => setOpenDate(true), []);
+  const closeDatePicker = useCallback(() => setOpenDate(false), []);
+  const onDatePickerConfirm = useCallback<RangeChange>(
+    ({ startDate, endDate }) => {
+      if (!startDate || !endDate) return;
+      setOpenDate(false);
+      setRange({ startDate, endDate });
+    },
+    []
+  );
+
   return (
     <View style={screenStyles.content}>
       <Button
         mode="contained"
         icon="calendar-range"
-        onPress={() => setOpenDate(true)}
+        onPress={openDatePicker}
         style={styles.dateButton}
       >
         {intlDtFormat.format(range.startDate)} -{" "}
@@ -167,14 +179,10 @@ export const DashboardProfitScreen: FC<
       <DatePickerModal
         mode="range"
         visible={openDate}
-        onDismiss={() => setOpenDate(false)}
+        onDismiss={closeDatePicker}
         startDate={range.startDate}
         endDate={range.endDate}
-        onConfirm={({ startDate, endDate }) => {
-          if (!startDate || !endDate) return;
-          setOpenDate(false);
-          setRange({ startDate, endDate });
-        }}
+        onConfirm={onDatePickerConfirm}
         locale={i18n.language}
         saveLabel={t("action.save")}
         startLabel={t("time.start")}
@@ -182,8 +190,8 @@ export const DashboardProfitScreen: FC<
         label={t("time.select_period")}
       />
       <Card style={styles.stat}>
-        <Text style={styles.statsHeader}>{t("stats.profit")}</Text>
-        <Text style={styles.statsValue}>{profit}</Text>
+        <Text style={styles.statLabel}>{t("stats.profit")}</Text>
+        <Text style={styles.statValue}>{profit}</Text>
       </Card>
       <FlatList
         style={styles.list}
@@ -191,11 +199,11 @@ export const DashboardProfitScreen: FC<
         ListHeaderComponent={
           <View>
             <Title>{t("stats.top_products")}</Title>
-            <View style={styles.statHeader}>
-              <Caption style={[styles.statAmountWidth, styles.statHeaderText]}>
+            <View style={styles.listColHead}>
+              <Caption style={[styles.listAmountWidth, styles.listColHeadText]}>
                 {t("order.amount")}
               </Caption>
-              <Caption style={[styles.statProfitWidth, styles.statHeaderText]}>
+              <Caption style={[styles.listProfitWidth, styles.listColHeadText]}>
                 {t("stats.profit")}
               </Caption>
             </View>

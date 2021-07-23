@@ -35,22 +35,22 @@ import { toast } from "utils/toasts";
 const snapPoints = ["85%"];
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 12,
-    backgroundColor: "transparent",
-    borderTopWidth: StyleSheet.hairlineWidth,
+  inputAmount: {
+    width: 80,
+  },
+  inputPerPrice: {
+    marginRight: 12,
+    width: 120,
   },
   list: {
     flex: 1,
   },
-  perPrice: {
-    width: 120,
-    marginRight: 12,
-  },
-  amount: {
-    width: 80,
-  },
   totalContainer: {
+    backgroundColor: "transparent",
+    borderTopWidth: StyleSheet.hairlineWidth,
+    padding: 12,
+  },
+  totalRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 8,
@@ -112,63 +112,61 @@ const ProductItem: FC<{
     setValue("amount", orderProduct.amount);
   }, [orderProductMapRef, product.id, setValue]);
 
-  return (
-    <List.Item
-      title={product.name}
-      right={() => (
-        <>
-          <Controller
-            control={control}
-            name="per_price"
-            rules={rules.perPrice}
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { invalid },
-            }) => (
-              <TextInput
-                style={styles.perPrice}
-                label={t("order.per_price")}
-                dense
-                mode="outlined"
-                value={String(value)}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                keyboardType="numeric"
-                error={invalid}
-              />
-            )}
-            defaultValue={
-              isBuyOrder
-                ? product.default_buy_price
-                : product.default_sell_price
-            }
-          />
-          <Controller
-            control={control}
-            name="amount"
-            rules={rules.amount}
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { invalid },
-            }) => (
-              <TextInput
-                style={styles.amount}
-                label={t("order.amount")}
-                dense
-                mode="outlined"
-                value={String(value)}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                keyboardType="numeric"
-                error={invalid}
-              />
-            )}
-            defaultValue={0}
-          />
-        </>
-      )}
-    />
+  const listRight = useCallback(
+    () => (
+      <>
+        <Controller
+          control={control}
+          name="per_price"
+          rules={rules.perPrice}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid },
+          }) => (
+            <TextInput
+              style={styles.inputPerPrice}
+              label={t("order.per_price")}
+              dense
+              mode="outlined"
+              value={String(value)}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              keyboardType="numeric"
+              error={invalid}
+            />
+          )}
+          defaultValue={
+            isBuyOrder ? product.default_buy_price : product.default_sell_price
+          }
+        />
+        <Controller
+          control={control}
+          name="amount"
+          rules={rules.amount}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid },
+          }) => (
+            <TextInput
+              style={styles.inputAmount}
+              label={t("order.amount")}
+              dense
+              mode="outlined"
+              value={String(value)}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              keyboardType="numeric"
+              error={invalid}
+            />
+          )}
+          defaultValue={0}
+        />
+      </>
+    ),
+    [control, isBuyOrder, product, t]
   );
+
+  return <List.Item title={product.name} right={listRight} />;
 };
 
 const keyExtractor = (item: Product) => String(item.id);
@@ -189,7 +187,12 @@ export const OrderProductEditor: FC<{
   }, [orderProducts]);
 
   const sheetRef = useRef<BottomSheetModal>(null);
+
   const sheetIndexRef = useRef(-1);
+  const onBottomSheetChange = useCallback(
+    (index: number) => (sheetIndexRef.current = index),
+    []
+  );
 
   const { data: dataProducts, status: statusGetProducts } = useProductsQuery();
 
@@ -258,9 +261,9 @@ export const OrderProductEditor: FC<{
   return (
     <>
       <Surface
-        style={[styles.container, { borderColor: theme.colors.surface }]}
+        style={[styles.totalContainer, { borderColor: theme.colors.surface }]}
       >
-        <View style={styles.totalContainer}>
+        <View style={styles.totalRow}>
           <Text style={styles.totalText}>{t("order.total")}</Text>
           <Text style={styles.totalText}>{totalPrice}</Text>
         </View>
@@ -274,7 +277,7 @@ export const OrderProductEditor: FC<{
         backgroundComponent={CustomBackgroundComponent}
         ref={sheetRef}
         handleComponent={null}
-        onChange={(index) => (sheetIndexRef.current = index)}
+        onChange={onBottomSheetChange}
       >
         <FlatList
           style={styles.list}

@@ -14,20 +14,20 @@ import {
 import { Order } from "services/order";
 
 const styles = StyleSheet.create({
+  divider: {
+    marginBottom: 12,
+  },
   toggle: {
-    marginBottom: 8,
-    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     elevation: 2,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
     padding: 12,
   },
   toggleLabel: {
     fontSize: 16,
     marginRight: 12,
-  },
-  divider: {
-    marginBottom: 12,
   },
 });
 
