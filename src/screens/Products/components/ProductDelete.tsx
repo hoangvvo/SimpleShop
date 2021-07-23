@@ -48,6 +48,9 @@ export const ProductDelete: FC<{
           </Dialog.Title>
           <Dialog.Content>
             <Paragraph>{t("action.not_undoable")}</Paragraph>
+            <Paragraph style={{ color: Colors.red400 }}>
+              {t("product_editor.delete_also_order")}
+            </Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={onDismiss}>{t("action.cancel")}</Button>

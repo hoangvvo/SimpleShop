@@ -1,9 +1,6 @@
 import { Platform } from "react-native";
 import RNFS from "react-native-fs";
-import SQLite, {
-  DatabaseParams,
-  SQLiteDatabase,
-} from "react-native-sqlite-storage";
+import SQLite, { DatabaseParams } from "react-native-sqlite-storage";
 import {
   order as orderSchema,
   orderProducts as orderProductsSchema,
@@ -26,23 +23,22 @@ export const dbPath =
     ? `${RNFS.DocumentDirectoryPath.replace("files", "databases")}/${dbName}`
     : `${RNFS.LibraryDirectoryPath}/LocalDatabase/${dbName}`;
 
-let db: SQLiteDatabase;
+const initDBPromise = (async () => {
+  const db = await SQLite.openDatabase(dbParams);
 
-export const initDb = async () => {
-  if (db) return db;
-
-  const _db = await SQLite.openDatabase(dbParams);
-
-  await _db.transaction((tx) => {
+  await db.transaction((tx) => {
     for (const initSchema of initSchemas) {
       tx.executeSql(initSchema);
     }
   });
 
-  return (db = _db);
+  return db;
+})();
+
+export const initDb = async () => {
+  return initDBPromise;
 };
 
 export const deleteDb = async () => {
-  await db.close();
   await SQLite.deleteDatabase(dbParams);
 };

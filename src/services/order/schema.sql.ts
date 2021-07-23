@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS "order" (
   note VARCHAR(256) NULL,
   has_paid BOOLEAN NOT NULL DEFAULT FALSE,
   has_delivered BOOLEAN NOT NULL DEFAULT FALSE,
-  created_at DATETIME NOT NULL
+  created_at INTEGER NOT NULL
 )
 `;
 

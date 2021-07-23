@@ -1,8 +1,7 @@
-import { useTheme } from "@react-navigation/native";
 import { StackHeaderProps } from "@react-navigation/stack";
 import { FC } from "react";
 import { StatusBar, StyleSheet } from "react-native";
-import { Appbar } from "react-native-paper";
+import { Appbar, useTheme } from "react-native-paper";
 
 const styles = StyleSheet.create({
   root: {
@@ -23,7 +22,9 @@ export const NavigationBar: FC<StackHeaderProps> = ({
       style={[
         styles.root,
         {
-          backgroundColor: !theme.dark ? options.headerTintColor : undefined,
+          backgroundColor: !theme.dark
+            ? options.headerTintColor
+            : theme.colors.surface,
         },
       ]}
       statusBarHeight={StatusBar.currentHeight}

@@ -22,6 +22,7 @@ import { ParamList, RouteName } from "screens/types";
 import { useColorSchemeSettings } from "styles/colorScheme";
 import { styles as screenStyles } from "styles/screens";
 import { toast } from "utils/toasts";
+// @ts-ignore
 import { githubUrl, name as appName } from "../../../app.json";
 import { version as appVersion } from "../../../package.json";
 
@@ -140,10 +141,10 @@ export const SettingsScreen: FC<
           >
             {supportedLngs.map((lng) => (
               <Picker.Item
-                style={{ color: theme.colors.text }}
                 key={lng}
                 label={t(`language.${lng}`)}
                 value={lng}
+                color={theme.colors.text}
               />
             ))}
           </Picker>
@@ -168,17 +169,17 @@ export const SettingsScreen: FC<
             dropdownIconColor={theme.colors.text}
           >
             <Picker.Item
-              style={{ color: theme.colors.text }}
+              color={theme.colors.text}
               label={t("settings.color_scheme.follow_system")}
               value=""
             />
             <Picker.Item
-              style={{ color: theme.colors.text }}
+              color={theme.colors.text}
               label={t("settings.color_scheme.light")}
               value="light"
             />
             <Picker.Item
-              style={{ color: theme.colors.text }}
+              color={theme.colors.text}
               label={t("settings.color_scheme.dark")}
               value="dark"
             />

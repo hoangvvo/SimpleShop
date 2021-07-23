@@ -4,7 +4,6 @@ import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
   NavigationContainer,
-  useTheme,
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationBar } from "components/NavigationBar";
@@ -23,7 +22,7 @@ import {
 } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { DashboardScreen } from "screens/Dashboard";
+import { DashboardProfitScreen, DashboardScreen } from "screens/Dashboard";
 import { OrderEditorScreen, OrdersScreen } from "screens/Orders";
 import { ProductEditorScreen, ProductsScreen } from "screens/Products";
 import { SettingsScreen } from "screens/Settings";
@@ -44,9 +43,8 @@ CombinedDefaultTheme.colors.primary = CombinedDarkTheme.colors.primary =
 
 const Main: FC = () => {
   const { t } = useTranslation();
-  const theme = useTheme();
   return (
-    <Tab.Navigator shifting={!theme.dark}>
+    <Tab.Navigator shifting>
       <Tab.Screen
         name={RouteName.Dashboard}
         component={DashboardScreen}
@@ -129,6 +127,13 @@ const AppInner: FC = () => {
                     component={SettingsScreen}
                     options={{
                       headerTitle: t("settings.title"),
+                    }}
+                  />
+                  <Stack.Screen
+                    name={RouteName.DashboardProfit}
+                    component={DashboardProfitScreen}
+                    options={{
+                      headerTitle: t("stats.profit"),
                     }}
                   />
                 </Stack.Navigator>

@@ -34,7 +34,7 @@ INSERT INTO
     created_at
   )
 VALUES
-  (?, ?, ?, ?, ?, datetime('now'))
+  (?, ?, ?, ?, ?, ?)
 `;
 
 export const orderUpdate = `

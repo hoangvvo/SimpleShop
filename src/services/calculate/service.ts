@@ -1,8 +1,9 @@
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { Order, OrderService } from "services/order";
+import { OrderProductsStats } from "./types";
 
 export class CalculateService {
-  static async getProfit(
+  static async getOrderProductsStats(
     db: SQLiteDatabase,
     fromTimestamp: number,
     toTimestamp: number
@@ -14,6 +15,7 @@ export class CalculateService {
     const ordersMap = new Map<Order["id"], Order>();
     const productsMap = Object.create({}) as {
       [key: number]: {
+        _calc: number;
         amount: number;
         profit: number;
       };
@@ -25,7 +27,11 @@ export class CalculateService {
       const order = ordersMap.get(orderProduct.order_id);
       if (!order) return false;
       if (!(orderProduct.product_id in productsMap))
-        productsMap[orderProduct.product_id] = { amount: 0, profit: 0 };
+        productsMap[orderProduct.product_id] = {
+          amount: 0,
+          profit: 0,
+          _calc: 0,
+        };
       if (order.is_buy_order) {
         // store for later calculation
         return true;
@@ -34,19 +40,44 @@ export class CalculateService {
       // we record the selling orders also
       const productsMapObj = productsMap[orderProduct.product_id];
       productsMapObj.amount += orderProduct.amount;
+      productsMapObj._calc += orderProduct.amount;
       productsMapObj.profit += orderProduct.per_price * orderProduct.amount;
       return false;
     });
     for (const filteredBuyOrder of filteredBuyOrders) {
       const subtractableAmount = Math.min(
         filteredBuyOrder.amount,
-        productsMap[filteredBuyOrder.product_id].amount
+        productsMap[filteredBuyOrder.product_id]._calc
       );
-      productsMap[filteredBuyOrder.product_id].amount -= subtractableAmount;
+      productsMap[filteredBuyOrder.product_id]._calc -= subtractableAmount;
       productsMap[filteredBuyOrder.product_id].profit -=
         subtractableAmount * filteredBuyOrder.per_price;
     }
-    return Object.values(productsMap).reduce(
+    const arr: OrderProductsStats[] = [];
+
+    for (const [key, value] of Object.entries(productsMap)) {
+      arr.push({
+        product_id: Number(key),
+        amount: value.amount,
+        profit: value.profit,
+      });
+    }
+
+    return arr;
+  }
+
+  static async getProfit(
+    db: SQLiteDatabase,
+    fromTimestamp: number,
+    toTimestamp: number
+  ) {
+    const calculatedOrderProductArr =
+      await CalculateService.getOrderProductsStats(
+        db,
+        fromTimestamp,
+        toTimestamp
+      );
+    return calculatedOrderProductArr.reduce(
       (prev, current) => (prev += current.profit),
       0
     );

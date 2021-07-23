@@ -64,6 +64,7 @@ export class OrderService {
       input.note,
       input.has_paid,
       input.has_delivered,
+      Date.now(),
     ]);
 
     const filteredOrderProducts = input.order_products?.filter(

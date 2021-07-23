@@ -17,7 +17,8 @@ const invalidateCache = (client: QueryClient, orderId?: Order["id"]) => {
   client.invalidateQueries("orders");
   client.invalidateQueries("orders-count");
   if (orderId) client.invalidateQueries(["order", orderId]);
-  client.invalidateQueries(["calculate", "profit"]);
+  client.invalidateQueries(["calculate"]);
+  client.invalidateQueries(["calculate"]);
 };
 
 export const useOrdersQuery = () => {

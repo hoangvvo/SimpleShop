@@ -34,7 +34,8 @@
   },
   "product_editor": {
     "title_edit": "Edit Product",
-    "title_create": "New Product"
+    "title_create": "New Product",
+    "delete_also_order": "This will also delete its orders."
   },
   "error": {
     "something_went_wrong": "Something went wrong",
@@ -69,13 +70,18 @@
     "cancel": "Cancel",
     "select": "Select",
     "done": "Done",
+    "save": "Save",
     "not_undoable": "This action cannot be undone."
   },
   "stats": {
-    "profit": "Profit"
+    "profit": "Profit",
+    "top_products": "Top Products"
   },
   "time": {
-    "today": "Today"
+    "today": "Today",
+    "start": "Start",
+    "end": "End",
+    "select_period": "Select period"
   },
   "settings": {
     "title": "Settings",

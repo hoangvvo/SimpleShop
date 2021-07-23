@@ -34,7 +34,8 @@
   },
   "product_editor": {
     "title_edit": "Chỉnh sửa sản phẩm",
-    "title_create": "Tạo sản phẩm"
+    "title_create": "Tạo sản phẩm",
+    "delete_also_order": "Việc này cũng sẽ xóa đơn hàng của sản phẩm này."
   },
   "error": {
     "something_went_wrong": "Có gì đó đã xảy ra",
@@ -69,13 +70,18 @@
     "cancel": "Hủy bỏ",
     "select": "Chọn",
     "done": "Xong",
+    "save": "Lưu",
     "not_undoable": "Hành động này không thể được hoàn tác."
   },
   "stats": {
-    "profit": "Lợi nhuận"
+    "profit": "Lợi nhuận",
+    "top_products": "Sản phẩm hàng đầu"
   },
   "time": {
-    "today": "Hôm nay"
+    "today": "Hôm nay",
+    "start": "Bắt đầu",
+    "end": "Kết thúc",
+    "select_period": "Chọn chu kì"
   },
   "settings": {
     "title": "Cài đặt",
