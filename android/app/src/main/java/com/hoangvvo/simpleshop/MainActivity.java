@@ -1,4 +1,4 @@
-package com.simpleshop;
+package com.hoangvvo.simpleshop;
 
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;

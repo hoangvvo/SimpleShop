@@ -39,6 +39,14 @@ See [Screenshots](./resources/screenshots) to learn more.
 3. Set up emulator or physical devices
 4. Run `yarn start` and `yarn android`/`yarn ios` in two different terminals
 
+## Build
+
+### Android
+
+1. Copy `simple-shop.keystore` file back into `android/app`.
+2. Update the `*****` with the keystore password in `android/gradle.properties`.
+3. Run `cd android && ./gradlew bundleRelease`.
+
 ## License
 
 See [LICENSE](LICENSE).
