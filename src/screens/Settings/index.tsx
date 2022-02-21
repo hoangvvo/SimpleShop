@@ -93,7 +93,6 @@ export const SettingsScreen: FC<
   const onImport = async () => {
     try {
       const { fileCopyUri } = await DocumentPicker.pickSingle({
-        // @ts-ignore
         type: DocumentPicker.types.allFiles,
         copyTo: "cachesDirectory",
       });
@@ -114,7 +113,7 @@ export const SettingsScreen: FC<
         { cancelable: true }
       );
     } catch (e) {
-      /* noop */
+      /* noop: user cancelled */
     }
   };
 
@@ -124,11 +123,12 @@ export const SettingsScreen: FC<
       onError(error: any) {
         toast.error(error.message);
       },
-      onSuccess(copyToPath) {
-        toast.success(t("settings.export.ok_message", { path: copyToPath }));
+      onSuccess(ok) {
+        if (ok) toast.success(t("settings.export.ok_message"));
       },
     }
   );
+  const onExport = () => mutateExport();
 
   const theme = useTheme();
   const { value: settingsValues, changeSetting } = useSettings();
@@ -254,7 +254,7 @@ export const SettingsScreen: FC<
       <List.Section>
         <List.Subheader>{t("settings.title_data")}</List.Subheader>
         <List.Item
-          onPress={() => mutateExport()}
+          onPress={onExport}
           disabled={isLoading}
           title={t("settings.export.title")}
         />

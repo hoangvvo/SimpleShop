@@ -95,7 +95,7 @@
     },
     "export": {
       "title": "Xuất dữ liệu",
-      "ok_message": "Cơ sở dữ liệu đã được xuất ra tại {{ path }}"
+      "ok_message": "Cơ sở dữ liệu đã được xuất"
     },
     "color_scheme": {
       "title": "Chủ đề",

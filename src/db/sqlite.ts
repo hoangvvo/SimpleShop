@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
-import RNFS from "react-native-fs";
+import RNFS, { readFile } from "react-native-fs";
+import Share from "react-native-share";
 import SQLite, { DatabaseParams } from "react-native-sqlite-storage";
 import {
   order as orderSchema,
@@ -35,8 +36,10 @@ export const initDb = async () => {
 };
 
 export const deleteDb = async () => {
+  // we only archive not delete
+  // await SQLite.deleteDatabase(dbParams);
   const archivedDbPath = `${dbPath}.${Date.now()}.old`;
-  await RNFS.copyFile(dbPath, archivedDbPath); // copy just in case
+  await RNFS.copyFile(dbPath, archivedDbPath);
   await SQLite.deleteDatabase(dbParams);
 };
 
@@ -46,8 +49,15 @@ export const importDb = async (fileCopyUri: string) => {
 };
 
 export const exportDb = async () => {
-  if (Platform.OS === "ios") throw new Error("Not implemented");
-  const copyToPath = `${RNFS.DownloadDirectoryPath}/${Date.now()}_${dbName}`;
-  await RNFS.copyFile(dbPath, copyToPath);
-  return copyToPath;
+  const dbBase64 = await readFile(dbPath, "base64");
+  // FIXME: on android, this is not recognized so the extension turned into .null
+  const mimeType = `data:application/vnd.sqlite3`;
+  return Share.open({
+    url: `${mimeType};base64,${dbBase64}`,
+    filename: dbName,
+    type: mimeType,
+  }).then(
+    () => true,
+    () => false
+  );
 };

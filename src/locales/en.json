@@ -95,7 +95,7 @@
     },
     "export": {
       "title": "Export data",
-      "ok_message": "Database has been exported to {{ path }}"
+      "ok_message": "Database has been exported"
     },
     "color_scheme": {
       "title": "Theme",
