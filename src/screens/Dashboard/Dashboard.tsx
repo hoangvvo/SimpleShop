@@ -1,5 +1,5 @@
 import { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-tabs";
-import { FC, useCallback, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import {
@@ -79,18 +79,10 @@ export const DashboardScreen: FC<
     todayTimestamps[1]
   );
 
-  const onPressCog = useCallback(
-    () => navigation.navigate(RouteName.Settings),
-    [navigation]
-  );
-  const onPressCardProfit = useCallback(
-    () => navigation.navigate(RouteName.DashboardProfit),
-    [navigation]
-  );
-  const onPressCardOrders = useCallback(
-    () => navigation.navigate(RouteName.Orders),
-    [navigation]
-  );
+  const onPressCog = () => navigation.navigate(RouteName.Settings);
+  const onPressCardProfit = () =>
+    navigation.navigate(RouteName.DashboardProfit);
+  const onPressCardOrders = () => navigation.navigate(RouteName.Orders);
 
   const { data: stocks } = useProductsStockQuery();
   const hasNegativeStock = useMemo(

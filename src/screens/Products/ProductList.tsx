@@ -1,6 +1,6 @@
 import { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import { FC, useCallback } from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { ListRenderItem, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
@@ -50,10 +50,8 @@ const styles = StyleSheet.create({
 const ProductItem: FC<{ product: Product }> = ({ product }) => {
   const navigation = useNavigation();
 
-  const onEdit = useCallback(
-    () => navigation.navigate(RouteName.ProductEditor, { id: product.id }),
-    [navigation, product.id]
-  );
+  const onEdit = () =>
+    navigation.navigate(RouteName.ProductEditor, { id: product.id });
 
   const { data: stocks } = useProductsStockQuery();
 
@@ -91,10 +89,7 @@ export const ProductsScreen: FC<
   MaterialBottomTabScreenProps<ParamList, RouteName.Products>
 > = ({ navigation }) => {
   const { t } = useTranslation();
-  const onAdd = useCallback(
-    () => navigation.navigate(RouteName.ProductEditor),
-    [navigation]
-  );
+  const onAdd = () => navigation.navigate(RouteName.ProductEditor);
 
   const { data } = useProductsQuery();
 

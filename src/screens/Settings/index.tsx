@@ -3,7 +3,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { toast } from "components/Toast";
 import { deleteDb, exportDb, importDb } from "db/sqlite";
 import { supportedLngs } from "locales/constants";
-import { FC, useCallback } from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Alert,
@@ -60,7 +60,7 @@ export const SettingsScreen: FC<
       },
     }
   );
-  const onDelete = useCallback(() => {
+  const onDelete = () => {
     Alert.alert(
       "Reset all data?",
       t("action.not_undoable"),
@@ -77,7 +77,7 @@ export const SettingsScreen: FC<
       ],
       { cancelable: true }
     );
-  }, [t, mutateDelete]);
+  };
 
   const { isLoading: isLoadingImport, mutate: mutateImport } = useMutation(
     importDb,
@@ -90,7 +90,7 @@ export const SettingsScreen: FC<
       },
     }
   );
-  const onImport = useCallback(async () => {
+  const onImport = async () => {
     try {
       const { fileCopyUri } = await DocumentPicker.pickSingle({
         // @ts-ignore
@@ -116,7 +116,7 @@ export const SettingsScreen: FC<
     } catch (e) {
       /* noop */
     }
-  }, [t, mutateImport]);
+  };
 
   const { isLoading: isLoadingExport, mutate: mutateExport } = useMutation(
     exportDb,
@@ -133,29 +133,20 @@ export const SettingsScreen: FC<
   const theme = useTheme();
   const { value: settingsValues, changeSetting } = useSettings();
 
-  const onPickerChangeColorScheme = useCallback(
-    (itemValue: ColorSchemeName | "") =>
-      changeSetting("colorScheme", itemValue || null),
-    [changeSetting]
-  );
+  const onPickerChangeColorScheme = (itemValue: ColorSchemeName | "") =>
+    changeSetting("colorScheme", itemValue || null);
 
-  const onPickerChangeLanguage = useCallback(
-    (itemValue: string) =>
-      changeSetting(
-        "language",
-        (itemValue || null) as SettingsValues["language"]
-      ),
-    [changeSetting]
-  );
+  const onPickerChangeLanguage = (itemValue: string) =>
+    changeSetting(
+      "language",
+      (itemValue || null) as SettingsValues["language"]
+    );
 
-  const onPickerChangeCurrency = useCallback(
-    (itemValue: string) =>
-      changeSetting(
-        "currency",
-        (itemValue || null) as SettingsValues["currency"]
-      ),
-    [changeSetting]
-  );
+  const onPickerChangeCurrency = (itemValue: string) =>
+    changeSetting(
+      "currency",
+      (itemValue || null) as SettingsValues["currency"]
+    );
 
   const isLoading = isLoadingDelete || isLoadingExport || isLoadingImport;
 

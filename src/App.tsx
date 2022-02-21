@@ -54,6 +54,7 @@ const Main: FC = () => {
           tabBarLabel: t("dashboard.title"),
           tabBarIcon: "home",
           tabBarColor: TabThemeColor.dashboard,
+          title: t("dashboard.title"),
         }}
       />
       <Tab.Screen
@@ -63,6 +64,7 @@ const Main: FC = () => {
           tabBarLabel: t("order.title_other"),
           tabBarIcon: "clipboard-text",
           tabBarColor: TabThemeColor.order,
+          title: t("order.title_other"),
         }}
       />
       <Tab.Screen
@@ -72,6 +74,7 @@ const Main: FC = () => {
           tabBarLabel: t("product.title_other"),
           tabBarIcon: "shopping",
           tabBarColor: TabThemeColor.product,
+          title: t("product.title_other"),
         }}
       />
     </Tab.Navigator>

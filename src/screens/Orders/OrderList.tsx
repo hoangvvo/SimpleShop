@@ -63,14 +63,11 @@ const OrderItem: FC<{ order: Order }> = ({ order }) => {
 
   const swipeableRef = useRef<Swipeable>(null);
 
-  const onEdit = useCallback(
-    () =>
-      navigation.navigate(RouteName.OrderEditor, {
-        id: order.id,
-        isBuyOrder: false,
-      }),
-    [navigation, order.id]
-  );
+  const onEdit = () =>
+    navigation.navigate(RouteName.OrderEditor, {
+      id: order.id,
+      isBuyOrder: false,
+    });
 
   const listRight = useCallback(
     () => (
@@ -162,7 +159,6 @@ export const OrdersScreen: FC<
   const { data } = useOrdersQuery();
 
   const [addBtn, setAddBtn] = useState(false);
-  const onStateChange = useCallback(({ open }) => setAddBtn(open), []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("blur", () => {
@@ -217,7 +213,7 @@ export const OrdersScreen: FC<
             small: false,
           },
         ]}
-        onStateChange={onStateChange}
+        onStateChange={({ open }) => setAddBtn(open)}
         fabStyle={styles.fab}
       />
     </SafeAreaView>

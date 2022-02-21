@@ -39,15 +39,19 @@ export const useSettingsProvider = () => {
   // restore settings
   useEffect(() => {
     (async () => {
-      const values = await AsyncStorage.multiGet([
+      const values = (await AsyncStorage.multiGet([
         "colorScheme",
         "language",
         "currency",
-      ]);
+      ])) as [
+        [string, SettingsValues["colorScheme"]],
+        [string, SettingsValues["language"]],
+        [string, SettingsValues["currency"]]
+      ];
       setValue({
-        colorScheme: values[0][1] as SettingsValues["colorScheme"],
-        language: values[1][1] as SettingsValues["language"],
-        currency: values[2][1] as SettingsValues["currency"],
+        colorScheme: values[0][1],
+        language: values[1][1],
+        currency: values[2][1],
       });
     })();
   }, []);

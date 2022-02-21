@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { toast } from "components/Toast";
-import { FC, useCallback, useState } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import { Button, Colors, Dialog, Paragraph, Portal } from "react-native-paper";
@@ -32,20 +32,16 @@ export const ProductDelete: FC<{
   const navigation = useNavigation();
 
   const [deleteVisible, setDeleteVisible] = useState(false);
-  const onDismiss = useCallback(() => setDeleteVisible(false), []);
-  const onPress = useCallback(() => setDeleteVisible(true), []);
-
-  const onDelete = useCallback(
-    () => mutate({ id: product.id }),
-    [product.id, mutate]
-  );
+  const onDismiss = () => setDeleteVisible(false);
+  const presentDelete = () => setDeleteVisible(true);
+  const onDelete = () => mutate({ id: product.id });
 
   return (
     <>
       <Button
         color="#ffffff"
         style={styles.button}
-        onPress={onPress}
+        onPress={presentDelete}
         icon="archive"
       >
         {t("action.delete")}

@@ -191,10 +191,6 @@ export const OrderProductEditor: FC<{
   const sheetRef = useRef<BottomSheetModal>(null);
 
   const sheetIndexRef = useRef(-1);
-  const onBottomSheetChange = useCallback(
-    (index: number) => (sheetIndexRef.current = index),
-    []
-  );
 
   const { data: dataProducts, status: statusGetProducts } = useProductsQuery();
 
@@ -209,7 +205,7 @@ export const OrderProductEditor: FC<{
     }
   }, [orderProducts]);
 
-  const onDone = useCallback(() => {
+  const onDone = () => {
     const values: OrderProductWithoutOrderId[] = [];
     for (const [productId, formRef] of formMapRef.current) {
       if (Object.keys(formRef.formState.errors).length > 0) {
@@ -227,7 +223,7 @@ export const OrderProductEditor: FC<{
     }
     setOrderProducts(values);
     sheetRef.current?.dismiss();
-  }, [t, setOrderProducts]);
+  };
 
   useEffect(() => {
     const onBackHandler = BackHandler.addEventListener(
@@ -242,7 +238,7 @@ export const OrderProductEditor: FC<{
     return onBackHandler.remove;
   }, []);
 
-  const onPressButton = useCallback(() => sheetRef.current?.present(), []);
+  const presentList = () => sheetRef.current?.present();
 
   const renderItem: ListRenderItem<Product> = useCallback(
     ({ item }) => {
@@ -273,7 +269,7 @@ export const OrderProductEditor: FC<{
             {numberFormatProfit.format(totalPrice)}
           </Text>
         </View>
-        <Button icon="pencil" mode="outlined" onPress={onPressButton}>
+        <Button icon="pencil" mode="outlined" onPress={presentList}>
           {t("order_editor.product_list")}
         </Button>
       </Surface>
@@ -283,7 +279,7 @@ export const OrderProductEditor: FC<{
         backgroundComponent={CustomBackgroundComponent}
         ref={sheetRef}
         handleComponent={null}
-        onChange={onBottomSheetChange}
+        onChange={(index) => (sheetIndexRef.current = index)}
       >
         <FlatList
           style={styles.list}

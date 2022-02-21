@@ -1,5 +1,5 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, ListRenderItem, StyleSheet, View } from "react-native";
 import {
@@ -161,16 +161,13 @@ export const DashboardProfitScreen: FC<
     [orderProductsStats]
   );
 
-  const openDatePicker = useCallback(() => setOpenDate(true), []);
-  const closeDatePicker = useCallback(() => setOpenDate(false), []);
-  const onDatePickerConfirm = useCallback<RangeChange>(
-    ({ startDate, endDate }) => {
-      if (!startDate || !endDate) return;
-      setOpenDate(false);
-      setRange({ startDate, endDate });
-    },
-    []
-  );
+  const openDatePicker = () => setOpenDate(true);
+  const closeDatePicker = () => setOpenDate(false);
+  const onDatePickerConfirm: RangeChange = ({ startDate, endDate }) => {
+    if (!startDate || !endDate) return;
+    setOpenDate(false);
+    setRange({ startDate, endDate });
+  };
 
   const numberFormatProfit = useNumberFormatCurrency();
 

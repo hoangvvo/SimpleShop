@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { toast } from "components/Toast";
-import { FC, useCallback, useState } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import { Button, Colors, Dialog, Paragraph, Portal } from "react-native-paper";
@@ -36,9 +36,9 @@ export const OrderDelete: FC<{
   const navigation = useNavigation();
 
   const [deleteVisible, setDeleteVisible] = useState(false);
-  const onDismiss = useCallback(() => setDeleteVisible(false), []);
-  const onPress = useCallback(() => setDeleteVisible(true), []);
-  const onDelete = useCallback(() => mutate({ id: order.id }), [order, mutate]);
+  const onDismiss = () => setDeleteVisible(false);
+  const onPress = () => setDeleteVisible(true);
+  const onDelete = () => mutate({ id: order.id });
 
   return (
     <>
