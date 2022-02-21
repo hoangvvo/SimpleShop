@@ -2,6 +2,7 @@ import { useSQLite } from "db";
 import {
   QueryClient,
   useMutation,
+  UseMutationOptions,
   useQuery,
   useQueryClient,
 } from "react-query";
@@ -39,43 +40,57 @@ export const useOrderQuery = (id: Order["id"]) => {
   );
 };
 
-export const useOrderCreateMutation = () => {
+type OrderCreateMutationResult = Omit<Order, "id" | "created_at"> & {
+  order_products?: OrderProductWithoutOrderId[];
+};
+export const useOrderCreateMutation = (
+  options?: Omit<
+    UseMutationOptions<void, Error, OrderCreateMutationResult, unknown>,
+    "mutationFn"
+  >
+) => {
   const client = useQueryClient();
   const db = useSQLite();
-  return useMutation<
-    void,
-    Error,
-    Omit<Order, "id" | "created_at"> & {
-      order_products?: OrderProductWithoutOrderId[];
-    }
-  >(async (data) => {
+  return useMutation<void, Error, OrderCreateMutationResult>(async (data) => {
     await OrderService.create(db, data);
     invalidateCache(client);
-  });
+  }, options);
 };
 
-export const useOrderUpdateMutation = () => {
+type OrderUpdateMutationResult = Omit<Order, "is_buy_order" | "created_at"> & {
+  order_products?: OrderProductWithoutOrderId[];
+};
+export const useOrderUpdateMutation = (
+  options?:
+    | Omit<
+        UseMutationOptions<void, Error, OrderUpdateMutationResult, unknown>,
+        "mutationFn"
+      >
+    | undefined
+) => {
   const db = useSQLite();
   const client = useQueryClient();
-  return useMutation<
-    void,
-    Error,
-    Omit<Order, "is_buy_order" | "created_at"> & {
-      order_products?: OrderProductWithoutOrderId[];
-    }
-  >(async ({ id, ...data }) => {
-    await OrderService.update(db, id, data);
-    invalidateCache(client, id);
-  });
+  return useMutation<void, Error, OrderUpdateMutationResult>(
+    async ({ id, ...data }) => {
+      await OrderService.update(db, id, data);
+      invalidateCache(client, id);
+    },
+    options
+  );
 };
 
-export const useOrderDeleteMutation = () => {
+export const useOrderDeleteMutation = (
+  options?: Omit<
+    UseMutationOptions<void, Error, Pick<Order, "id">, unknown>,
+    "mutationFn"
+  >
+) => {
   const db = useSQLite();
   const client = useQueryClient();
   return useMutation<void, Error, Pick<Order, "id">>(async ({ id }) => {
     await OrderService.delete(db, id);
     invalidateCache(client, id);
-  });
+  }, options);
 };
 
 export const useOrdersCountQuery = (

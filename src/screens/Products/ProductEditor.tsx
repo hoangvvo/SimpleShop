@@ -1,9 +1,8 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { FormHelperText } from "components/HelperText";
 import { LoadingScreen } from "components/Loading";
-import { ErrorSnackbar } from "components/Snackbar";
 import { toast } from "components/Toast";
-import { FC, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
+import { FC, useEffect, useLayoutEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
@@ -38,40 +37,48 @@ export const ProductEditorScreen: FC<
   const { control, handleSubmit, setValue } = useForm<Omit<Product, "id">>({});
   const editingId = route.params?.id;
 
-  const {
-    mutateAsync: mutateAsyncCreate,
-    error: errorCreate,
-    reset: resetCreate,
-    status: statusCreate,
-  } = useProductCreateMutation();
+  const { mutate: mutateCreate, isLoading: isLoadingCreate } =
+    useProductCreateMutation({
+      onSuccess() {
+        toast.success(
+          t("entity.has_been_created", { name: t("product.title_one") })
+        );
+        navigation.goBack();
+      },
+      onError(e) {
+        toast.error(e.message);
+      },
+    });
 
-  const {
-    mutateAsync: mutateAsyncEdit,
-    error: errorEdit,
-    reset: resetEdit,
-    status: statusEdit,
-  } = useProductUpdateMutation();
+  const { mutate: mutateEdit, isLoading: isLoadingEdit } =
+    useProductUpdateMutation({
+      onSuccess() {
+        toast.success(
+          t("entity.has_been_updated", { name: t("product.title_one") })
+        );
+        navigation.goBack();
+      },
+      onError(e) {
+        toast.error(e.message);
+      },
+    });
 
   const onSubmit = useMemo(
     () =>
-      handleSubmit(async (data) => {
+      handleSubmit((data) => {
         if (editingId) {
-          await mutateAsyncEdit({
+          mutateEdit({
             id: editingId,
             ...data,
           });
-          toast.success(
-            t("entity.has_been_updated", { name: t("product.title_one") })
-          );
         } else {
-          await mutateAsyncCreate(data);
+          mutateCreate(data);
           toast.success(
             t("entity.has_been_created", { name: t("product.title_one") })
           );
         }
-        navigation.goBack();
       }),
-    [t, handleSubmit, mutateAsyncCreate, mutateAsyncEdit, editingId, navigation]
+    [t, handleSubmit, mutateCreate, mutateEdit, editingId]
   );
 
   const { data: dataGetEdit, status: statusGetEdit } = useProductQuery(
@@ -95,11 +102,7 @@ export const ProductEditorScreen: FC<
     });
   }, [navigation, editingId, t]);
 
-  const disableEditing = statusCreate === "loading" || statusEdit === "loading";
-  const resetMutate = useCallback(() => {
-    resetEdit();
-    resetCreate();
-  }, [resetEdit, resetCreate]);
+  const isLoading = isLoadingCreate || isLoadingEdit;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -108,7 +111,7 @@ export const ProductEditorScreen: FC<
           <Appbar.Action
             icon="check"
             onPress={onSubmit}
-            disabled={disableEditing}
+            disabled={isLoading}
             accessibilityLabel={
               editingId ? t("entity.update") : t("entity.create")
             }
@@ -116,11 +119,10 @@ export const ProductEditorScreen: FC<
         );
       },
     });
-  }, [editingId, navigation, t, disableEditing, onSubmit]);
+  }, [editingId, navigation, t, isLoading, onSubmit]);
 
   return (
     <View style={screenStyles.root}>
-      <ErrorSnackbar error={errorCreate || errorEdit} onDismiss={resetMutate} />
       {statusGetEdit === "loading" ? (
         <LoadingScreen />
       ) : (
@@ -140,7 +142,7 @@ export const ProductEditorScreen: FC<
                   maxLength={100}
                   label={t("product.name")}
                   error={!!error}
-                  disabled={disableEditing}
+                  disabled={isLoading}
                 />
                 <FormHelperText
                   error={error}
@@ -166,7 +168,7 @@ export const ProductEditorScreen: FC<
                   label={t("product.description")}
                   multiline
                   numberOfLines={3}
-                  disabled={disableEditing}
+                  disabled={isLoading}
                 />
                 <FormHelperText error={error} name={t("product.description")} />
               </View>
@@ -190,7 +192,7 @@ export const ProductEditorScreen: FC<
                     keyboardType="numeric"
                     label={t("product.default_sell_price")}
                     error={!!error}
-                    disabled={disableEditing}
+                    disabled={isLoading}
                   />
                   <FormHelperText
                     error={error}
@@ -218,7 +220,7 @@ export const ProductEditorScreen: FC<
                     keyboardType="numeric"
                     label={t("product.default_buy_price")}
                     error={!!error}
-                    disabled={disableEditing}
+                    disabled={isLoading}
                   />
                   <FormHelperText
                     error={error}

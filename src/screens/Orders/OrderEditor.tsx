@@ -1,15 +1,7 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { LoadingScreen } from "components/Loading";
-import { ErrorSnackbar } from "components/Snackbar";
 import { toast } from "components/Toast";
-import {
-  FC,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react";
+import { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
@@ -42,54 +34,58 @@ export const OrderEditorScreen: FC<
     OrderProductWithoutOrderId[]
   >([]);
 
-  const {
-    mutateAsync: mutateAsyncCreate,
-    error: errorCreate,
-    reset: resetCreate,
-    status: statusCreate,
-  } = useOrderCreateMutation();
+  const { mutate: mutateCreate, status: statusCreate } = useOrderCreateMutation(
+    {
+      onSuccess() {
+        toast.success(
+          t("entity.has_been_created", { name: t("order.title_one") })
+        );
+        navigation.goBack();
+      },
+      onError(e) {
+        toast.error(e.message);
+      },
+    }
+  );
 
-  const {
-    mutateAsync: mutateAsyncEdit,
-    error: errorEdit,
-    reset: resetEdit,
-    status: statusEdit,
-  } = useOrderUpdateMutation();
+  const { mutate: mutateEdit, status: statusEdit } = useOrderUpdateMutation({
+    onSuccess() {
+      toast.success(
+        t("entity.has_been_updated", { name: t("order.title_one") })
+      );
+      navigation.goBack();
+    },
+    onError(e) {
+      toast.error(e.message);
+    },
+  });
 
   const onSubmit = useMemo(
     () =>
-      handleSubmit(async (data) => {
+      handleSubmit((data) => {
         if (orderProducts.reduce((prev, curr) => prev + curr.amount, 0) <= 0) {
           return toast.error(t("order_editor.order_no_products"));
         }
         if (editingId) {
-          await mutateAsyncEdit({
+          mutateEdit({
             id: editingId,
             ...data,
             order_products: orderProducts,
           });
-          toast.success(
-            t("entity.has_been_updated", { name: t("order.title_one") })
-          );
         } else {
-          await mutateAsyncCreate({
+          mutateCreate({
             is_buy_order: isBuyOrder,
             ...data,
             order_products: orderProducts,
           });
-          toast.success(
-            t("entity.has_been_created", { name: t("order.title_one") })
-          );
         }
-        navigation.goBack();
       }),
     [
       t,
       handleSubmit,
-      mutateAsyncCreate,
-      mutateAsyncEdit,
+      mutateCreate,
+      mutateEdit,
       editingId,
-      navigation,
       isBuyOrder,
       orderProducts,
     ]
@@ -125,10 +121,6 @@ export const OrderEditorScreen: FC<
   }, [navigation, editingId, t, isBuyOrder]);
 
   const disableEditing = statusCreate === "loading" || statusEdit === "loading";
-  const resetMutate = useCallback(() => {
-    resetEdit();
-    resetCreate();
-  }, [resetEdit, resetCreate]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -151,7 +143,6 @@ export const OrderEditorScreen: FC<
     <LoadingScreen />
   ) : (
     <View style={screenStyles.root}>
-      <ErrorSnackbar error={errorCreate || errorEdit} onDismiss={resetMutate} />
       <ScrollView style={screenStyles.content}>
         <OrderDetailEditor
           control={control}

@@ -17,7 +17,18 @@ export const ProductDelete: FC<{
   product: Product;
 }> = ({ product }) => {
   const { t } = useTranslation();
-  const { mutateAsync } = useProductDeleteMutation();
+  const { mutate } = useProductDeleteMutation({
+    onSuccess() {
+      toast.success(
+        t("entity.has_been_deleted", { name: `'${product.name}'` })
+      );
+      setDeleteVisible(false);
+      navigation.goBack();
+    },
+    onError(e) {
+      toast.error(e.message);
+    },
+  });
   const navigation = useNavigation();
 
   const [deleteVisible, setDeleteVisible] = useState(false);
@@ -25,15 +36,8 @@ export const ProductDelete: FC<{
   const onPress = useCallback(() => setDeleteVisible(true), []);
 
   const onDelete = useCallback(
-    () =>
-      mutateAsync({ id: product.id }).then(() => {
-        toast.success(
-          t("entity.has_been_deleted", { name: `'${product.name}'` })
-        );
-        setDeleteVisible(false);
-        navigation.goBack();
-      }),
-    [navigation, t, product, mutateAsync]
+    () => mutate({ id: product.id }),
+    [product.id, mutate]
   );
 
   return (

@@ -18,27 +18,27 @@ export const OrderDelete: FC<{
   order: Order;
 }> = ({ order }) => {
   const { t } = useTranslation();
-  const { mutateAsync } = useOrderDeleteMutation();
+  const { mutate } = useOrderDeleteMutation({
+    onError(e) {
+      toast.error(e.message);
+    },
+    onSuccess(_data, variables) {
+      setDeleteVisible(false);
+      toast.success(
+        t("entity.has_been_deleted", {
+          name: `'${t("order.order_number_num", { id: variables.id })}'`,
+        })
+      );
+      navigation.goBack();
+    },
+  });
 
   const navigation = useNavigation();
 
   const [deleteVisible, setDeleteVisible] = useState(false);
   const onDismiss = useCallback(() => setDeleteVisible(false), []);
   const onPress = useCallback(() => setDeleteVisible(true), []);
-
-  const onDelete = useCallback(
-    () =>
-      mutateAsync({ id: order.id }).then(() => {
-        setDeleteVisible(false);
-        toast.success(
-          t("entity.has_been_deleted", {
-            name: `'${t("order.order_number_num", { id: order.id })}'`,
-          })
-        );
-        navigation.goBack();
-      }),
-    [navigation, order, t, mutateAsync]
-  );
+  const onDelete = useCallback(() => mutate({ id: order.id }), [order, mutate]);
 
   return (
     <>
