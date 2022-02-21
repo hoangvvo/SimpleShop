@@ -5,7 +5,7 @@ import {
   DefaultTheme as NavigationDefaultTheme,
   NavigationContainer,
 } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ErrorScreen } from "components/Error";
 import { NavigationBar } from "components/NavigationBar";
 import { Toaster } from "components/Toast";
@@ -34,7 +34,7 @@ import { useCurrentColorScheme } from "styles/colorScheme";
 
 LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);

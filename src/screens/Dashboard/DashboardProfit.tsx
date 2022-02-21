@@ -1,4 +1,4 @@
-import { StackScreenProps } from "@react-navigation/stack";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, ListRenderItem, StyleSheet, View } from "react-native";
@@ -127,7 +127,7 @@ const todayRangeInit = () => {
 };
 
 export const DashboardProfitScreen: FC<
-  StackScreenProps<ParamList, RouteName.DashboardProfit>
+  NativeStackScreenProps<ParamList, RouteName.DashboardProfit>
 > = () => {
   const [range, setRange] = useState<{
     startDate: Date;
@@ -183,13 +183,13 @@ export const DashboardProfitScreen: FC<
         {intlDtFormat.format(range.endDate)}
       </Button>
       <DatePickerModal
+        locale="en"
         mode="range"
         visible={openDate}
         onDismiss={closeDatePicker}
         startDate={range.startDate}
         endDate={range.endDate}
         onConfirm={onDatePickerConfirm}
-        locale={i18n.language.split("-")[0]}
         saveLabel={t("action.save")}
         startLabel={t("time.start")}
         endLabel={t("time.end")}

@@ -1,5 +1,5 @@
 import { Picker } from "@react-native-picker/picker";
-import { StackScreenProps } from "@react-navigation/stack";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { toast } from "components/Toast";
 import { deleteDb, exportDb, importDb } from "db/sqlite";
 import { supportedLngs } from "locales/constants";
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 const onPressGHLink = () => Linking.openURL(githubUrl);
 
 export const SettingsScreen: FC<
-  StackScreenProps<ParamList, RouteName.Settings>
+  NativeStackScreenProps<ParamList, RouteName.Settings>
 > = () => {
   const { t } = useTranslation();
 

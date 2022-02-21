@@ -1,4 +1,4 @@
-import { StackHeaderProps } from "@react-navigation/stack";
+import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { FC } from "react";
 import { StatusBar, StyleSheet } from "react-native";
 import { Appbar, useTheme } from "react-native-paper";
@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const NavigationBar: FC<StackHeaderProps> = ({
+export const NavigationBar: FC<NativeStackHeaderProps> = ({
   navigation,
   back,
   options,
@@ -31,7 +31,8 @@ export const NavigationBar: FC<StackHeaderProps> = ({
     >
       {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
       <Appbar.Content title={options.headerTitle} />
-      {options.headerRight && options.headerRight({})}
+      {options.headerRight &&
+        options.headerRight({ canGoBack: navigation.canGoBack() })}
     </Appbar.Header>
   );
 };

@@ -1,4 +1,4 @@
-import { StackScreenProps } from "@react-navigation/stack";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { FormHelperText } from "components/HelperText";
 import { LoadingScreen } from "components/Loading";
 import { toast } from "components/Toast";
@@ -31,7 +31,7 @@ const rules = {
 };
 
 export const ProductEditorScreen: FC<
-  StackScreenProps<ParamList, RouteName.ProductEditor>
+  NativeStackScreenProps<ParamList, RouteName.ProductEditor>
 > = ({ navigation, route }) => {
   const { t } = useTranslation();
   const { control, handleSubmit, setValue } = useForm<Omit<Product, "id">>({});

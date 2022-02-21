@@ -1,4 +1,4 @@
-import { StackScreenProps } from "@react-navigation/stack";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { LoadingScreen } from "components/Loading";
 import { toast } from "components/Toast";
 import { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
@@ -20,7 +20,7 @@ import { OrderProductEditor } from "./components/OrderProductEditor";
 import { OrderDetailEditor } from "./components/OrdersDetailEditor";
 
 export const OrderEditorScreen: FC<
-  StackScreenProps<ParamList, RouteName.OrderEditor>
+  NativeStackScreenProps<ParamList, RouteName.OrderEditor>
 > = ({ navigation, route }) => {
   const { t } = useTranslation();
   const { control, handleSubmit, setValue } = useForm<
