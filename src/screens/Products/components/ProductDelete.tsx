@@ -1,11 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
+import { toast } from "components/Toast";
 import { FC, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import { Button, Colors, Dialog, Paragraph, Portal } from "react-native-paper";
 import { Product } from "services/product";
 import { useProductDeleteMutation } from "services/product/api";
-import { toast } from "utils/toasts";
 
 const styles = StyleSheet.create({
   button: {
@@ -27,7 +27,9 @@ export const ProductDelete: FC<{
   const onDelete = useCallback(
     () =>
       mutateAsync({ id: product.id }).then(() => {
-        toast(t("entity.has_been_deleted", { name: `'${product.name}'` }));
+        toast.success(
+          t("entity.has_been_deleted", { name: `'${product.name}'` })
+        );
         setDeleteVisible(false);
         navigation.goBack();
       }),

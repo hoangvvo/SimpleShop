@@ -2,6 +2,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { FormHelperText } from "components/HelperText";
 import { LoadingScreen } from "components/Loading";
 import { ErrorSnackbar } from "components/Snackbar";
+import { toast } from "components/Toast";
 import { FC, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -16,7 +17,6 @@ import {
 } from "services/product/api";
 import { styles as screenStyles } from "styles/screens";
 import { isNumeric } from "utils/number";
-import { toast } from "utils/toasts";
 import { ProductDelete } from "./components/ProductDelete";
 
 const rules = {
@@ -60,10 +60,14 @@ export const ProductEditorScreen: FC<
             id: editingId,
             ...data,
           });
-          toast(t("entity.has_been_updated", { name: t("product.title_one") }));
+          toast.success(
+            t("entity.has_been_updated", { name: t("product.title_one") })
+          );
         } else {
           await mutateAsyncCreate(data);
-          toast(t("entity.has_been_created", { name: t("product.title_one") }));
+          toast.success(
+            t("entity.has_been_created", { name: t("product.title_one") })
+          );
         }
         navigation.goBack();
       }),

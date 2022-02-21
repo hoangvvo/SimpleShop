@@ -8,6 +8,7 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 import { ErrorScreen } from "components/Error";
 import { NavigationBar } from "components/NavigationBar";
+import { Toaster } from "components/Toast";
 import merge from "deepmerge";
 import { InitComponent } from "InitComponent";
 import { FC, useMemo } from "react";
@@ -143,6 +144,7 @@ const AppInner: FC = () => {
               </NavigationContainer>
             </BottomSheetModalProvider>
           </Portal.Host>
+          <Toaster />
         </SafeAreaProvider>
       </QueryClientProvider>
     </PaperProvider>

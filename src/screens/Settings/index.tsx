@@ -1,8 +1,9 @@
 import { Picker } from "@react-native-picker/picker";
 import { StackScreenProps } from "@react-navigation/stack";
+import { toast } from "components/Toast";
 import { deleteDb, exportDb, importDb } from "db/sqlite";
 import { supportedLngs } from "locales/constants";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Alert,
@@ -16,11 +17,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Caption, Colors, List, Text, useTheme } from "react-native-paper";
 // @ts-ignore
 import RNRestart from "react-native-restart";
+import { useMutation } from "react-query";
 import { ParamList, RouteName } from "screens/types";
 import { styles as screenStyles } from "styles/screens";
 import { supportedCurrencies } from "utils/currency";
 import { SettingsValues, useSettings } from "utils/settings";
-import { toast } from "utils/toasts";
 // @ts-ignore
 import { githubUrl, name as appName } from "../../../app.json";
 import { version as appVersion } from "../../../package.json";
@@ -46,8 +47,19 @@ const onPressGHLink = () => Linking.openURL(githubUrl);
 export const SettingsScreen: FC<
   StackScreenProps<ParamList, RouteName.Settings>
 > = () => {
-  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
+
+  const { isLoading: isLoadingDelete, mutate: mutateDelete } = useMutation(
+    deleteDb,
+    {
+      onError(error: any) {
+        toast.error(error.message);
+      },
+      onSuccess() {
+        RNRestart.Restart();
+      },
+    }
+  );
   const onDelete = useCallback(() => {
     Alert.alert(
       "Reset all data?",
@@ -59,27 +71,25 @@ export const SettingsScreen: FC<
         },
         {
           text: t("action.yes"),
-          onPress: async () => {
-            setLoading(true);
-            await deleteDb();
-            RNRestart.Restart();
-          },
+          onPress: () => mutateDelete(),
           style: "destructive",
         },
       ],
       { cancelable: true }
     );
-  }, [t]);
-  const onExport = useCallback(async () => {
-    try {
-      setLoading(true);
-      const copyToPath = await exportDb();
-      setLoading(false);
-      toast(t("settings.export.ok_message", { path: copyToPath }));
-    } catch (e) {
-      /* noop */
+  }, [t, mutateDelete]);
+
+  const { isLoading: isLoadingImport, mutate: mutateImport } = useMutation(
+    importDb,
+    {
+      onError(error: any) {
+        toast.error(error.message);
+      },
+      onSuccess() {
+        RNRestart.Restart();
+      },
     }
-  }, [t]);
+  );
   const onImport = useCallback(async () => {
     try {
       const { fileCopyUri } = await DocumentPicker.pickSingle({
@@ -98,11 +108,7 @@ export const SettingsScreen: FC<
           },
           {
             text: t("action.yes"),
-            onPress: async () => {
-              setLoading(true);
-              await importDb(fileCopyUri);
-              RNRestart.Restart();
-            },
+            onPress: () => mutateImport(fileCopyUri),
           },
         ],
         { cancelable: true }
@@ -110,7 +116,19 @@ export const SettingsScreen: FC<
     } catch (e) {
       /* noop */
     }
-  }, [t]);
+  }, [t, mutateImport]);
+
+  const { isLoading: isLoadingExport, mutate: mutateExport } = useMutation(
+    exportDb,
+    {
+      onError(error: any) {
+        toast.error(error.message);
+      },
+      onSuccess(copyToPath) {
+        toast.success(t("settings.export.ok_message", { path: copyToPath }));
+      },
+    }
+  );
 
   const theme = useTheme();
   const { value: settingsValues, changeSetting } = useSettings();
@@ -138,6 +156,8 @@ export const SettingsScreen: FC<
       ),
     [changeSetting]
   );
+
+  const isLoading = isLoadingDelete || isLoadingExport || isLoadingImport;
 
   return (
     <ScrollView style={screenStyles.root}>
@@ -243,19 +263,19 @@ export const SettingsScreen: FC<
       <List.Section>
         <List.Subheader>{t("settings.title_data")}</List.Subheader>
         <List.Item
-          onPress={onExport}
-          disabled={loading}
+          onPress={() => mutateExport()}
+          disabled={isLoading}
           title={t("settings.export.title")}
         />
         <List.Item
           onPress={onImport}
-          disabled={loading}
+          disabled={isLoading}
           title={t("settings.import.title")}
         />
         <List.Item
           titleStyle={{ color: Colors.red400 }}
           onPress={onDelete}
-          disabled={loading}
+          disabled={isLoading}
           title="Reset"
         />
       </List.Section>

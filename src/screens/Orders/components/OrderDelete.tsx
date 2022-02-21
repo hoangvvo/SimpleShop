@@ -1,11 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
+import { toast } from "components/Toast";
 import { FC, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import { Button, Colors, Dialog, Paragraph, Portal } from "react-native-paper";
 import { Order } from "services/order";
 import { useOrderDeleteMutation } from "services/order/api";
-import { toast } from "utils/toasts";
 
 const styles = StyleSheet.create({
   button: {
@@ -30,7 +30,7 @@ export const OrderDelete: FC<{
     () =>
       mutateAsync({ id: order.id }).then(() => {
         setDeleteVisible(false);
-        toast(
+        toast.success(
           t("entity.has_been_deleted", {
             name: `'${t("order.order_number_num", { id: order.id })}'`,
           })

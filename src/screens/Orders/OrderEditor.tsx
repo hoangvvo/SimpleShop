@@ -1,6 +1,7 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { LoadingScreen } from "components/Loading";
 import { ErrorSnackbar } from "components/Snackbar";
+import { toast } from "components/Toast";
 import {
   FC,
   useCallback,
@@ -22,7 +23,6 @@ import {
 } from "services/order/api";
 import { OrderProductWithoutOrderId } from "services/order/types";
 import { styles as screenStyles } from "styles/screens";
-import { toast } from "utils/toasts";
 import { OrderDelete } from "./components/OrderDelete";
 import { OrderProductEditor } from "./components/OrderProductEditor";
 import { OrderDetailEditor } from "./components/OrdersDetailEditor";
@@ -60,7 +60,7 @@ export const OrderEditorScreen: FC<
     () =>
       handleSubmit(async (data) => {
         if (orderProducts.reduce((prev, curr) => prev + curr.amount, 0) <= 0) {
-          return toast(t("order_editor.order_no_products"));
+          return toast.error(t("order_editor.order_no_products"));
         }
         if (editingId) {
           await mutateAsyncEdit({
@@ -68,14 +68,18 @@ export const OrderEditorScreen: FC<
             ...data,
             order_products: orderProducts,
           });
-          toast(t("entity.has_been_updated", { name: t("order.title_one") }));
+          toast.success(
+            t("entity.has_been_updated", { name: t("order.title_one") })
+          );
         } else {
           await mutateAsyncCreate({
             is_buy_order: isBuyOrder,
             ...data,
             order_products: orderProducts,
           });
-          toast(t("entity.has_been_created", { name: t("order.title_one") }));
+          toast.success(
+            t("entity.has_been_created", { name: t("order.title_one") })
+          );
         }
         navigation.goBack();
       }),

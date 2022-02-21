@@ -4,6 +4,7 @@ import {
   CustomBackgroundComponent,
 } from "components/BottomSheet";
 import { LoadingScreen } from "components/Loading";
+import { toast } from "components/Toast";
 import {
   Dispatch,
   FC,
@@ -32,7 +33,6 @@ import { Product } from "services/product";
 import { useProductsQuery } from "services/product/api";
 import { useNumberFormatCurrency } from "utils/currency";
 import { isNumeric } from "utils/number";
-import { toast } from "utils/toasts";
 
 const snapPoints = ["85%"];
 
@@ -213,7 +213,7 @@ export const OrderProductEditor: FC<{
     const values: OrderProductWithoutOrderId[] = [];
     for (const [productId, formRef] of formMapRef.current) {
       if (Object.keys(formRef.formState.errors).length > 0) {
-        toast(t("form.form_is_invalid"));
+        toast.error(t("form.form_is_invalid"));
         return;
       }
       const formValues = formRef.getValues();
