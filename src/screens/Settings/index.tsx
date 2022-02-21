@@ -1,6 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
 import { StackScreenProps } from "@react-navigation/stack";
-import { dbName, dbPath, deleteDb } from "db/sqlite";
+import { deleteDb, exportDb, importDb } from "db/sqlite";
 import { supportedLngs } from "locales/constants";
 import { FC, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,12 +8,10 @@ import {
   Alert,
   ColorSchemeName,
   Linking,
-  Platform,
   StyleSheet,
   View,
 } from "react-native";
 import DocumentPicker from "react-native-document-picker";
-import RNFS from "react-native-fs";
 import { ScrollView } from "react-native-gesture-handler";
 import { Caption, Colors, List, Text, useTheme } from "react-native-paper";
 // @ts-ignore
@@ -75,11 +73,7 @@ export const SettingsScreen: FC<
   const onExport = useCallback(async () => {
     try {
       setLoading(true);
-      if (Platform.OS === "ios") throw new Error("Not implemented");
-      const copyToPath = `${
-        RNFS.DownloadDirectoryPath
-      }/${Date.now()}_${dbName}`;
-      await RNFS.copyFile(dbPath, copyToPath);
+      const copyToPath = await exportDb();
       setLoading(false);
       toast(t("settings.export.ok_message", { path: copyToPath }));
     } catch (e) {
@@ -106,8 +100,7 @@ export const SettingsScreen: FC<
             text: t("action.yes"),
             onPress: async () => {
               setLoading(true);
-              await deleteDb();
-              await RNFS.copyFile(fileCopyUri, dbPath);
+              await importDb(fileCopyUri);
               RNRestart.Restart();
             },
           },
