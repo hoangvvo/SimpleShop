@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-share/android/src/main/java/cl/json/ShareFile.java b/node_modules/react-native-share/android/src/main/java/cl/json/ShareFile.java
+index 840d336..03efdf6 100644
+--- a/node_modules/react-native-share/android/src/main/java/cl/json/ShareFile.java
++++ b/node_modules/react-native-share/android/src/main/java/cl/json/ShareFile.java
+@@ -128,7 +128,7 @@ public class ShareFile {
+                 if (!dir.exists() && !dir.mkdirs()) {
+                     throw new IOException("mkdirs failed on " + dir.getAbsolutePath());
+                 }
+-                File file = new File(dir, filename + "." + extension);
++                File file = new File(dir, filename);
+                 final FileOutputStream fos = new FileOutputStream(file);
+                 fos.write(Base64.decode(encodedImg, Base64.DEFAULT));
+                 fos.flush();
