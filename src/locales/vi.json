@@ -3,8 +3,8 @@
     "title": "Tổng quan"
   },
   "order": {
-    "title": "Đơn hàng",
-    "title_plural": "Đơn hàng",
+    "title_one": "Đơn hàng",
+    "title_other": "Đơn hàng",
     "order_number_num": "Đơn hàng #{{id}}",
     "per_price": "Giá",
     "amount": "Số lượng",
@@ -25,8 +25,8 @@
     "product_list": "Danh sách sản phẩm"
   },
   "product": {
-    "title": "Sản phẩm",
-    "title_plural": "Sản phẩm",
+    "title_one": "Sản phẩm",
+    "title_other": "Sản phẩm",
     "name": "Tên",
     "description": "Mô tả",
     "default_sell_price": "Giá bán mặc định",

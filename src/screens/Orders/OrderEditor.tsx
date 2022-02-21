@@ -68,14 +68,14 @@ export const OrderEditorScreen: FC<
             ...data,
             order_products: orderProducts,
           });
-          toast(t("entity.has_been_updated", { name: t("order.title") }));
+          toast(t("entity.has_been_updated", { name: t("order.title_one") }));
         } else {
           await mutateAsyncCreate({
             is_buy_order: isBuyOrder,
             ...data,
             order_products: orderProducts,
           });
-          toast(t("entity.has_been_created", { name: t("order.title") }));
+          toast(t("entity.has_been_created", { name: t("order.title_one") }));
         }
         navigation.goBack();
       }),

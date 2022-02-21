@@ -88,11 +88,12 @@ export const SettingsScreen: FC<
   }, [t]);
   const onImport = useCallback(async () => {
     try {
-      const { fileCopyUri } = await DocumentPicker.pick({
+      const { fileCopyUri } = await DocumentPicker.pickSingle({
         // @ts-ignore
         type: DocumentPicker.types.allFiles,
         copyTo: "cachesDirectory",
       });
+      if (!fileCopyUri) return;
       Alert.alert(
         t("settings.import.title"),
         t("settings.import.prompt"),

@@ -13,7 +13,7 @@ import {
   Title,
 } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
-import type { RangeChange } from "react-native-paper-dates/lib/typescript/src/Date/Calendar";
+import type { RangeChange } from "react-native-paper-dates/lib/typescript/Date/Calendar";
 import { ParamList, RouteName } from "screens/types";
 import {
   OrderProductsStats,
@@ -79,35 +79,37 @@ const styles = StyleSheet.create({
   },
 });
 
-const OrderProductStatItem: FC<{ stats: OrderProductsStats; index: number }> =
-  ({ stats, index }) => {
-    const { data: product } = useProductQuery(stats.product_id);
-    const numberFormatProfit = useNumberFormatCurrency();
+const OrderProductStatItem: FC<{
+  stats: OrderProductsStats;
+  index: number;
+}> = ({ stats, index }) => {
+  const { data: product } = useProductQuery(stats.product_id);
+  const numberFormatProfit = useNumberFormatCurrency();
 
-    return (
-      <List.Item
-        left={({ style }) => (
-          <View style={[styles.listSide, style]}>
-            <Caption style={styles.listRank}>#{index + 1}</Caption>
+  return (
+    <List.Item
+      left={({ style }) => (
+        <View style={[styles.listSide, style]}>
+          <Caption style={styles.listRank}>#{index + 1}</Caption>
+        </View>
+      )}
+      title={<Text>{product?.name}</Text>}
+      descriptionNumberOfLines={1}
+      right={({ style }) => (
+        <>
+          <View style={[styles.listSide, styles.listAmountWidth, style]}>
+            <Text style={styles.listAmount}>{stats.amount}</Text>
           </View>
-        )}
-        title={<Text>{product?.name}</Text>}
-        descriptionNumberOfLines={1}
-        right={({ style }) => (
-          <>
-            <View style={[styles.listSide, styles.listAmountWidth, style]}>
-              <Text style={styles.listAmount}>{stats.amount}</Text>
-            </View>
-            <View style={[styles.listSide, styles.listProfitWidth, style]}>
-              <Text style={styles.listProfit}>
-                {numberFormatProfit.format(stats.profit)}
-              </Text>
-            </View>
-          </>
-        )}
-      />
-    );
-  };
+          <View style={[styles.listSide, styles.listProfitWidth, style]}>
+            <Text style={styles.listProfit}>
+              {numberFormatProfit.format(stats.profit)}
+            </Text>
+          </View>
+        </>
+      )}
+    />
+  );
+};
 
 const renderItem: ListRenderItem<OrderProductsStats> = ({ item, index }) => (
   <OrderProductStatItem stats={item} index={index} />
@@ -190,7 +192,7 @@ export const DashboardProfitScreen: FC<
         startDate={range.startDate}
         endDate={range.endDate}
         onConfirm={onDatePickerConfirm}
-        locale={i18n.language}
+        locale={i18n.language.split("-")[0]}
         saveLabel={t("action.save")}
         startLabel={t("time.start")}
         endLabel={t("time.end")}

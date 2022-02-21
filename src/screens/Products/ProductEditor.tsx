@@ -60,10 +60,10 @@ export const ProductEditorScreen: FC<
             id: editingId,
             ...data,
           });
-          toast(t("entity.has_been_updated", { name: t("product.title") }));
+          toast(t("entity.has_been_updated", { name: t("product.title_one") }));
         } else {
           await mutateAsyncCreate(data);
-          toast(t("entity.has_been_created", { name: t("product.title") }));
+          toast(t("entity.has_been_created", { name: t("product.title_one") }));
         }
         navigation.goBack();
       }),

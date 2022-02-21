@@ -14,7 +14,6 @@ import { FC, useMemo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useTranslation } from "react-i18next";
 import { LogBox, StatusBar } from "react-native";
-import "react-native-gesture-handler";
 import {
   Colors,
   DarkTheme as PaperDarkTheme,
@@ -60,7 +59,7 @@ const Main: FC = () => {
         name={RouteName.Orders}
         component={OrdersScreen}
         options={{
-          tabBarLabel: t("order.title_plural"),
+          tabBarLabel: t("order.title_other"),
           tabBarIcon: "clipboard-text",
           tabBarColor: TabThemeColor.order,
         }}
@@ -69,7 +68,7 @@ const Main: FC = () => {
         name={RouteName.Products}
         component={ProductsScreen}
         options={{
-          tabBarLabel: t("product.title_plural"),
+          tabBarLabel: t("product.title_other"),
           tabBarIcon: "shopping",
           tabBarColor: TabThemeColor.product,
         }}

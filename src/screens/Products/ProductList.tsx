@@ -101,7 +101,7 @@ export const ProductsScreen: FC<
   return (
     <SafeAreaView style={screenStyles.root}>
       <View style={[screenStyles.content, screenStyles.contentRoot]}>
-        <Title style={screenStyles.title}>{t("product.title_plural")}</Title>
+        <Title style={screenStyles.title}>{t("product.title_other")}</Title>
         <FlatList
           style={styles.list}
           ItemSeparatorComponent={Divider}

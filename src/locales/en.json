@@ -3,8 +3,8 @@
     "title": "Dashboard"
   },
   "order": {
-    "title": "Order",
-    "title_plural": "Orders",
+    "title_one": "Order",
+    "title_other": "Orders",
     "order_number_num": "Order #{{id}}",
     "per_price": "Price",
     "amount": "Amount",
@@ -25,8 +25,8 @@
     "product_list": "Product List"
   },
   "product": {
-    "title": "Product",
-    "title_plural": "Products",
+    "title_one": "Product",
+    "title_other": "Products",
     "name": "Name",
     "description": "Description",
     "default_sell_price": "Default Sell Price",

@@ -121,7 +121,7 @@ export const DashboardScreen: FC<
           </Card>
           <View style={styles.gutter} />
           <Card style={styles.stat} onPress={onPressCardOrders}>
-            <Text style={styles.statLabel}>{t("order.title_plural")}</Text>
+            <Text style={styles.statLabel}>{t("order.title_other")}</Text>
             <Text style={styles.statTime}>{t("time.today")}</Text>
             <Text style={styles.statValue}>{ordersCount}</Text>
           </Card>

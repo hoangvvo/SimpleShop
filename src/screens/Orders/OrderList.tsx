@@ -187,7 +187,7 @@ export const OrdersScreen: FC<
   return (
     <SafeAreaView style={screenStyles.root}>
       <View style={[screenStyles.content, screenStyles.contentRoot]}>
-        <Title style={screenStyles.title}>{t("order.title_plural")}</Title>
+        <Title style={screenStyles.title}>{t("order.title_other")}</Title>
         <FlatList
           style={screenStyles.root}
           ItemSeparatorComponent={Divider}
