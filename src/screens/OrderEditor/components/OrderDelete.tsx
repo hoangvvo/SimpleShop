@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import { toast } from "components/Toast";
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import { Button, Colors, Dialog, Paragraph, Portal } from "react-native-paper";
-import { Order } from "services/order";
-import { useOrderDeleteMutation } from "services/order/api";
+import type { Order } from "services/order";
+import { useOrderDeleteMutation } from "services/order";
 
 const styles = StyleSheet.create({
   button: {

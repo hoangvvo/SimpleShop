@@ -1,4 +1,4 @@
-import { ParamListBase } from "@react-navigation/routers";
+import type { ParamListBase } from "@react-navigation/routers";
 
 export enum RouteName {
   Main = "Main",

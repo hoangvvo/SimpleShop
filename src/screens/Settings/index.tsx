@@ -1,27 +1,23 @@
 import { Picker } from "@react-native-picker/picker";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { toast } from "components/Toast";
 import { deleteDb, exportDb, importDb } from "db/sqlite";
 import { supportedLngs } from "locales/constants";
-import { FC } from "react";
+import type { FC } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Alert,
-  ColorSchemeName,
-  Linking,
-  StyleSheet,
-  View,
-} from "react-native";
+import type { ColorSchemeName } from "react-native";
+import { Alert, Linking, StyleSheet, View } from "react-native";
 import DocumentPicker from "react-native-document-picker";
 import { ScrollView } from "react-native-gesture-handler";
 import { Caption, Colors, List, Text, useTheme } from "react-native-paper";
 // @ts-ignore
 import RNRestart from "react-native-restart";
 import { useMutation } from "react-query";
-import { ParamList, RouteName } from "screens/types";
+import type { ParamList, RouteName } from "screens/types";
 import { styles as screenStyles } from "styles/screens";
 import { supportedCurrencies } from "utils/currency";
-import { SettingsValues, useSettings } from "utils/settings";
+import type { SettingsValues } from "utils/settings";
+import { useSettings } from "utils/settings";
 // @ts-ignore
 import { githubUrl, name as appName } from "../../../app.json";
 import { version as appVersion } from "../../../package.json";
@@ -44,7 +40,7 @@ const styles = StyleSheet.create({
 
 const onPressGHLink = () => Linking.openURL(githubUrl);
 
-export const SettingsScreen: FC<
+const SettingsScreen: FC<
   NativeStackScreenProps<ParamList, RouteName.Settings>
 > = () => {
   const { t } = useTranslation();
@@ -279,3 +275,5 @@ export const SettingsScreen: FC<
     </ScrollView>
   );
 };
+
+export default SettingsScreen;

@@ -4,6 +4,9 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "react-native/sort-styles": "error",
+    "react-native/no-unused-styles": "error"
   }
 }

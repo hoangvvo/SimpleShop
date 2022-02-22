@@ -1,13 +1,8 @@
 import { useSQLite } from "db";
-import {
-  QueryClient,
-  useMutation,
-  UseMutationOptions,
-  useQuery,
-  useQueryClient,
-} from "react-query";
+import type { QueryClient, UseMutationOptions } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ProductService } from "./service";
-import { Product } from "./types";
+import type { Product } from "./types";
 
 const invalidateCache = (client: QueryClient, productId?: Product["id"]) => {
   client.invalidateQueries("products");

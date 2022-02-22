@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import SQLite from "react-native-sqlite-storage";
+import type SQLite from "react-native-sqlite-storage";
 import { initDb } from "./sqlite";
 
 export const SQLiteContext = createContext({} as SQLite.SQLiteDatabase);

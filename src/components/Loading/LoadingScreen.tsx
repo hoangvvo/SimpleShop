@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { Colors } from "react-native-paper";
 

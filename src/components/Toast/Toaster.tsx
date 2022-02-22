@@ -1,4 +1,5 @@
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import type { FC } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Snackbar, useTheme } from "react-native-paper";
 import { emitter } from "./pubsub";
 import type { ToastValue } from "./types";

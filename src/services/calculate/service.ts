@@ -1,6 +1,7 @@
-import { SQLiteDatabase } from "react-native-sqlite-storage";
-import { Order, OrderService } from "services/order";
-import { OrderProductsStats } from "./types";
+import type { SQLiteDatabase } from "react-native-sqlite-storage";
+import type { Order } from "services/order";
+import { OrderService } from "services/order";
+import type { OrderProductsStats } from "./types";
 
 export class CalculateService {
   static async getOrderProductsStats(

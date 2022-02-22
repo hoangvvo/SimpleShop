@@ -1,5 +1,5 @@
 import Clipboard from "@react-native-clipboard/clipboard";
-import { FC } from "react";
+import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -7,8 +7,8 @@ import { Avatar, Caption, Colors, Paragraph, Title } from "react-native-paper";
 
 const styles = StyleSheet.create({
   icon: {
-    marginBottom: 12,
     backgroundColor: "transparent",
+    marginBottom: 12,
   },
   paragraph: {
     marginBottom: 4,
@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   },
   root: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: Colors.grey200,
     alignItems: "center",
+    backgroundColor: Colors.grey200,
     justifyContent: "center",
     padding: 24,
   },

@@ -1,6 +1,6 @@
-import { SQLiteDatabase } from "react-native-sqlite-storage";
+import type { SQLiteDatabase } from "react-native-sqlite-storage";
 import * as queries from "./queries.sql";
-import { Product } from "./types";
+import type { Product } from "./types";
 
 export class ProductService {
   static async findAll(db: SQLiteDatabase) {

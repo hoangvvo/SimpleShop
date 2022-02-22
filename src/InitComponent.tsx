@@ -1,7 +1,8 @@
 import { LoadingScreen } from "components/Loading";
 import { SQLiteContext, useSQLiteInit } from "db/SQLiteProvider";
 import { useLanguageInit } from "i18n";
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import { SafeAreaView } from "react-native";
 import { Colors } from "react-native-paper";
 import { useCurrentColorScheme } from "styles/colorScheme";

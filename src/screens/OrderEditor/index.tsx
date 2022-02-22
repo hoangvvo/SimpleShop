@@ -1,25 +1,26 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { LoadingScreen } from "components/Loading";
 import { toast } from "components/Toast";
-import { FC, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import type { FC } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
 import { Appbar } from "react-native-paper";
-import { ParamList, RouteName } from "screens/types";
-import { Order } from "services/order";
+import type { ParamList, RouteName } from "screens/types";
+import type { Order } from "services/order";
 import {
   useOrderCreateMutation,
   useOrderQuery,
   useOrderUpdateMutation,
-} from "services/order/api";
-import { OrderProductWithoutOrderId } from "services/order/types";
+} from "services/order";
+import type { OrderProductWithoutOrderId } from "services/order/types";
 import { styles as screenStyles } from "styles/screens";
 import { OrderDelete } from "./components/OrderDelete";
 import { OrderProductEditor } from "./components/OrderProductEditor";
 import { OrderDetailEditor } from "./components/OrdersDetailEditor";
 
-export const OrderEditorScreen: FC<
+const OrderEditorScreen: FC<
   NativeStackScreenProps<ParamList, RouteName.OrderEditor>
 > = ({ navigation, route }) => {
   const { t } = useTranslation();
@@ -159,3 +160,5 @@ export const OrderEditorScreen: FC<
     </View>
   );
 };
+
+export default OrderEditorScreen;

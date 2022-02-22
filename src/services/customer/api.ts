@@ -1,13 +1,8 @@
 import { useSQLite } from "db";
-import {
-  QueryClient,
-  useMutation,
-  UseMutationOptions,
-  useQuery,
-  useQueryClient,
-} from "react-query";
+import type { QueryClient, UseMutationOptions } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { CustomerService } from "./service";
-import { Customer } from "./types";
+import type { Customer } from "./types";
 
 const invalidateCache = (client: QueryClient, customerId?: Customer["id"]) => {
   client.invalidateQueries("customers");

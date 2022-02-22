@@ -1,4 +1,4 @@
-import { ParamList } from "./screens/types";
+import type { ParamList } from "./screens/types";
 
 declare global {
   namespace ReactNavigation {

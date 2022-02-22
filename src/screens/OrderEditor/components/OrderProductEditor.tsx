@@ -1,20 +1,12 @@
 import { LoadingScreen } from "components/Loading";
 import { toast } from "components/Toast";
 import Fuse from "fuse.js";
-import {
-  Dispatch,
-  FC,
-  MutableRefObject,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import type { Dispatch, FC, MutableRefObject, SetStateAction } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { ListRenderItem, StyleSheet, View } from "react-native";
+import type { ListRenderItem } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import {
   Button,
@@ -29,13 +21,30 @@ import {
   Title,
   useTheme,
 } from "react-native-paper";
-import { OrderProduct, OrderProductWithoutOrderId } from "services/order/types";
-import { Product } from "services/product";
-import { useProductsQuery } from "services/product/api";
+import type {
+  OrderProduct,
+  OrderProductWithoutOrderId,
+} from "services/order/types";
+import type { Product } from "services/product";
+import { useProductsQuery } from "services/product";
 import { useNumberFormatCurrency } from "utils/currency";
 import { isNumeric } from "utils/number";
 
 const styles = StyleSheet.create({
+  btnDone: {
+    width: "100%",
+  },
+  empty: {
+    opacity: 0.7,
+    padding: 18,
+  },
+  emptyText: {
+    textAlign: "center",
+  },
+  emptyTitle: {
+    fontSize: 18,
+    textAlign: "center",
+  },
   inputAmount: {
     width: 60,
   },
@@ -45,6 +54,12 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
+  },
+  listItem: {
+    height: 64,
+  },
+  searchbar: {
+    margin: 10,
   },
   totalContainer: {
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -58,26 +73,6 @@ const styles = StyleSheet.create({
   totalText: {
     fontSize: 16,
     fontWeight: "bold",
-  },
-  btnDone: {
-    width: "100%",
-  },
-  empty: {
-    padding: 18,
-    opacity: 0.7,
-  },
-  emptyTitle: {
-    textAlign: "center",
-    fontSize: 18,
-  },
-  emptyText: {
-    textAlign: "center",
-  },
-  searchbar: {
-    margin: 10,
-  },
-  listItem: {
-    height: 64,
   },
 });
 
@@ -262,7 +257,7 @@ const ProductList: FC<{
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data: dataProducts, status: statusGetProducts } = useProductsQuery();
-  const fuseProducts = useMemo(
+  const fuse = useMemo(
     () =>
       new Fuse(dataProducts || [], {
         keys: ["name", "description"],
@@ -291,12 +286,12 @@ const ProductList: FC<{
   const data = useMemo(() => {
     const trimmedSQ = searchQuery.trim();
     if (trimmedSQ !== "") {
-      return fuseProducts.search(trimmedSQ).map((result) => result.item);
+      return fuse.search(trimmedSQ).map((result) => result.item);
     }
     return dataProducts?.filter((p) =>
       orderProducts.some((oP) => oP.product_id === p.id)
     );
-  }, [dataProducts, searchQuery, orderProducts, fuseProducts]);
+  }, [dataProducts, searchQuery, orderProducts, fuse]);
 
   const onDone = () => {
     for (const hasError of formMapRef.current.values()) {

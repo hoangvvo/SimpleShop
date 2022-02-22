@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import { toast } from "components/Toast";
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import { Button, Colors, Dialog, Paragraph, Portal } from "react-native-paper";
-import { Customer } from "services/customer";
-import { useCustomerDeleteMutation } from "services/customer/api";
+import type { Customer } from "services/customer";
+import { useCustomerDeleteMutation } from "services/customer";
 
 const styles = StyleSheet.create({
   button: {

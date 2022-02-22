@@ -1,19 +1,20 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { FormHelperText } from "components/HelperText";
 import { LoadingScreen } from "components/Loading";
 import { toast } from "components/Toast";
-import { FC, useEffect, useLayoutEffect, useMemo } from "react";
+import type { FC } from "react";
+import { useEffect, useLayoutEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
 import { Appbar, TextInput } from "react-native-paper";
-import { ParamList, RouteName } from "screens/types";
-import { Customer } from "services/customer";
+import type { ParamList, RouteName } from "screens/types";
+import type { Customer } from "services/customer";
 import {
   useCustomerCreateMutation,
   useCustomerQuery,
   useCustomerUpdateMutation,
-} from "services/customer/api";
+} from "services/customer";
 import { styles as screenStyles } from "styles/screens";
 import { CustomerDelete } from "./components/CustomerDelete";
 
@@ -29,7 +30,7 @@ const rules = {
   },
 };
 
-export const CustomerEditorScreen: FC<
+const CustomerEditorScreen: FC<
   NativeStackScreenProps<ParamList, RouteName.CustomerEditor>
 > = ({ navigation, route }) => {
   const { t } = useTranslation();
@@ -206,3 +207,5 @@ export const CustomerEditorScreen: FC<
     </View>
   );
 };
+
+export default CustomerEditorScreen;

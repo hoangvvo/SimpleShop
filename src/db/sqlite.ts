@@ -1,7 +1,8 @@
 import { Platform } from "react-native";
 import RNFS, { readFile } from "react-native-fs";
 import Share from "react-native-share";
-import SQLite, { DatabaseParams } from "react-native-sqlite-storage";
+import type { DatabaseParams } from "react-native-sqlite-storage";
+import SQLite from "react-native-sqlite-storage";
 import migrationCustomer from "./migrations/customer.sql";
 import migrationInit from "./migrations/init.sql";
 

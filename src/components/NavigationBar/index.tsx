@@ -1,5 +1,5 @@
-import { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import { FC } from "react";
+import type { NativeStackHeaderProps } from "@react-navigation/native-stack";
+import type { FC } from "react";
 import { StatusBar, StyleSheet } from "react-native";
 import { Appbar, useTheme } from "react-native-paper";
 

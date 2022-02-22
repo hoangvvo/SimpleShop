@@ -1,4 +1,4 @@
-import { Product } from "services/product";
+import type { Product } from "services/product";
 
 export interface OrderProductsStats {
   product_id: Product["id"];

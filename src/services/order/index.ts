@@ -1,2 +1,2 @@
-export { OrderService } from "./service";
+export * from "./api";
 export type { Order } from "./types";

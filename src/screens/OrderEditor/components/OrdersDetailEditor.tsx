@@ -1,6 +1,7 @@
 import { FormHelperText } from "components/HelperText";
-import { FC } from "react";
-import { Control, Controller } from "react-hook-form";
+import type { FC } from "react";
+import type { Control } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import {
@@ -12,7 +13,7 @@ import {
   TextInput,
 } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Order } from "services/order";
+import type { Order } from "services/order";
 
 const styles = StyleSheet.create({
   divider: {
@@ -31,8 +32,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   toggleLabelWrap: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
   },
 });
 

@@ -1,7 +1,9 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { FC, useMemo, useState } from "react";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { FC } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, ListRenderItem, StyleSheet, View } from "react-native";
+import type { ListRenderItem } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import {
   Button,
   Caption,
@@ -14,13 +16,10 @@ import {
 } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 import type { RangeChange } from "react-native-paper-dates/lib/typescript/Date/Calendar";
-import { ParamList, RouteName } from "screens/types";
-import {
-  OrderProductsStats,
-  useOrderProductsStatsQuery,
-  useProfitQuery,
-} from "services/calculate";
-import { useProductQuery } from "services/product/api";
+import type { ParamList, RouteName } from "screens/types";
+import type { OrderProductsStats } from "services/calculate";
+import { useOrderProductsStatsQuery, useProfitQuery } from "services/calculate";
+import { useProductQuery } from "services/product";
 import { styles as screenStyles } from "styles/screens";
 import { useNumberFormatCurrency } from "utils/currency";
 
@@ -126,7 +125,7 @@ const todayRangeInit = () => {
   return { startDate, endDate };
 };
 
-export const DashboardProfitScreen: FC<
+const DashboardProfitScreen: FC<
   NativeStackScreenProps<ParamList, RouteName.DashboardProfit>
 > = () => {
   const [range, setRange] = useState<{
@@ -225,3 +224,5 @@ export const DashboardProfitScreen: FC<
     </View>
   );
 };
+
+export default DashboardProfitScreen;

@@ -1,19 +1,20 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { FormHelperText } from "components/HelperText";
 import { LoadingScreen } from "components/Loading";
 import { toast } from "components/Toast";
-import { FC, useEffect, useLayoutEffect, useMemo } from "react";
+import type { FC } from "react";
+import { useEffect, useLayoutEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
 import { Appbar, TextInput } from "react-native-paper";
-import { ParamList, RouteName } from "screens/types";
-import { Product } from "services/product";
+import type { ParamList, RouteName } from "screens/types";
+import type { Product } from "services/product";
 import {
   useProductCreateMutation,
   useProductQuery,
   useProductUpdateMutation,
-} from "services/product/api";
+} from "services/product";
 import { styles as screenStyles } from "styles/screens";
 import { isNumeric } from "utils/number";
 import { ProductDelete } from "./components/ProductDelete";
@@ -30,7 +31,7 @@ const rules = {
   },
 };
 
-export const ProductEditorScreen: FC<
+const ProductEditorScreen: FC<
   NativeStackScreenProps<ParamList, RouteName.ProductEditor>
 > = ({ navigation, route }) => {
   const { t } = useTranslation();
@@ -238,3 +239,5 @@ export const ProductEditorScreen: FC<
     </View>
   );
 };
+
+export default ProductEditorScreen;

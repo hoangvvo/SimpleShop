@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { FieldError, UseControllerProps } from "react-hook-form";
+import type { FC } from "react";
+import type { FieldError, UseControllerProps } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { HelperText } from "react-native-paper";
 

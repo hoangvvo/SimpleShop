@@ -1,15 +1,18 @@
-import { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-tabs";
+import type { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 import Fuse from "fuse.js";
-import { FC, useMemo, useState } from "react";
+import type { FC } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ListRenderItem, StyleSheet, View } from "react-native";
+import type { ListRenderItem } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Divider, FAB, List, Searchbar, Text, Title } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ParamList, RouteName } from "screens/types";
-import { Customer } from "services/customer";
-import { useCustomersQuery } from "services/customer/api";
+import type { ParamList } from "screens/types";
+import { RouteName } from "screens/types";
+import type { Customer } from "services/customer";
+import { useCustomersQuery } from "services/customer";
 import { TabThemeColor } from "styles/Colors";
 import { styles as screenStyles } from "styles/screens";
 
@@ -18,22 +21,6 @@ const styles = StyleSheet.create({
     backgroundColor: TabThemeColor.customer,
   },
   list: { flex: 1 },
-  listHeadQuantity: {
-    lineHeight: 12,
-    width: 56,
-  },
-  listHeader: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingHorizontal: 8,
-  },
-  listQuantityText: {
-    textAlign: "center",
-    width: 56,
-  },
-  listSide: {
-    justifyContent: "center",
-  },
   listTitle: {
     fontWeight: "bold",
   },
@@ -62,7 +49,7 @@ const renderItem: ListRenderItem<Customer> = ({ item }) => (
   <CustomerItem customer={item} />
 );
 
-export const CustomersScreen: FC<
+const CustomersScreen: FC<
   MaterialBottomTabScreenProps<ParamList, RouteName.Customers>
 > = ({ navigation }) => {
   const { t } = useTranslation();
@@ -114,3 +101,5 @@ export const CustomersScreen: FC<
     </SafeAreaView>
   );
 };
+
+export default CustomersScreen;

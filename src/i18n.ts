@@ -5,7 +5,7 @@ import vi from "locales/vi.json";
 import { useEffect } from "react";
 import { initReactI18next } from "react-i18next";
 import * as RNLocalize from "react-native-localize";
-import { SettingsValues } from "utils/settings";
+import type { SettingsValues } from "utils/settings";
 
 i18n.use(initReactI18next).init({
   resources: {

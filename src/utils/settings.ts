@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { supportedLngs } from "locales/constants";
+import type { supportedLngs } from "locales/constants";
 import {
   createContext,
   useCallback,
@@ -8,8 +8,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import { ColorSchemeName } from "react-native";
-import { supportedCurrencies } from "utils/currency";
+import type { ColorSchemeName } from "react-native";
+import type { supportedCurrencies } from "utils/currency";
 
 export interface SettingsValues {
   colorScheme: ColorSchemeName;

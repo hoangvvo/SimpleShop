@@ -1,13 +1,8 @@
 import { useSQLite } from "db";
-import {
-  QueryClient,
-  useMutation,
-  UseMutationOptions,
-  useQuery,
-  useQueryClient,
-} from "react-query";
+import type { QueryClient, UseMutationOptions } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { OrderService } from "./service";
-import {
+import type {
   Order,
   OrderProduct,
   OrderProductWithoutOrderId,
