@@ -1,18 +1,16 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { Snackbar, useTheme } from "react-native-paper";
-import { useSharedValue } from "react-native-reanimated";
 import { emitter } from "./pubsub";
 import type { ToastValue } from "./types";
 
 export const Toaster: FC = () => {
   const [toast, setToast] = useState<ToastValue | null>(null);
-  const animValue = useSharedValue(0);
 
   useEffect(() => {
     emitter.off("toast"); // clear out other listeners
     emitter.on("toast", setToast);
     return () => emitter.off("toast", setToast);
-  }, [animValue]);
+  }, []);
 
   // when toast is being removed, there is a flicker so we use this to prevent it
   const lastTypeStyle = useRef<ToastValue["type"]>();

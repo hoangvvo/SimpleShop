@@ -1,8 +1,3 @@
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import {
-  CustomBackdropModal,
-  CustomBackgroundComponent,
-} from "components/BottomSheet";
 import { LoadingScreen } from "components/Loading";
 import { toast } from "components/Toast";
 import {
@@ -14,15 +9,18 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import { Controller, useForm, UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { BackHandler, ListRenderItem, StyleSheet, View } from "react-native";
+import { ListRenderItem, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import {
   Button,
+  Dialog,
   Divider,
   List,
+  Portal,
   Surface,
   Text,
   TextInput,
@@ -33,8 +31,6 @@ import { Product } from "services/product";
 import { useProductsQuery } from "services/product/api";
 import { useNumberFormatCurrency } from "utils/currency";
 import { isNumeric } from "utils/number";
-
-const snapPoints = ["85%"];
 
 const styles = StyleSheet.create({
   inputAmount: {
@@ -48,7 +44,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   totalContainer: {
-    backgroundColor: "transparent",
     borderTopWidth: StyleSheet.hairlineWidth,
     padding: 12,
   },
@@ -60,6 +55,9 @@ const styles = StyleSheet.create({
   totalText: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  btnDone: {
+    width: "100%",
   },
 });
 
@@ -188,10 +186,6 @@ export const OrderProductEditor: FC<{
     return total;
   }, [orderProducts]);
 
-  const sheetRef = useRef<BottomSheetModal>(null);
-
-  const sheetIndexRef = useRef(-1);
-
   const { data: dataProducts, status: statusGetProducts } = useProductsQuery();
 
   const formMapRef = useRef<FormMapRef>(new Map());
@@ -222,23 +216,12 @@ export const OrderProductEditor: FC<{
       });
     }
     setOrderProducts(values);
-    sheetRef.current?.dismiss();
+    setVisible(false);
   };
 
-  useEffect(() => {
-    const onBackHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        if (sheetIndexRef.current === 0) {
-          return true;
-        }
-        return false;
-      }
-    );
-    return onBackHandler.remove;
-  }, []);
+  const [visible, setVisible] = useState(false);
 
-  const presentList = () => sheetRef.current?.present();
+  const presentList = () => setVisible(true);
 
   const renderItem: ListRenderItem<Product> = useCallback(
     ({ item }) => {
@@ -269,32 +252,33 @@ export const OrderProductEditor: FC<{
             {numberFormatProfit.format(totalPrice)}
           </Text>
         </View>
-        <Button icon="pencil" mode="outlined" onPress={presentList}>
+        <Button mode="outlined" icon="pencil" onPress={presentList}>
           {t("order_editor.product_list")}
         </Button>
       </Surface>
-      <BottomSheetModal
-        backdropComponent={CustomBackdropModal}
-        snapPoints={snapPoints}
-        backgroundComponent={CustomBackgroundComponent}
-        ref={sheetRef}
-        handleComponent={null}
-        onChange={(index) => (sheetIndexRef.current = index)}
-      >
-        <FlatList
-          style={styles.list}
-          ItemSeparatorComponent={Divider}
-          data={dataProducts || []}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          ListEmptyComponent={
-            statusGetProducts === "loading" ? <LoadingScreen /> : null
-          }
-        />
-        <Button theme={{ roundness: 0 }} onPress={onDone} mode="contained">
-          {t("action.done")}
-        </Button>
-      </BottomSheetModal>
+      <Portal>
+        <Dialog
+          style={StyleSheet.absoluteFill}
+          visible={visible}
+          onDismiss={onDone}
+        >
+          <FlatList
+            style={styles.list}
+            ItemSeparatorComponent={Divider}
+            data={dataProducts || []}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            ListEmptyComponent={
+              statusGetProducts === "loading" ? <LoadingScreen /> : null
+            }
+          />
+          <Dialog.Actions>
+            <Button mode="text" onPress={onDone} style={styles.btnDone}>
+              {t("action.done")}
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </>
   );
 };

@@ -1,4 +1,3 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import {
   DarkTheme as NavigationDarkTheme,
@@ -99,53 +98,51 @@ const AppInner: FC = () => {
         <SafeAreaProvider style={{ backgroundColor: theme.colors.background }}>
           <StatusBar translucent backgroundColor="transparent" />
           <Portal.Host>
-            <BottomSheetModalProvider>
-              <NavigationContainer theme={theme}>
-                <Stack.Navigator
-                  screenOptions={{
-                    header(props) {
-                      return <NavigationBar {...props} />;
-                    },
+            <NavigationContainer theme={theme}>
+              <Stack.Navigator
+                screenOptions={{
+                  header(props) {
+                    return <NavigationBar {...props} />;
+                  },
+                }}
+              >
+                <Stack.Screen
+                  name={RouteName.Main}
+                  component={Main}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name={RouteName.OrderEditor}
+                  component={OrderEditorScreen}
+                  options={{
+                    headerTitle: "",
+                    headerTintColor: TabThemeColor.order,
                   }}
-                >
-                  <Stack.Screen
-                    name={RouteName.Main}
-                    component={Main}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name={RouteName.OrderEditor}
-                    component={OrderEditorScreen}
-                    options={{
-                      headerTitle: "",
-                      headerTintColor: TabThemeColor.order,
-                    }}
-                  />
-                  <Stack.Screen
-                    name={RouteName.ProductEditor}
-                    component={ProductEditorScreen}
-                    options={{
-                      headerTitle: "",
-                      headerTintColor: TabThemeColor.product,
-                    }}
-                  />
-                  <Stack.Screen
-                    name={RouteName.Settings}
-                    component={SettingsScreen}
-                    options={{
-                      headerTitle: t("settings.title"),
-                    }}
-                  />
-                  <Stack.Screen
-                    name={RouteName.DashboardProfit}
-                    component={DashboardProfitScreen}
-                    options={{
-                      headerTitle: t("stats.profit"),
-                    }}
-                  />
-                </Stack.Navigator>
-              </NavigationContainer>
-            </BottomSheetModalProvider>
+                />
+                <Stack.Screen
+                  name={RouteName.ProductEditor}
+                  component={ProductEditorScreen}
+                  options={{
+                    headerTitle: "",
+                    headerTintColor: TabThemeColor.product,
+                  }}
+                />
+                <Stack.Screen
+                  name={RouteName.Settings}
+                  component={SettingsScreen}
+                  options={{
+                    headerTitle: t("settings.title"),
+                  }}
+                />
+                <Stack.Screen
+                  name={RouteName.DashboardProfit}
+                  component={DashboardProfitScreen}
+                  options={{
+                    headerTitle: t("stats.profit"),
+                  }}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
           </Portal.Host>
           <Toaster />
         </SafeAreaProvider>
