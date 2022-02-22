@@ -2,6 +2,7 @@ import { Platform } from "react-native";
 import RNFS, { readFile } from "react-native-fs";
 import Share from "react-native-share";
 import SQLite, { DatabaseParams } from "react-native-sqlite-storage";
+import migrationCustomer from "./migrations/customer.sql";
 import migrationInit from "./migrations/init.sql";
 
 SQLite.enablePromise(true);
@@ -16,7 +17,7 @@ const dbParams: DatabaseParams = {
   location: "default",
 };
 
-const migrations = [migrationInit];
+const migrations = [migrationInit, migrationCustomer];
 const initDBPromise = (async () => {
   const db = await SQLite.openDatabase(dbParams);
   await db.executeSql(`

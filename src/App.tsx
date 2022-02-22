@@ -23,6 +23,7 @@ import {
 } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { CustomerEditorScreen, CustomersScreen } from "screens/Customer";
 import { DashboardProfitScreen, DashboardScreen } from "screens/Dashboard";
 import { OrderEditorScreen, OrdersScreen } from "screens/Orders";
 import { ProductEditorScreen, ProductsScreen } from "screens/Products";
@@ -76,6 +77,16 @@ const Main: FC = () => {
           title: t("product.title_other"),
         }}
       />
+      <Tab.Screen
+        name={RouteName.Customers}
+        component={CustomersScreen}
+        options={{
+          tabBarLabel: t("customer.title_other"),
+          tabBarIcon: "account",
+          tabBarColor: TabThemeColor.customer,
+          title: t("customer.title_others"),
+        }}
+      />
     </Tab.Navigator>
   );
 };
@@ -125,6 +136,14 @@ const AppInner: FC = () => {
                   options={{
                     headerTitle: "",
                     headerTintColor: TabThemeColor.product,
+                  }}
+                />
+                <Stack.Screen
+                  name={RouteName.CustomerEditor}
+                  component={CustomerEditorScreen}
+                  options={{
+                    headerTitle: "",
+                    headerTintColor: TabThemeColor.customer,
                   }}
                 />
                 <Stack.Screen

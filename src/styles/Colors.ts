@@ -4,4 +4,5 @@ export const TabThemeColor = {
   order: Colors.pink600,
   product: Colors.teal500,
   dashboard: Colors.blue500,
+  customer: Colors.orange500,
 };

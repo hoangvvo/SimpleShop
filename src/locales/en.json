@@ -42,6 +42,17 @@
     "title_create": "New Product",
     "delete_also_order": "This will also delete its orders."
   },
+  "customer": {
+    "title_one": "Customer",
+    "title_other": "Customers",
+    "name": "Name",
+    "loc_text": "Location",
+    "note": "Note"
+  },
+  "customer_editor": {
+    "title_edit": "Edit Customer",
+    "title_create": "New Customer"
+  },
   "error": {
     "something_went_wrong": "Something went wrong",
     "general_description": "Sorry, an error has occurred. Please restart this application and try again.",

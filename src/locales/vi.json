@@ -42,6 +42,17 @@
     "title_create": "Tạo sản phẩm",
     "delete_also_order": "Việc này cũng sẽ xóa đơn hàng của sản phẩm này."
   },
+  "customer": {
+    "title_one": "Khách hàng",
+    "title_other": "Khách hàng",
+    "name": "Tên",
+    "loc_text": "Địa chỉ",
+    "note": "Ghi chú"
+  },
+  "customer_editor": {
+    "title_edit": "Chỉnh sửa khách hàng",
+    "title_create": "Tạo khách hàng"
+  },
   "error": {
     "something_went_wrong": "Có gì đó đã xảy ra",
     "general_description": "Đã có lỗi xảy ra. Vui lòng khởi động lại ứng dụng.",

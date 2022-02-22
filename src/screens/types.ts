@@ -8,6 +8,8 @@ export enum RouteName {
   OrderEditor = "OrderEditor",
   Products = "Products",
   ProductEditor = "ProductEditor",
+  Customers = "Customers",
+  CustomerEditor = "CustomerEditor",
   Settings = "Settings",
 }
 
@@ -19,5 +21,7 @@ export interface ParamList extends ParamListBase {
   [RouteName.OrderEditor]: { id?: number; isBuyOrder: boolean };
   [RouteName.Products]: undefined;
   [RouteName.ProductEditor]: undefined | { id: number };
+  [RouteName.Customers]: undefined;
+  [RouteName.CustomerEditor]: undefined | { id: number };
   [RouteName.Settings]: undefined;
 }
