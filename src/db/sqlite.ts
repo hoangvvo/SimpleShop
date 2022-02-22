@@ -2,11 +2,7 @@ import { Platform } from "react-native";
 import RNFS, { readFile } from "react-native-fs";
 import Share from "react-native-share";
 import SQLite, { DatabaseParams } from "react-native-sqlite-storage";
-import {
-  order as orderSchema,
-  orderProducts as orderProductsSchema,
-} from "services/order/schema.sql";
-import { default as productSchema } from "services/product/schema.sql";
+import migrationInit from "./migrations/init.sql";
 
 SQLite.enablePromise(true);
 const dbName = "simple_shop.db";
@@ -20,13 +16,31 @@ const dbParams: DatabaseParams = {
   location: "default",
 };
 
-const initSchemas = [productSchema, orderSchema, orderProductsSchema];
+const migrations = [migrationInit];
 const initDBPromise = (async () => {
   const db = await SQLite.openDatabase(dbParams);
+  await db.executeSql(`
+CREATE TABLE IF NOT EXISTS migrations (
+  id INTEGER PRIMARY KEY NOT NULL,
+  migration INTEGER NOT NULL DEFAULT -1
+)`);
+  const indexResult = await db.executeSql(
+    `SELECT migration FROM "migrations" WHERE id = 1`
+  );
+  const migratedIndex = indexResult[0].rows?.item(0)?.index ?? -1;
   await db.transaction((tx) => {
-    for (const initSchema of initSchemas) {
-      tx.executeSql(initSchema);
-    }
+    migrations.forEach((migration, index) => {
+      if (index <= migratedIndex) return;
+      migration.split(`\n\n`).forEach((statement) => {
+        statement = statement.trim();
+        if (statement) tx.executeSql(statement);
+      });
+    });
+    tx.executeSql(
+      `REPLACE INTO "migrations" (id, migration)
+VALUES (1, ?)`,
+      [migrations.length - 1]
+    );
   });
   return db;
 })();

@@ -1,4 +1,12 @@
-export const order = `
+export default `
+CREATE TABLE IF NOT EXISTS product (
+  id INTEGER PRIMARY KEY autoincrement,
+  name VARCHAR(100) NOT NULL,
+  description VARCHAR(256) NULL,
+  default_sell_price DECIMAL(12, 2) NOT NULL CHECK(default_sell_price >= 0),
+  default_buy_price DECIMAL(12, 2) NOT NULL CHECK(default_buy_price >= 0)
+)
+
 CREATE TABLE IF NOT EXISTS "order" (
   id INTEGER PRIMARY KEY autoincrement,
   is_buy_order BOOLEAN NOT NULL,
@@ -8,9 +16,7 @@ CREATE TABLE IF NOT EXISTS "order" (
   has_delivered BOOLEAN NOT NULL DEFAULT FALSE,
   created_at INTEGER NOT NULL
 )
-`;
 
-export const orderProducts = `
 CREATE TABLE IF NOT EXISTS order_product (
   order_id INTERGER NOT NULL,
   product_id INTEGER NOT NULL,
