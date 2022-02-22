@@ -7,6 +7,7 @@
     "title_other": "Đơn hàng",
     "order_number_num": "Đơn hàng #{{id}}",
     "per_price": "Giá",
+    "per_cost": "Chi phí",
     "amount": "Số lượng",
     "loc_text": "Địa chỉ",
     "note": "Ghi chú",
@@ -15,14 +16,16 @@
     "created_at": "Tạo lúc",
     "total": "Tổng",
     "sell": "Bán",
-    "buy": "Mua"
+    "buy": "Nhập kho"
   },
   "order_editor": {
     "title_edit": "Chỉnh sửa đơn hàng",
     "title_create": "Tạo đơn hàng",
     "select_product": "Chọn sản phẩm",
     "order_no_products": "Đơn hàng này không có sản phẩm",
-    "product_list": "Danh sách sản phẩm"
+    "product_list": "Danh sách sản phẩm",
+    "search_prompt": "Tìm kiếm sản phẩm để thêm vào danh sách",
+    "add": "Thêm"
   },
   "product": {
     "title_one": "Sản phẩm",
@@ -30,8 +33,9 @@
     "name": "Tên",
     "description": "Mô tả",
     "default_sell_price": "Giá bán mặc định",
-    "default_buy_price": "Giá mua mặc định",
-    "stock": "Tồn kho"
+    "default_buy_price": "Chi phí mặc định",
+    "stock": "Tồn kho",
+    "search_product": "Tìm kiếm sản phẩm"
   },
   "product_editor": {
     "title_edit": "Chỉnh sửa sản phẩm",

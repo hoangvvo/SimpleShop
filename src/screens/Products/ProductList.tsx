@@ -1,6 +1,7 @@
 import { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import { FC } from "react";
+import Fuse from "fuse.js";
+import { FC, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ListRenderItem, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
@@ -10,6 +11,7 @@ import {
   Divider,
   FAB,
   List,
+  Searchbar,
   Text,
   Title,
 } from "react-native-paper";
@@ -44,6 +46,9 @@ const styles = StyleSheet.create({
   },
   listTitle: {
     fontWeight: "bold",
+  },
+  searchbar: {
+    marginVertical: 10,
   },
 });
 
@@ -92,6 +97,20 @@ export const ProductsScreen: FC<
   const onAdd = () => navigation.navigate(RouteName.ProductEditor);
 
   const { data } = useProductsQuery();
+  const fuseProducts = useMemo(
+    () =>
+      new Fuse(data || [], {
+        keys: ["name", "description"],
+      }),
+    [data]
+  );
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const products = useMemo(() => {
+    const trimmedSQ = searchQuery.trim();
+    if (!trimmedSQ) return data;
+    return fuseProducts.search(trimmedSQ).map((result) => result.item);
+  }, [fuseProducts, searchQuery, data]);
 
   return (
     <SafeAreaView style={screenStyles.root}>
@@ -102,13 +121,20 @@ export const ProductsScreen: FC<
           ItemSeparatorComponent={Divider}
           stickyHeaderIndices={[0]}
           ListHeaderComponent={
-            <View style={styles.listHeader}>
-              <Caption style={styles.listHeadQuantity}>
-                {t("product.stock")}
-              </Caption>
-            </View>
+            <>
+              <Searchbar
+                onChangeText={(query) => setSearchQuery(query)}
+                value={searchQuery}
+                style={styles.searchbar}
+              />
+              <View style={styles.listHeader}>
+                <Caption style={styles.listHeadQuantity}>
+                  {t("product.stock")}
+                </Caption>
+              </View>
+            </>
           }
-          data={data}
+          data={products}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
         />

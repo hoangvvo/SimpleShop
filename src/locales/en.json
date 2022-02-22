@@ -7,6 +7,7 @@
     "title_other": "Orders",
     "order_number_num": "Order #{{id}}",
     "per_price": "Price",
+    "per_cost": "Cost",
     "amount": "Amount",
     "loc_text": "Location",
     "note": "Note",
@@ -15,14 +16,16 @@
     "created_at": "Created at",
     "total": "Total",
     "sell": "Sell",
-    "buy": "Buy"
+    "buy": "Import"
   },
   "order_editor": {
     "title_edit": "Edit Order",
     "title_create": "New Order",
     "select_product": "Select Product",
     "order_no_products": "This order has no products",
-    "product_list": "Product List"
+    "product_list": "Product List",
+    "search_prompt": "Search a product to add it to the list",
+    "add": "Add"
   },
   "product": {
     "title_one": "Product",
@@ -30,8 +33,9 @@
     "name": "Name",
     "description": "Description",
     "default_sell_price": "Default Sell Price",
-    "default_buy_price": "Default Buy Price",
-    "stock": "Inventory"
+    "default_buy_price": "Default Cost Price",
+    "stock": "Inventory",
+    "search_product": "Search products"
   },
   "product_editor": {
     "title_edit": "Edit Product",
