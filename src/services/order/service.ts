@@ -60,6 +60,7 @@ export class OrderService {
 
     const result = await db.executeSql(queries.orderCreate, [
       input.is_buy_order,
+      input.customer_id ?? null,
       input.loc_text,
       input.note,
       input.has_paid,
@@ -98,6 +99,7 @@ export class OrderService {
   ) {
     const result = await db.transaction((tx) => {
       tx.executeSql(queries.orderUpdate, [
+        input.customer_id,
         input.loc_text,
         input.note,
         input.has_paid,

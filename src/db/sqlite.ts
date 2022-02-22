@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS migrations (
   const indexResult = await db.executeSql(
     `SELECT migration FROM "migrations" WHERE id = 1`
   );
-  const migratedIndex = indexResult[0].rows?.item(0)?.index ?? -1;
+  const migratedIndex = indexResult[0].rows?.item(0)?.migration ?? -1;
   await db.transaction((tx) => {
     migrations.forEach((migration, index) => {
       if (index <= migratedIndex) return;

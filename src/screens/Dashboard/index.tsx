@@ -2,7 +2,7 @@ import type { MaterialBottomTabScreenProps } from "@react-navigation/material-bo
 import type { FC } from "react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import {
   Banner,
   Card,
@@ -12,6 +12,7 @@ import {
   Title,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useQueryClient } from "react-query";
 import type { ParamList } from "screens/types";
 import { RouteName } from "screens/types";
 import { useProductsStockQuery, useProfitQuery } from "services/calculate";
@@ -93,10 +94,19 @@ const DashboardScreen: FC<
   );
 
   const numberFormatProfit = useNumberFormatCurrency(profitFormatOptions);
+  const client = useQueryClient();
+  const onRefresh = () => {
+    client.invalidateQueries();
+  };
 
   return (
     <SafeAreaView style={screenStyles.root}>
-      <View style={[screenStyles.content, screenStyles.contentRoot]}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={false} onRefresh={onRefresh} />
+        }
+        style={[screenStyles.content, screenStyles.contentRoot]}
+      >
         <View style={styles.header}>
           <Title style={screenStyles.title}>{t("dashboard.title")}</Title>
           <IconButton
@@ -132,7 +142,7 @@ const DashboardScreen: FC<
         >
           {t("error.negative_stock")}
         </Banner>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

@@ -65,7 +65,8 @@
     "create": "Tạo",
     "update": "Cập nhật",
     "delete": "Xóa",
-    "delete_name": "Xóa {{ name }}"
+    "delete_name": "Xóa {{ name }}",
+    "none": "Không có"
   },
   "form": {
     "validate_messages": {

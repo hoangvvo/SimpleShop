@@ -18,7 +18,9 @@ const invalidateCache = (client: QueryClient, orderId?: Order["id"]) => {
 
 export const useOrdersQuery = () => {
   const db = useSQLite();
-  return useQuery<Order[]>("orders", () => OrderService.findAll(db));
+  return useQuery<(Order & { customer_name?: string })[]>("orders", () =>
+    OrderService.findAll(db)
+  );
 };
 
 export const useOrderProductsQuery = () => {

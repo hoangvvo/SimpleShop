@@ -1,7 +1,7 @@
 import type { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-tabs";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { FC } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ListRenderItem } from "react-native";
 import { BackHandler, Linking, Platform, StyleSheet, View } from "react-native";
@@ -14,6 +14,7 @@ import {
   List,
   Text,
   Title,
+  useTheme,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -36,17 +37,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
-  listStatusIcon: {
-    marginRight: 4,
-  },
   listStatuses: {
     justifyContent: "center",
     marginLeft: 4,
-    paddingHorizontal: 8,
-  },
-  listTitle: {
-    alignItems: "center",
-    flexDirection: "row",
+    paddingHorizontal: 2,
   },
   typeTag: {
     borderRadius: 4,
@@ -66,9 +60,15 @@ const openInMap = (q: string) => {
   Linking.openURL(`${scheme}${q}`);
 };
 
-const OrderItem: FC<{ order: Order }> = ({ order }) => {
-  const { t } = useTranslation();
+const OrderItem: FC<{ order: Order & { customer_name?: string } }> = ({
+  order,
+}) => {
+  const { t, i18n } = useTranslation();
   const navigation = useNavigation();
+
+  const dtStr = useMemo(() => {
+    return new Intl.DateTimeFormat(i18n.language).format(order.created_at);
+  }, [i18n.language, order.created_at]);
 
   const onEdit = () =>
     navigation.navigate(RouteName.OrderEditor, {
@@ -98,7 +98,6 @@ const OrderItem: FC<{ order: Order }> = ({ order }) => {
           style={[styles.listStatuses, { backgroundColor: Colors.transparent }]}
         >
           <Icon
-            style={styles.listStatusIcon}
             name="cash"
             accessibilityLabel={`${t("order.has_paid")}: ${
               order.has_paid ? t("action.yes") : t("action.no")
@@ -107,7 +106,6 @@ const OrderItem: FC<{ order: Order }> = ({ order }) => {
             size={24}
           />
           <Icon
-            style={styles.listStatusIcon}
             name="truck-delivery"
             accessibilityLabel={`${t("order.has_delivered")}: ${
               order.has_delivered ? t("action.yes") : t("action.no")
@@ -120,6 +118,27 @@ const OrderItem: FC<{ order: Order }> = ({ order }) => {
     ),
     [t, order, openMap]
   );
+  const listLeft = useCallback(
+    () => (
+      <View
+        style={[
+          styles.typeTag,
+          {
+            backgroundColor: order.is_buy_order
+              ? Colors.red400
+              : Colors.green400,
+          },
+        ]}
+      >
+        <Text style={styles.typeTagText}>
+          {order.is_buy_order ? t("order.buy") : t("order.sell")}
+        </Text>
+      </View>
+    ),
+    [t, order.is_buy_order]
+  );
+
+  const theme = useTheme();
 
   return (
     <List.Item
@@ -127,33 +146,25 @@ const OrderItem: FC<{ order: Order }> = ({ order }) => {
         order.has_delivered && order.has_paid ? styles.listOpaque : undefined
       }
       title={
-        <View style={styles.listTitle}>
-          <View
-            style={[
-              styles.typeTag,
-              {
-                backgroundColor: order.is_buy_order
-                  ? Colors.red400
-                  : Colors.green400,
-              },
-            ]}
-          >
-            <Text style={styles.typeTagText}>
-              {order.is_buy_order ? t("order.buy") : t("order.sell")}
-            </Text>
-          </View>
-          <Text>{t("order.order_number_num", { id: order.id })}</Text>
-        </View>
+        order.customer_name
+          ? order.customer_name
+          : t("order.order_number_num", { id: order.id })
       }
-      description={order.loc_text || " "}
+      titleStyle={
+        order.customer_name ? { color: theme.colors.primary } : undefined
+      }
+      description={`${dtStr} ${order.loc_text ? `• ${order.loc_text}` : ""}`}
+      left={listLeft}
       right={listRight}
       onPress={onEdit}
+      titleNumberOfLines={1}
+      descriptionNumberOfLines={1}
     />
   );
 };
 
 const renderItem: ListRenderItem<Order> = ({ item }) => (
-  <OrderItem order={item} />
+  <OrderItem key={item.id} order={item} />
 );
 
 const keyExtractor = (item: Order) => String(item.id);

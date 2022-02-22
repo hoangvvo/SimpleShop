@@ -2,6 +2,7 @@ import type { Product } from "services/product";
 
 export interface Order {
   id: number;
+  customer_id: number;
   is_buy_order: boolean;
   loc_text?: string;
   note?: string;

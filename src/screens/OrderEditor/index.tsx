@@ -103,6 +103,7 @@ const OrderEditorScreen: FC<
   useEffect(() => {
     if (editingOrder) {
       setIsBuyOrder(editingOrder.is_buy_order);
+      setValue("customer_id", editingOrder.customer_id);
       setValue("loc_text", editingOrder.loc_text);
       setValue("note", editingOrder.note);
       setValue("has_paid", editingOrder.has_paid);
@@ -146,6 +147,7 @@ const OrderEditorScreen: FC<
     <View style={screenStyles.root}>
       <ScrollView style={screenStyles.content}>
         <OrderDetailEditor
+          setValue={setValue}
           control={control}
           disableEditing={disableEditing}
           isBuyOrder={isBuyOrder}

@@ -1,8 +1,10 @@
 export const orderFindAll = `
 SELECT
-  *
+  "order".*,
+  customer.name AS customer_name
 FROM
   "order"
+  LEFT JOIN customer ON customer.id = "order".customer_id
 `;
 
 export const orderFindById = `
@@ -27,6 +29,7 @@ export const orderCreate = `
 INSERT INTO
   "order" (
     is_buy_order,
+    customer_id,
     loc_text,
     note,
     has_paid,
@@ -34,13 +37,14 @@ INSERT INTO
     created_at
   )
 VALUES
-  (?, ?, ?, ?, ?, ?)
+  (?, ?, ?, ?, ?, ?, ?)
 `;
 
 export const orderUpdate = `
 UPDATE
   "order"
 SET
+  customer_id = ?,
   loc_text = ?,
   note = ?,
   has_paid = ?,
