@@ -1,18 +1,24 @@
 import { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-tabs";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { BackHandler, ListRenderItem, StyleSheet, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import Swipeable from "react-native-gesture-handler/Swipeable";
 import {
+  BackHandler,
+  Linking,
+  ListRenderItem,
+  Platform,
+  StyleSheet,
+  View,
+} from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import {
+  Card,
   Colors,
   Divider,
   FAB,
   List,
   Text,
   Title,
-  useTheme,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -31,12 +37,11 @@ const styles = StyleSheet.create({
   },
   listSide: {
     justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
   },
   listStatusIcon: {
     marginRight: 4,
-  },
-  listStatusText: {
-    fontSize: 12,
   },
   listTitle: {
     alignItems: "center",
@@ -53,15 +58,21 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 12,
   },
+  listStatuses: {
+    marginLeft: 4,
+    paddingHorizontal: 8,
+    justifyContent: "center",
+  },
 });
+
+const openInMap = (q: string) => {
+  const scheme = Platform.select({ ios: "maps:0,0?q=", android: "geo:0,0?q=" });
+  Linking.openURL(`${scheme}${q}`);
+};
 
 const OrderItem: FC<{ order: Order }> = ({ order }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-
-  const theme = useTheme();
-
-  const swipeableRef = useRef<Swipeable>(null);
 
   const onEdit = () =>
     navigation.navigate(RouteName.OrderEditor, {
@@ -69,79 +80,79 @@ const OrderItem: FC<{ order: Order }> = ({ order }) => {
       isBuyOrder: false,
     });
 
+  const openMap = useCallback(() => {
+    if (order.loc_text) openInMap(order.loc_text);
+  }, [order.loc_text]);
+
   const listRight = useCallback(
     () => (
       <View style={styles.listSide}>
-        <Text
-          style={[
-            styles.listStatusText,
-            { color: order.has_paid ? Colors.green400 : Colors.red400 },
-          ]}
+        {Boolean(order.loc_text) && (
+          <Card
+            style={styles.listStatuses}
+            mode="outlined"
+            accessibilityLabel={t("order.loc_text")}
+            onPress={openMap}
+          >
+            <Icon style={{ marginTop: 12 }} name="map" size={24} />
+          </Card>
+        )}
+        <Card
+          mode="outlined"
+          style={[styles.listStatuses, { backgroundColor: Colors.transparent }]}
         >
           <Icon
-            accessibilityLabel={
-              order.has_delivered ? t("action.yes") : t("action.no")
-            }
             style={styles.listStatusIcon}
-            name={order.has_paid ? "check" : "close"}
+            name="cash"
+            accessibilityLabel={`${t("order.has_paid")}: ${
+              order.has_paid ? t("action.yes") : t("action.no")
+            }`}
+            color={order.has_paid ? Colors.green400 : Colors.red400}
+            size={24}
           />
-          {t("order.has_paid")}
-        </Text>
-        <Text
-          style={[
-            styles.listStatusText,
-            {
-              color: order.has_delivered ? Colors.green400 : Colors.red400,
-            },
-          ]}
-        >
           <Icon
-            accessibilityLabel={
-              order.has_delivered ? t("action.yes") : t("action.no")
-            }
             style={styles.listStatusIcon}
-            name={order.has_delivered ? "check" : "close"}
+            name="truck-delivery"
+            accessibilityLabel={`${t("order.has_delivered")}: ${
+              order.has_delivered ? t("action.yes") : t("action.no")
+            }`}
+            color={order.has_delivered ? Colors.green400 : Colors.red400}
+            size={24}
           />
-          {t("order.has_delivered")}
-        </Text>
+        </Card>
       </View>
     ),
-    [t, order]
+    [t, order, openMap]
   );
 
   return (
-    <Swipeable
-      ref={swipeableRef}
-      containerStyle={
+    <List.Item
+      style={
         order.has_delivered && order.has_paid ? styles.listOpaque : undefined
       }
-    >
-      <List.Item
-        style={{ backgroundColor: theme.colors.background }}
-        title={
-          <View style={styles.listTitle}>
-            <View
-              style={[
-                styles.typeTag,
-                {
-                  backgroundColor: order.is_buy_order
-                    ? Colors.red400
-                    : Colors.green400,
-                },
-              ]}
-            >
-              <Text style={styles.typeTagText}>
-                {order.is_buy_order ? t("order.buy") : t("order.sell")}
-              </Text>
-            </View>
-            <Text>{t("order.order_number_num", { id: order.id })}</Text>
+      title={
+        <View style={styles.listTitle}>
+          <View
+            style={[
+              styles.typeTag,
+              {
+                backgroundColor: order.is_buy_order
+                  ? Colors.red400
+                  : Colors.green400,
+              },
+            ]}
+          >
+            <Text style={styles.typeTagText}>
+              {order.is_buy_order ? t("order.buy") : t("order.sell")}
+            </Text>
           </View>
-        }
-        description={order.loc_text || " "}
-        right={listRight}
-        onPress={onEdit}
-      />
-    </Swipeable>
+          <Text>{t("order.order_number_num", { id: order.id })}</Text>
+        </View>
+      }
+      description={order.loc_text || " "}
+      right={listRight}
+      onPress={onEdit}
+    />
   );
 };
 

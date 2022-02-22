@@ -11,6 +11,7 @@ import {
   Surface,
   TextInput,
 } from "react-native-paper";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Order } from "services/order";
 
 const styles = StyleSheet.create({
@@ -27,14 +28,17 @@ const styles = StyleSheet.create({
   },
   toggleLabel: {
     fontSize: 16,
-    marginRight: 12,
+    marginLeft: 5,
+  },
+  toggleLabelWrap: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
 const rules = {
   locText: {
-    maxLength: 100,
-    required: true,
+    maxLength: 200,
   },
   note: {
     maxLength: 256,
@@ -109,7 +113,12 @@ export const OrderDetailEditor: FC<{
         control={control}
         render={({ field: { onChange, value } }) => (
           <Surface style={styles.toggle}>
-            <Caption style={styles.toggleLabel}>{t("order.has_paid")}</Caption>
+            <View style={styles.toggleLabelWrap}>
+              <Icon size={24} name="cash" />
+              <Caption style={styles.toggleLabel}>
+                {t("order.has_paid")}
+              </Caption>
+            </View>
             <Checkbox
               status={value ? "checked" : "unchecked"}
               onPress={() => onChange(!value)}
@@ -125,9 +134,12 @@ export const OrderDetailEditor: FC<{
         control={control}
         render={({ field: { onChange, value } }) => (
           <Surface style={styles.toggle}>
-            <Caption style={styles.toggleLabel}>
-              {t("order.has_delivered")}
-            </Caption>
+            <View style={styles.toggleLabelWrap}>
+              <Icon size={24} name="truck-delivery" />
+              <Caption style={styles.toggleLabel}>
+                {t("order.has_delivered")}
+              </Caption>
+            </View>
             <Checkbox
               status={value ? "checked" : "unchecked"}
               onPress={() => onChange(!value)}
