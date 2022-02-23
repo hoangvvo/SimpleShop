@@ -27,7 +27,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import CustomerEditorScreen from "screens/CustomerEditor";
 import CustomersScreen from "screens/Customers";
 import DashboardScreen from "screens/Dashboard";
-import DashboardProfitScreen from "screens/DashboardProfit";
+import DashboardStatsScreen from "screens/DashboardStats";
 import OrderEditorScreen from "screens/OrderEditor";
 import OrdersScreen from "screens/Orders";
 import ProductEditorScreen from "screens/ProductEditor";
@@ -159,10 +159,10 @@ const AppInner: FC = () => {
                   }}
                 />
                 <Stack.Screen
-                  name={RouteName.DashboardProfit}
-                  component={DashboardProfitScreen}
+                  name={RouteName.DashboardStats}
+                  component={DashboardStatsScreen}
                   options={{
-                    headerTitle: t("stats.profit"),
+                    headerTitle: t("stats.title"),
                   }}
                 />
               </Stack.Navigator>

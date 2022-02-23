@@ -92,8 +92,11 @@
     "see_more": "Xem thêm"
   },
   "stats": {
+    "title": "Thống kê",
     "profit": "Lợi nhuận",
-    "top_products": "Sản phẩm hàng đầu"
+    "revenue": "Doanh thu",
+    "cost": "Chi phí",
+    "view_detail": "Xem chi tiết"
   },
   "time": {
     "today": "Hôm nay",

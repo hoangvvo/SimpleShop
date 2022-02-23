@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ListRenderItem } from "react-native";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Divider, FAB, List, Searchbar, Text, Title } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,8 +20,7 @@ const styles = StyleSheet.create({
   fab: {
     backgroundColor: TabThemeColor.customer,
   },
-  list: { flex: 1 },
-  listTitle: {
+  itemTitle: {
     fontWeight: "bold",
   },
   searchbar: {
@@ -37,7 +36,7 @@ const CustomerItem: FC<{ customer: Customer }> = ({ customer }) => {
 
   return (
     <List.Item
-      title={<Text style={styles.listTitle}>{customer.name}</Text>}
+      title={<Text style={styles.itemTitle}>{customer.name}</Text>}
       description={customer.loc_text}
       descriptionNumberOfLines={1}
       onPress={onEdit}
@@ -73,25 +72,24 @@ const CustomersScreen: FC<
 
   return (
     <SafeAreaView style={screenStyles.root}>
-      <View style={[screenStyles.content, screenStyles.contentRoot]}>
-        <Title style={screenStyles.title}>{t("customer.title_other")}</Title>
-        <FlatList
-          style={styles.list}
-          ItemSeparatorComponent={Divider}
-          stickyHeaderIndices={[0]}
-          ListHeaderComponent={
-            <>
-              <Searchbar
-                onChangeText={(query) => setSearchQuery(query)}
-                value={searchQuery}
-                style={styles.searchbar}
-              />
-            </>
-          }
-          data={customers}
-          renderItem={renderItem}
-        />
-      </View>
+      <Title style={screenStyles.title}>{t("customer.title_other")}</Title>
+      <FlatList
+        style={screenStyles.fill}
+        contentContainerStyle={screenStyles.content}
+        ItemSeparatorComponent={Divider}
+        stickyHeaderIndices={[0]}
+        ListHeaderComponent={
+          <>
+            <Searchbar
+              onChangeText={(query) => setSearchQuery(query)}
+              value={searchQuery}
+              style={styles.searchbar}
+            />
+          </>
+        }
+        data={customers}
+        renderItem={renderItem}
+      />
       <FAB
         accessibilityLabel={t("customer_editor.title_create")}
         onPress={onAdd}

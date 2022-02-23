@@ -92,8 +92,11 @@
     "see_more": "See more"
   },
   "stats": {
+    "title": "Statistics",
     "profit": "Profit",
-    "top_products": "Top Products"
+    "revenue": "Revenue",
+    "cost": "Cost",
+    "view_detail": "View Detail"
   },
   "time": {
     "today": "Today",

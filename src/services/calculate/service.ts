@@ -19,6 +19,8 @@ export class CalculateService {
         _calc: number;
         amount: number;
         profit: number;
+        revenue: number;
+        cost: number;
       };
     };
     for (const order of allOrders) {
@@ -31,6 +33,8 @@ export class CalculateService {
         productsMap[orderProduct.product_id] = {
           amount: 0,
           profit: 0,
+          cost: 0,
+          revenue: 0,
           _calc: 0,
         };
       if (order.is_buy_order) {
@@ -42,7 +46,7 @@ export class CalculateService {
       const productsMapObj = productsMap[orderProduct.product_id];
       productsMapObj.amount += orderProduct.amount;
       productsMapObj._calc += orderProduct.amount;
-      productsMapObj.profit += orderProduct.per_price * orderProduct.amount;
+      productsMapObj.revenue += orderProduct.per_price * orderProduct.amount;
       return false;
     });
     for (const filteredBuyOrder of filteredBuyOrders) {
@@ -51,7 +55,7 @@ export class CalculateService {
         productsMap[filteredBuyOrder.product_id]._calc
       );
       productsMap[filteredBuyOrder.product_id]._calc -= subtractableAmount;
-      productsMap[filteredBuyOrder.product_id].profit -=
+      productsMap[filteredBuyOrder.product_id].cost +=
         subtractableAmount * filteredBuyOrder.per_price;
     }
     const arr: OrderProductsStats[] = [];
@@ -60,7 +64,9 @@ export class CalculateService {
       arr.push({
         product_id: Number(key),
         amount: value.amount,
-        profit: value.profit,
+        revenue: value.revenue,
+        cost: value.cost,
+        profit: value.revenue - value.cost,
       });
     }
 
@@ -80,6 +86,23 @@ export class CalculateService {
       );
     return calculatedOrderProductArr.reduce(
       (prev, current) => (prev += current.profit),
+      0
+    );
+  }
+
+  static async getRevenue(
+    db: SQLiteDatabase,
+    fromTimestamp: number,
+    toTimestamp: number
+  ) {
+    const calculatedOrderProductArr =
+      await CalculateService.getOrderProductsStats(
+        db,
+        fromTimestamp,
+        toTimestamp
+      );
+    return calculatedOrderProductArr.reduce(
+      (prev, current) => (prev += current.revenue),
       0
     );
   }

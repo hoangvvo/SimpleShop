@@ -16,6 +16,7 @@ import {
   Searchbar,
   Text,
   Title,
+  useTheme,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { ParamList } from "screens/types";
@@ -30,7 +31,6 @@ const styles = StyleSheet.create({
   fab: {
     backgroundColor: TabThemeColor.product,
   },
-  list: { flex: 1 },
   listHeadQuantity: {
     lineHeight: 12,
     width: 56,
@@ -115,33 +115,34 @@ const ProductsScreen: FC<
     return fuse.search(trimmedSQ).map((result) => result.item);
   }, [fuse, searchQuery, data]);
 
+  const theme = useTheme();
+
   return (
     <SafeAreaView style={screenStyles.root}>
-      <View style={[screenStyles.content, screenStyles.contentRoot]}>
-        <Title style={screenStyles.title}>{t("product.title_other")}</Title>
-        <FlatList
-          style={styles.list}
-          ItemSeparatorComponent={Divider}
-          stickyHeaderIndices={[0]}
-          ListHeaderComponent={
-            <>
-              <Searchbar
-                onChangeText={(query) => setSearchQuery(query)}
-                value={searchQuery}
-                style={styles.searchbar}
-              />
-              <View style={styles.listHeader}>
-                <Caption style={styles.listHeadQuantity}>
-                  {t("product.stock")}
-                </Caption>
-              </View>
-            </>
-          }
-          data={products}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-        />
-      </View>
+      <Title style={screenStyles.title}>{t("product.title_other")}</Title>
+      <FlatList
+        style={screenStyles.fill}
+        contentContainerStyle={screenStyles.content}
+        ItemSeparatorComponent={Divider}
+        stickyHeaderIndices={[0]}
+        ListHeaderComponent={
+          <View style={{ backgroundColor: theme.colors.background }}>
+            <Searchbar
+              onChangeText={(query) => setSearchQuery(query)}
+              value={searchQuery}
+              style={styles.searchbar}
+            />
+            <View style={styles.listHeader}>
+              <Caption style={styles.listHeadQuantity}>
+                {t("product.stock")}
+              </Caption>
+            </View>
+          </View>
+        }
+        data={products}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+      />
       <FAB
         accessibilityLabel={t("product_editor.title_create")}
         onPress={onAdd}

@@ -12,7 +12,6 @@ import {
   Divider,
   FAB,
   List,
-  Text,
   Title,
   useTheme,
 } from "react-native-paper";
@@ -46,14 +45,12 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     justifyContent: "center",
     marginRight: 4,
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-  },
-  typeTagText: {
-    color: Colors.white,
-    fontSize: 12,
+    width: 12,
   },
 });
+
+const colorBuy = Colors.red400;
+const colorSell = Colors.green400;
 
 const openInMap = (q: string) => {
   const scheme = Platform.select({ ios: "maps:0,0?q=", android: "geo:0,0?q=" });
@@ -102,7 +99,7 @@ const OrderItem: FC<{ order: Order & { customer_name?: string } }> = ({
             accessibilityLabel={`${t("order.has_paid")}: ${
               order.has_paid ? t("action.yes") : t("action.no")
             }`}
-            color={order.has_paid ? Colors.green400 : Colors.red400}
+            color={order.has_paid ? Colors.green400 : Colors.blueGrey100}
             size={24}
           />
           <Icon
@@ -110,7 +107,7 @@ const OrderItem: FC<{ order: Order & { customer_name?: string } }> = ({
             accessibilityLabel={`${t("order.has_delivered")}: ${
               order.has_delivered ? t("action.yes") : t("action.no")
             }`}
-            color={order.has_delivered ? Colors.green400 : Colors.red400}
+            color={order.has_delivered ? Colors.green400 : Colors.blueGrey100}
             size={24}
           />
         </Card>
@@ -124,16 +121,13 @@ const OrderItem: FC<{ order: Order & { customer_name?: string } }> = ({
         style={[
           styles.typeTag,
           {
-            backgroundColor: order.is_buy_order
-              ? Colors.red400
-              : Colors.green400,
+            backgroundColor: order.is_buy_order ? colorBuy : colorSell,
           },
         ]}
-      >
-        <Text style={styles.typeTagText}>
-          {order.is_buy_order ? t("order.buy") : t("order.sell")}
-        </Text>
-      </View>
+        accessibilityLabel={
+          order.is_buy_order ? t("order.buy") : t("order.sell")
+        }
+      />
     ),
     [t, order.is_buy_order]
   );
@@ -200,16 +194,15 @@ const OrdersScreen: FC<
 
   return (
     <SafeAreaView style={screenStyles.root}>
-      <View style={[screenStyles.content, screenStyles.contentRoot]}>
-        <Title style={screenStyles.title}>{t("order.title_other")}</Title>
-        <FlatList
-          style={screenStyles.root}
-          ItemSeparatorComponent={Divider}
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-        />
-      </View>
+      <Title style={screenStyles.title}>{t("order.title_other")}</Title>
+      <FlatList
+        style={screenStyles.fill}
+        contentContainerStyle={screenStyles.content}
+        ItemSeparatorComponent={Divider}
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+      />
       <FAB.Group
         accessibilityLabel={t("order_editor.title_create")}
         visible
@@ -222,6 +215,7 @@ const OrdersScreen: FC<
             onPress: () =>
               navigation.navigate(RouteName.OrderEditor, { isBuyOrder: false }),
             small: false,
+            color: colorSell,
           },
           {
             icon: "package-down",
@@ -229,6 +223,7 @@ const OrdersScreen: FC<
             onPress: () =>
               navigation.navigate(RouteName.OrderEditor, { isBuyOrder: true }),
             small: false,
+            color: colorBuy,
           },
         ]}
         onStateChange={({ open }) => setAddBtn(open)}

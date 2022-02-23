@@ -3,7 +3,7 @@ import type { ParamListBase } from "@react-navigation/routers";
 export enum RouteName {
   Main = "Main",
   Dashboard = "Dashboard",
-  DashboardProfit = "DashboardProfit",
+  DashboardStats = "DashboardStats",
   Orders = "Orders",
   OrderEditor = "OrderEditor",
   Products = "Products",
@@ -16,7 +16,7 @@ export enum RouteName {
 export interface ParamList extends ParamListBase {
   [RouteName.Main]: undefined;
   [RouteName.Dashboard]: undefined;
-  [RouteName.DashboardProfit]: undefined;
+  [RouteName.DashboardStats]: { tab?: "revenue" | "profit" } | undefined;
   [RouteName.Orders]: undefined;
   [RouteName.OrderEditor]: { id?: number; isBuyOrder: boolean };
   [RouteName.Products]: undefined;
