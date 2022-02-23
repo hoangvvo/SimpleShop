@@ -23,9 +23,10 @@ const DashboardRevenue: FC = () => {
   }>(thisMonthDateInit);
 
   const slices = useRevenueSlices(range.from, range.to);
-  const { data: revenue } = useRevenueQuery(
-    range.from.getTime(),
-    range.to.getTime()
+  const { data } = useRevenueQuery(range.from.getTime(), range.to.getTime());
+  const { data: previousData } = useRevenueQuery(
+    range.from.getTime() - (range.to.getTime() - range.from.getTime()),
+    range.from.getTime()
   );
 
   const navigation = useNavigation();
@@ -44,7 +45,8 @@ const DashboardRevenue: FC = () => {
               value: number;
             }[]) || []
           }
-          total={revenue || 0}
+          total={data || 0}
+          previousTotal={previousData || 0}
         />
       </Card.Content>
       <Card.Actions style={styles.actions}>

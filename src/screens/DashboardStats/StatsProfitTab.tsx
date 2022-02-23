@@ -11,9 +11,10 @@ import { thisMonthDateInit } from "./shared";
 const ChartView: FC<RangeProps> = ({ range, setRange }) => {
   const { t } = useTranslation();
   const slices = useProfitSlices(range.from, range.to);
-  const { data: revenue } = useProfitQuery(
-    range.from.getTime(),
-    range.to.getTime()
+  const { data } = useProfitQuery(range.from.getTime(), range.to.getTime());
+  const { data: previousData } = useProfitQuery(
+    range.from.getTime() - (range.to.getTime() - range.from.getTime()),
+    range.from.getTime()
   );
 
   return (
@@ -30,7 +31,8 @@ const ChartView: FC<RangeProps> = ({ range, setRange }) => {
               value: number;
             }[]) || []
           }
-          total={revenue || 0}
+          total={data || 0}
+          previousTotal={previousData || 0}
         />
       </Card.Content>
     </Card>

@@ -3,9 +3,10 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { LayoutChangeEvent } from "react-native";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { Button, Colors, Text, Title } from "react-native-paper";
+import { Button, Chip, Colors, Text, Title } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 import type { RangeChange } from "react-native-paper-dates/lib/typescript/Date/Calendar";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNumberFormatCurrency } from "utils/currency";
 import {
   VictoryAxis,
@@ -16,12 +17,21 @@ import {
 import type { RangeProps } from "../shared";
 
 const styles = StyleSheet.create({
+  diff: {
+    borderRadius: 8,
+  },
+  diffText: {
+    color: Colors.white,
+    fontSize: 14,
+    fontWeight: "bold",
+  },
   statValue: {
     color: Colors.blue400,
     fontSize: 18,
     fontWeight: "bold",
   },
-  titleWrap: {
+  wrap: {
+    alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
@@ -41,9 +51,10 @@ const MoneyChartView: FC<
       value: number;
     }[];
     total: number;
+    previousTotal: number;
     title: string;
   }
-> = ({ range, setRange, data, total, title }) => {
+> = ({ range, setRange, data, total, previousTotal, title }) => {
   const { t, i18n } = useTranslation();
 
   const numberFormatProfit = useNumberFormatCurrency(profitFormatOptions);
@@ -73,6 +84,11 @@ const MoneyChartView: FC<
     [i18n.language]
   );
 
+  const diffPerc = useMemo(() => {
+    if (previousTotal === 0) return 1;
+    return (total - previousTotal) / previousTotal;
+  }, [total, previousTotal]);
+
   return (
     <>
       <DatePickerModal
@@ -88,25 +104,51 @@ const MoneyChartView: FC<
         endLabel={t("time.end")}
         label={t("time.select_period")}
       />
-      <View onLayout={onWidthLayout} style={styles.titleWrap}>
+      <Button
+        mode="outlined"
+        icon="calendar-range"
+        onPress={() => setVisiblePicker(true)}
+        labelStyle={{ fontSize: 12 }}
+      >
+        {intlDtFormat.format(range.from)} - {intlDtFormat.format(range.to)}
+      </Button>
+      <View onLayout={onWidthLayout} style={styles.wrap}>
         <Title>{title}</Title>
-        <Button
-          icon="calendar-range"
-          onPress={() => setVisiblePicker(true)}
-          labelStyle={{ fontSize: 12 }}
-        >
-          {intlDtFormat.format(range.from)} - {intlDtFormat.format(range.to)}
-        </Button>
       </View>
-      <Text style={styles.statValue}>{numberFormatProfit.format(total)}</Text>
+      <View style={styles.wrap}>
+        <Text style={styles.statValue}>{numberFormatProfit.format(total)}</Text>
+        <Chip
+          icon={() => (
+            <Icon
+              name={diffPerc >= 0 ? "arrow-up" : "arrow-down"}
+              size={16}
+              color={Colors.white}
+            />
+          )}
+          textStyle={styles.diffText}
+          style={[
+            styles.diff,
+            {
+              backgroundColor:
+                diffPerc > 0
+                  ? Colors.green400
+                  : diffPerc < 0
+                  ? Colors.red400
+                  : Colors.grey400,
+            },
+          ]}
+        >
+          {(diffPerc * 100).toFixed(2)}%
+        </Chip>
+      </View>
       <VictoryChart
         theme={VictoryTheme.material}
-        width={width || Dimensions.get("window").width}
+        width={width || Dimensions.get("window").width - 64}
         height={320}
       >
         <VictoryAxis
           dependentAxis
-          tickFormat={(t) => intlNumFormat.format(t)}
+          tickFormat={(v) => intlNumFormat.format(v)}
         />
         <VictoryLine
           data={data}
