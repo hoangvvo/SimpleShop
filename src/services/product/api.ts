@@ -6,6 +6,7 @@ import type { Product } from "./types";
 
 const invalidateCache = (client: QueryClient, productId?: Product["id"]) => {
   client.invalidateQueries("products");
+  client.invalidateQueries("calculate");
   if (productId) client.invalidateQueries(["product", productId]);
 };
 

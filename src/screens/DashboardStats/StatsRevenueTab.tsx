@@ -6,17 +6,7 @@ import { useRevenueQuery, useRevenueSlices } from "services/calculate";
 import MoneyChartView from "./components/MoneyChartView";
 import ProductRankList from "./components/ProductRankList";
 import type { RangeProps } from "./shared";
-
-const thisMonthDateInit = () => {
-  const startDate = new Date();
-  const endDate = new Date(startDate);
-  startDate.setDate(1);
-  endDate.setDate(endDate.getDate() + 1);
-  return {
-    from: startDate,
-    to: endDate,
-  };
-};
+import { thisMonthDateInit } from "./shared";
 
 const ChartView: FC<RangeProps> = ({ range, setRange }) => {
   const { t } = useTranslation();

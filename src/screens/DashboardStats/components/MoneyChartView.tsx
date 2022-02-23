@@ -7,7 +7,12 @@ import { Button, Colors, Text, Title } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 import type { RangeChange } from "react-native-paper-dates/lib/typescript/Date/Calendar";
 import { useNumberFormatCurrency } from "utils/currency";
-import { VictoryChart, VictoryLine, VictoryTheme } from "victory-native";
+import {
+  VictoryAxis,
+  VictoryChart,
+  VictoryLine,
+  VictoryTheme,
+} from "victory-native";
 import type { RangeProps } from "../shared";
 
 const styles = StyleSheet.create({
@@ -60,6 +65,14 @@ const MoneyChartView: FC<
     [i18n.language]
   );
 
+  const intlNumFormat = useMemo(
+    () =>
+      Intl.NumberFormat(i18n.language, {
+        notation: "compact",
+      }),
+    [i18n.language]
+  );
+
   return (
     <>
       <DatePickerModal
@@ -91,6 +104,10 @@ const MoneyChartView: FC<
         width={width || Dimensions.get("window").width}
         height={320}
       >
+        <VictoryAxis
+          dependentAxis
+          tickFormat={(t) => intlNumFormat.format(t)}
+        />
         <VictoryLine
           data={data}
           interpolation="natural"

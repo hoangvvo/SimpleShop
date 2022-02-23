@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import { Button, Card } from "react-native-paper";
 import MoneyChartView from "screens/DashboardStats/components/MoneyChartView";
+import { thisMonthDateInit } from "screens/DashboardStats/shared";
 import { RouteName } from "screens/types";
 import { useRevenueQuery, useRevenueSlices } from "services/calculate";
 
@@ -13,17 +14,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 });
-
-const thisMonthDateInit = () => {
-  const startDate = new Date();
-  const endDate = new Date(startDate);
-  startDate.setDate(1);
-  endDate.setDate(endDate.getDate() + 1);
-  return {
-    from: startDate,
-    to: endDate,
-  };
-};
 
 const DashboardRevenue: FC = () => {
   const { t } = useTranslation();
