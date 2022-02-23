@@ -12,25 +12,29 @@ See [Screenshots](./resources/screenshots) to learn more.
 
 ### General features
 
-- Offline-first: Backed by SQLite and allows importing, exporting Data
+- Offline-first, free forever: Backed by SQLite, allowing importing, exporting data
 - Light/Dark theme
 - Multi-languages (See [Supported languages](./src/locales))
 
 ### Orders tracking
 
-- Buy and sell orders: Use _Buy_ order to keep track of Cost and _Sell_ order to keep track of revenue
-- Product price can be overridden, like for the time you sell to your lovely neighbor
+- Import and sell orders: Use _Import_ order to keep track of Stock and Cost and _Sell_ order to keep track of revenue
+- Product price/cost can be overridden, like for the time you give discount for your lovely neighbor
 - Keep track of _paid_ and _delivered_ status
 
-### Profit calculation
+### Profit/Revenue calculation
 
-- Calculate the profits of sold products
+- Calculate the **revenue** and **profits** of sold products
 - Can select date range of calculation
-- Rank products by profit
+- Rank products by revenue and profit
 
 ### Products management
 
-- Update product info and set default sell/buy price
+- Update product info and set default sell price/import cost
+
+### Customers management
+
+- Manage customers to quick fill addresses
 
 ## Development
 
