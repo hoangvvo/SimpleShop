@@ -1,10 +1,9 @@
 import type { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-tabs";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { IconButton, Title } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useQueryClient } from "react-query";
 import type { ParamList } from "screens/types";
 import { RouteName } from "screens/types";
 import { styles as screenStyles } from "styles/screens";
@@ -26,11 +25,6 @@ const DashboardScreen: FC<
 
   const onPressCog = () => navigation.navigate(RouteName.Settings);
 
-  const client = useQueryClient();
-  const onRefresh = () => {
-    client.invalidateQueries();
-  };
-
   return (
     <SafeAreaView style={screenStyles.root}>
       <View style={styles.header}>
@@ -42,9 +36,6 @@ const DashboardScreen: FC<
         />
       </View>
       <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={false} onRefresh={onRefresh} />
-        }
         style={screenStyles.fill}
         contentContainerStyle={screenStyles.content}
       >
