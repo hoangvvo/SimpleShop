@@ -5,14 +5,12 @@ import {
   NavigationContainer,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { ErrorScreen } from "components/Error";
 import { NavigationBar } from "components/NavigationBar";
 import { Toaster } from "components/Toast";
 import merge from "deepmerge";
 import { InitComponent } from "InitComponent";
 import type { FC } from "react";
 import { useMemo } from "react";
-import { ErrorBoundary } from "react-error-boundary";
 import { useTranslation } from "react-i18next";
 import { LogBox, StatusBar } from "react-native";
 import {
@@ -28,6 +26,7 @@ import CustomerEditorScreen from "screens/CustomerEditor";
 import CustomersScreen from "screens/Customers";
 import DashboardScreen from "screens/Dashboard";
 import DashboardStatsScreen from "screens/DashboardStats";
+import DebugScreen from "screens/Debug";
 import OrderEditorScreen from "screens/OrderEditor";
 import OrdersScreen from "screens/Orders";
 import ProductEditorScreen from "screens/ProductEditor";
@@ -155,15 +154,20 @@ const AppInner: FC = () => {
                   name={RouteName.Settings}
                   component={SettingsScreen}
                   options={{
-                    headerTitle: t("settings.title"),
+                    title: t("settings.title"),
                   }}
                 />
                 <Stack.Screen
                   name={RouteName.DashboardStats}
                   component={DashboardStatsScreen}
                   options={{
-                    headerTitle: t("stats.title"),
+                    title: t("stats.title"),
                   }}
+                />
+                <Stack.Screen
+                  name={RouteName.Debug}
+                  component={DebugScreen}
+                  options={{ title: "DEBUG" }}
                 />
               </Stack.Navigator>
             </NavigationContainer>
@@ -177,10 +181,8 @@ const AppInner: FC = () => {
 
 export default function App() {
   return (
-    <ErrorBoundary FallbackComponent={ErrorScreen}>
-      <InitComponent>
-        <AppInner />
-      </InitComponent>
-    </ErrorBoundary>
+    <InitComponent>
+      <AppInner />
+    </InitComponent>
   );
 }

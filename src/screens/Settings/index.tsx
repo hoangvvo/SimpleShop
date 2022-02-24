@@ -1,4 +1,5 @@
 import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { toast } from "components/Toast";
 import { deleteDb, exportDb, importDb } from "db/sqlite";
@@ -6,14 +7,15 @@ import { supportedLngs } from "locales/constants";
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import type { ColorSchemeName } from "react-native";
-import { Alert, Linking, StyleSheet, View } from "react-native";
+import { Alert, Linking, Pressable, StyleSheet, View } from "react-native";
 import DocumentPicker from "react-native-document-picker";
 import { ScrollView } from "react-native-gesture-handler";
 import { Caption, Colors, List, Text, useTheme } from "react-native-paper";
 // @ts-ignore
 import RNRestart from "react-native-restart";
 import { useMutation } from "react-query";
-import type { ParamList, RouteName } from "screens/types";
+import type { ParamList } from "screens/types";
+import { RouteName } from "screens/types";
 import { styles as screenStyles } from "styles/screens";
 import { supportedCurrencies } from "utils/currency";
 import type { SettingsValues } from "utils/settings";
@@ -145,6 +147,7 @@ const SettingsScreen: FC<
     );
 
   const isLoading = isLoadingDelete || isLoadingExport || isLoadingImport;
+  const navigation = useNavigation();
 
   return (
     <ScrollView style={screenStyles.root}>
@@ -266,12 +269,17 @@ const SettingsScreen: FC<
           title="Reset"
         />
       </List.Section>
-      <Caption style={styles.footer}>
-        {appName} v{appVersion}{" "}
-        <Text onPress={onPressGHLink} style={styles.footerLink}>
-          GitHub
-        </Text>
-      </Caption>
+      <Pressable
+        onLongPress={() => navigation.navigate(RouteName.Debug)}
+        delayLongPress={10000}
+      >
+        <Caption style={styles.footer}>
+          {appName} v{appVersion}{" "}
+          <Text onPress={onPressGHLink} style={styles.footerLink}>
+            GitHub
+          </Text>
+        </Caption>
+      </Pressable>
     </ScrollView>
   );
 };

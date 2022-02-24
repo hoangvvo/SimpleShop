@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type SQLite from "react-native-sqlite-storage";
 import { initDb } from "./sqlite";
 
@@ -6,10 +6,16 @@ export const SQLiteContext = createContext({} as SQLite.SQLiteDatabase);
 
 export const useSQLiteInit = (onError: (error: Error) => void) => {
   const [sqlite, setSqlite] = useState<SQLite.SQLiteDatabase | null>(null);
-  const loading = useMemo(() => !sqlite, [sqlite]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (!sqlite) {
-      initDb().then(setSqlite, onError);
+      setLoading(true);
+      initDb()
+        .then(({ db, error }) => {
+          setSqlite(db);
+          if (error) onError(error as Error);
+        }, onError)
+        .finally(() => setLoading(false));
     }
   }, [onError, sqlite]);
   return [loading, sqlite] as const;

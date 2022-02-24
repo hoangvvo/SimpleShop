@@ -56,8 +56,8 @@
     "title_create": "New Customer"
   },
   "error": {
-    "something_went_wrong": "Something went wrong",
-    "general_description": "Sorry, an error has occurred. Please restart this application and try again.",
+    "something_went_wrong": "An error has occurred.",
+    "general_description": "The application will not work correctly. Please restart and contact support if this still happens.",
     "negative_stock": "Some products' stock is negative. This will lead to invalid calculations."
   },
   "entity": {

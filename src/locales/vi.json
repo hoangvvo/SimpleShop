@@ -56,8 +56,8 @@
     "title_create": "Tạo khách hàng"
   },
   "error": {
-    "something_went_wrong": "Có gì đó đã xảy ra",
-    "general_description": "Đã có lỗi xảy ra. Vui lòng khởi động lại ứng dụng.",
+    "something_went_wrong": "Đã có lỗi xảy ra",
+    "general_description": "Ứng dụng sẽ không hoạt động. Vui lòng khởi động lại và liên hệ hỗ trợ nếu lỗi tiếp tục xảy ra.",
     "negative_stock": "Một số sản phẩm có số lượng tồn kho âm. Điều này sẽ dẫn đến tính toán sai lệch."
   },
   "entity": {

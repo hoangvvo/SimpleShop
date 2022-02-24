@@ -21,30 +21,34 @@ const dbParams: DatabaseParams = {
 const migrations = [migrationInit, migrationCustomer];
 const initDBPromise = (async () => {
   const db = await SQLite.openDatabase(dbParams);
-  await db.executeSql(`
+  try {
+    await db.executeSql(`
 CREATE TABLE IF NOT EXISTS migrations (
   id INTEGER PRIMARY KEY NOT NULL,
   migration INTEGER NOT NULL DEFAULT -1
 )`);
-  const indexResult = await db.executeSql(
-    `SELECT migration FROM "migrations" WHERE id = 1`
-  );
-  const migratedIndex = indexResult[0].rows?.item(0)?.migration ?? -1;
-  await db.transaction((tx) => {
-    migrations.forEach((migration, index) => {
-      if (index <= migratedIndex) return;
-      migration.split(`\n\n`).forEach((statement) => {
-        statement = statement.trim();
-        if (statement) tx.executeSql(statement);
-      });
-    });
-    tx.executeSql(
-      `REPLACE INTO "migrations" (id, migration)
-VALUES (1, ?)`,
-      [migrations.length - 1]
+    const indexResult = await db.executeSql(
+      `SELECT migration FROM "migrations" WHERE id = 1`
     );
-  });
-  return db;
+    const migratedIndex = indexResult[0].rows?.item(0)?.migration ?? -1;
+    await db.transaction((tx) => {
+      migrations.forEach((migration, index) => {
+        if (index <= migratedIndex) return;
+        migration.split(`\n\n`).forEach((statement) => {
+          statement = statement.trim();
+          if (statement) tx.executeSql(statement);
+        });
+      });
+      tx.executeSql(
+        `REPLACE INTO "migrations" (id, migration)
+VALUES (1, ?)`,
+        [migrations.length - 1]
+      );
+    });
+  } catch (e) {
+    return { db, error: e };
+  }
+  return { db, error: null };
 })();
 
 export const initDb = async () => {
@@ -70,7 +74,7 @@ export const exportDb = async () => {
   const mimeType = `data:application/vnd.sqlite3`;
   return Share.open({
     url: `${mimeType};base64,${dbBase64}`,
-    filename: dbName,
+    filename: `${dbName.replace("db", "")}${Date.now()}.db`,
     type: mimeType,
   }).then(
     () => true,

@@ -11,6 +11,7 @@ export enum RouteName {
   Customers = "Customers",
   CustomerEditor = "CustomerEditor",
   Settings = "Settings",
+  Debug = "Debug",
 }
 
 export interface ParamList extends ParamListBase {
@@ -26,4 +27,5 @@ export interface ParamList extends ParamListBase {
   [RouteName.Customers]: undefined;
   [RouteName.CustomerEditor]: undefined | { id: number };
   [RouteName.Settings]: undefined;
+  [RouteName.Debug]: undefined;
 }
