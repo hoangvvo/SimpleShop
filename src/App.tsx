@@ -154,14 +154,14 @@ const AppInner: FC = () => {
                   name={RouteName.Settings}
                   component={SettingsScreen}
                   options={{
-                    title: t("settings.title"),
+                    headerTitle: t("settings.title"),
                   }}
                 />
                 <Stack.Screen
                   name={RouteName.DashboardStats}
                   component={DashboardStatsScreen}
                   options={{
-                    title: t("stats.title"),
+                    headerTitle: t("stats.title"),
                   }}
                 />
                 <Stack.Screen

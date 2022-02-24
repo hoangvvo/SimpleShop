@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { ListRenderItem } from "react-native";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import {
   ActivityIndicator,
   Caption,
@@ -12,11 +12,11 @@ import {
   List,
   Text,
 } from "react-native-paper";
+import { useQueryClient } from "react-query";
 import type { ProductInventoryStat } from "services/calculate";
 import { useInventoryCostsQuery } from "services/calculate";
 import { useProductQuery } from "services/product";
 import { useNumberFormatCurrency } from "utils/currency";
-
 const styles = StyleSheet.create({
   fill: {
     flex: 1,
@@ -121,9 +121,17 @@ const StatsInventoryTab: FC = () => {
   );
   const numberFormatProfit = useNumberFormatCurrency();
 
+  const client = useQueryClient();
+
   return (
     <View style={styles.fill}>
       <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={() => client.invalidateQueries(["calculate"])}
+          />
+        }
         style={styles.fill}
         contentContainerStyle={styles.listContainer}
         ListEmptyComponent={isLoading ? <ActivityIndicator /> : null}

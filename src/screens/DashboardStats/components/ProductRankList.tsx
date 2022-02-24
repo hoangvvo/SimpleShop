@@ -2,7 +2,7 @@ import type { FC, ReactNode } from "react";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { ListRenderItem } from "react-native";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import {
   ActivityIndicator,
   Caption,
@@ -11,6 +11,7 @@ import {
   List,
   Text,
 } from "react-native-paper";
+import { useQueryClient } from "react-query";
 import type { OrderProductsStats } from "services/calculate";
 import { useOrderProductsStatsQuery } from "services/calculate";
 import { useProductQuery } from "services/product";
@@ -131,8 +132,16 @@ const ProductRankList: FC<{
     [property]
   );
 
+  const client = useQueryClient();
+
   return (
     <FlatList
+      refreshControl={
+        <RefreshControl
+          refreshing={false}
+          onRefresh={() => client.invalidateQueries(["calculate"])}
+        />
+      }
       style={styles.list}
       contentContainerStyle={styles.listContainer}
       ListEmptyComponent={isLoading ? <ActivityIndicator /> : null}

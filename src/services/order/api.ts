@@ -9,7 +9,7 @@ import type {
   OrderWithOrderProducts,
 } from "./types";
 
-const invalidateCache = (client: QueryClient, orderId?: Order["id"]) => {
+export const invalidateCache = (client: QueryClient, orderId?: Order["id"]) => {
   client.invalidateQueries("orders");
   client.invalidateQueries("orders-count");
   if (orderId) client.invalidateQueries(["order", orderId]);

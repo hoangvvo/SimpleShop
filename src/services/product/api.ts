@@ -4,7 +4,10 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ProductService } from "./service";
 import type { Product } from "./types";
 
-const invalidateCache = (client: QueryClient, productId?: Product["id"]) => {
+export const invalidateCache = (
+  client: QueryClient,
+  productId?: Product["id"]
+) => {
   client.invalidateQueries("products");
   client.invalidateQueries("calculate");
   if (productId) client.invalidateQueries(["product", productId]);

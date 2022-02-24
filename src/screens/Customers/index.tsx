@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ListRenderItem } from "react-native";
-import { StyleSheet } from "react-native";
+import { RefreshControl, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import {
   ActivityIndicator,
@@ -17,10 +17,11 @@ import {
   Title,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useQueryClient } from "react-query";
 import type { ParamList } from "screens/types";
 import { RouteName } from "screens/types";
 import type { Customer } from "services/customer";
-import { useCustomersQuery } from "services/customer";
+import { invalidateCache, useCustomersQuery } from "services/customer";
 import { TabThemeColor } from "styles/Colors";
 import { styles as screenStyles } from "styles/screens";
 
@@ -78,10 +79,18 @@ const CustomersScreen: FC<
     return fuse.search(trimmedSQ).map((result) => result.item);
   }, [fuse, searchQuery, data]);
 
+  const client = useQueryClient();
+
   return (
     <SafeAreaView style={screenStyles.root}>
       <Title style={screenStyles.title}>{t("customer.title_other")}</Title>
       <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={() => invalidateCache(client)}
+          />
+        }
         style={screenStyles.fill}
         contentContainerStyle={screenStyles.content}
         ItemSeparatorComponent={Divider}

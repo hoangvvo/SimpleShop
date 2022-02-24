@@ -4,7 +4,7 @@ import type { FC } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ListRenderItem } from "react-native";
-import { BackHandler, StyleSheet } from "react-native";
+import { BackHandler, RefreshControl, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import {
   ActivityIndicator,
@@ -14,10 +14,11 @@ import {
   Title,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useQueryClient } from "react-query";
 import type { ParamList } from "screens/types";
 import { RouteName } from "screens/types";
 import type { Order } from "services/order";
-import { useOrdersQuery } from "services/order";
+import { invalidateCache, useOrdersQuery } from "services/order";
 import { TabThemeColor } from "styles/Colors";
 import { styles as screenStyles } from "styles/screens";
 import OrderItem from "./components/OrderItem";
@@ -67,10 +68,18 @@ const OrdersScreen: FC<
     }, [addBtn])
   );
 
+  const client = useQueryClient();
+
   return (
     <SafeAreaView style={screenStyles.root}>
       <Title style={screenStyles.title}>{t("order.title_other")}</Title>
       <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={() => invalidateCache(client)}
+          />
+        }
         style={screenStyles.fill}
         contentContainerStyle={screenStyles.content}
         ItemSeparatorComponent={Divider}

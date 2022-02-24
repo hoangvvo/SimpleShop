@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ListRenderItem } from "react-native";
-import { StyleSheet, View } from "react-native";
+import { RefreshControl, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import {
   ActivityIndicator,
@@ -20,11 +20,12 @@ import {
   useTheme,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useQueryClient } from "react-query";
 import type { ParamList } from "screens/types";
 import { RouteName } from "screens/types";
 import { useProductsStockQuery } from "services/calculate";
 import type { Product } from "services/product";
-import { useProductsQuery } from "services/product";
+import { invalidateCache, useProductsQuery } from "services/product";
 import { TabThemeColor } from "styles/Colors";
 import { styles as screenStyles } from "styles/screens";
 
@@ -118,10 +119,18 @@ const ProductsScreen: FC<
 
   const theme = useTheme();
 
+  const client = useQueryClient();
+
   return (
     <SafeAreaView style={screenStyles.root}>
       <Title style={screenStyles.title}>{t("product.title_other")}</Title>
       <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={() => invalidateCache(client)}
+          />
+        }
         style={screenStyles.fill}
         contentContainerStyle={screenStyles.content}
         ItemSeparatorComponent={Divider}
