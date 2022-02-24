@@ -15,11 +15,11 @@ import type { OrderProductsStats } from "services/calculate";
 import { useOrderProductsStatsQuery } from "services/calculate";
 import { useProductQuery } from "services/product";
 import { useNumberFormatCurrency } from "utils/currency";
+import { calcProfit } from "utils/number";
 
 const styles = StyleSheet.create({
   list: {
     flex: 1,
-    marginTop: 16,
   },
   listAmount: {
     color: Colors.blue400,
@@ -69,6 +69,8 @@ const OrderProductStatItem: FC<{
   const { data: product } = useProductQuery(stats.product_id);
   const numberFormatProfit = useNumberFormatCurrency();
 
+  const val = property === "revenue" ? stats.revenue : calcProfit(stats);
+
   return (
     <List.Item
       left={({ style }) => (
@@ -85,7 +87,7 @@ const OrderProductStatItem: FC<{
           </View>
           <View style={[styles.listSide, styles.listProfitWidth, style]}>
             <Text style={styles.listProfit}>
-              {numberFormatProfit.format(stats[property])}
+              {numberFormatProfit.format(val)}
             </Text>
           </View>
         </>
@@ -112,7 +114,7 @@ const ProductRankList: FC<{
   const sortedOrderProductsStats = useMemo(
     () =>
       orderProductsStats
-        ? [...orderProductsStats].sort((a, b) => b.profit - a.profit)
+        ? [...orderProductsStats].sort((a, b) => calcProfit(b) - calcProfit(a))
         : undefined,
     [orderProductsStats]
   );

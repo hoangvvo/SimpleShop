@@ -1,6 +1,8 @@
 import type { SQLiteDatabase } from "react-native-sqlite-storage";
 import type { Order } from "services/order";
 import { OrderService } from "services/order";
+import { calcProfit } from "utils/number";
+import type { ProductInventoryStat } from ".";
 import type { OrderProductsStats } from "./types";
 
 export class CalculateService {
@@ -15,13 +17,7 @@ export class CalculateService {
     ]);
     const ordersMap = new Map<Order["id"], Order>();
     const productsMap = Object.create({}) as {
-      [key: number]: {
-        _calc: number;
-        amount: number;
-        profit: number;
-        revenue: number;
-        cost: number;
-      };
+      [key: number]: OrderProductsStats & { _calc: number };
     };
     for (const order of allOrders) {
       ordersMap.set(order.id, order);
@@ -31,8 +27,8 @@ export class CalculateService {
       if (!order) return false;
       if (!(orderProduct.product_id in productsMap))
         productsMap[orderProduct.product_id] = {
+          product_id: orderProduct.product_id,
           amount: 0,
-          profit: 0,
           cost: 0,
           revenue: 0,
           _calc: 0,
@@ -58,19 +54,60 @@ export class CalculateService {
       productsMap[filteredBuyOrder.product_id].cost +=
         subtractableAmount * filteredBuyOrder.per_price;
     }
-    const arr: OrderProductsStats[] = [];
 
-    for (const [key, value] of Object.entries(productsMap)) {
-      arr.push({
-        product_id: Number(key),
-        amount: value.amount,
-        revenue: value.revenue,
-        cost: value.cost,
-        profit: value.revenue - value.cost,
-      });
+    return Object.values(productsMap);
+  }
+
+  static async getInventoryCost(db: SQLiteDatabase) {
+    const [allOrders, allOrderProducts] = await Promise.all([
+      OrderService.findAll(db),
+      OrderService.findAllProducts(db),
+    ]);
+    const ordersMap = new Map<Order["id"], Order>();
+    const productsMap = Object.create({}) as {
+      [key: number]: ProductInventoryStat;
+    };
+    for (const order of allOrders) {
+      ordersMap.set(order.id, order);
     }
 
-    return arr;
+    allOrderProducts.forEach((orderProduct) => {
+      const order = ordersMap.get(orderProduct.order_id);
+      if (!order) return;
+      if (!(orderProduct.product_id in productsMap))
+        productsMap[orderProduct.product_id] = {
+          product_id: orderProduct.product_id,
+          inventory: 0,
+          cost: 0,
+        };
+      if (!order.is_buy_order) {
+        productsMap[orderProduct.product_id].inventory -= orderProduct.amount;
+      }
+      return;
+    });
+
+    allOrderProducts.forEach((orderProduct) => {
+      const order = ordersMap.get(orderProduct.order_id);
+      if (!order) return;
+      if (!(orderProduct.product_id in productsMap))
+        productsMap[orderProduct.product_id] = {
+          product_id: orderProduct.product_id,
+          inventory: 0,
+          cost: 0,
+        };
+      if (order.is_buy_order) {
+        const countableAmount = Math.min(
+          orderProduct.amount + productsMap[orderProduct.product_id].inventory,
+          orderProduct.amount
+        );
+        productsMap[orderProduct.product_id].inventory += orderProduct.amount;
+        productsMap[orderProduct.product_id].cost +=
+          countableAmount * orderProduct.per_price;
+      }
+      return;
+    });
+
+    return Object.values(productsMap);
   }
 
   static async getProfit(
@@ -85,7 +122,7 @@ export class CalculateService {
         toTimestamp
       );
     return calculatedOrderProductArr.reduce(
-      (prev, current) => (prev += current.profit),
+      (prev, current) => (prev += calcProfit(current)),
       0
     );
   }

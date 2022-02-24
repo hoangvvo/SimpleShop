@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import { RouteName } from "screens/types";
-import { useProfitQuery } from "services/calculate";
+import { useInventoryCostsQuery, useProfitQuery } from "services/calculate";
 import { useOrdersCountQuery } from "services/order";
 import { useNumberFormatCurrency } from "utils/currency";
 import StatBlock from "./StatBlock";
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
   stats: {
     flexDirection: "row",
-    paddingVertical: 8,
+    marginTop: 8,
   },
 });
 
@@ -59,6 +59,31 @@ const ProfitBlock: FC = () => {
   );
 };
 
+const InventoryCostBlock: FC = () => {
+  const { t } = useTranslation();
+
+  const navigation = useNavigation();
+
+  const { data } = useInventoryCostsQuery();
+  const total = useMemo(
+    () => data?.reduce((prev: number = 0, curr) => prev + curr.cost, 0),
+    [data]
+  );
+
+  const numberFormatProfit = useNumberFormatCurrency(profitFormatOptions);
+
+  return (
+    <StatBlock
+      title={t("stats.inventory")}
+      subtitle={t("stats.cost")}
+      value={numberFormatProfit.format(total || 0)}
+      onPress={() =>
+        navigation.navigate(RouteName.DashboardStats, { tab: "inventory" })
+      }
+    />
+  );
+};
+
 const OrderCountBlock: FC = () => {
   const { t } = useTranslation();
 
@@ -82,10 +107,17 @@ const OrderCountBlock: FC = () => {
 
 export const DashboardBlocks: FC = () => {
   return (
-    <View style={styles.stats}>
-      <ProfitBlock />
-      <View style={styles.gutter} />
-      <OrderCountBlock />
-    </View>
+    <>
+      <View style={styles.stats}>
+        <ProfitBlock />
+        <View style={styles.gutter} />
+        <OrderCountBlock />
+      </View>
+      <View style={styles.stats}>
+        <InventoryCostBlock />
+        <View style={styles.gutter} />
+        <View style={{ flex: 1, padding: 12 }} />
+      </View>
+    </>
   );
 };

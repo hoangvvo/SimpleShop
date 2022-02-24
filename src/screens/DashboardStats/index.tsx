@@ -10,12 +10,14 @@ import type {
 } from "react-native-tab-view";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import type { ParamList, RouteName } from "screens/types";
+import StatsInventoryTab from "./StatsInventoryTab";
 import StatsProfitTab from "./StatsProfitTab";
 import StatsRevenueTab from "./StatsRevenueTab";
 
 const renderScene = SceneMap({
   revenue: StatsRevenueTab,
   profit: StatsProfitTab,
+  inventory: StatsInventoryTab,
 });
 
 const ThemedTabbar: FC<
@@ -51,6 +53,7 @@ const DashboardStatsScreen: FC<
     () => [
       { key: "revenue", title: t("stats.revenue") },
       { key: "profit", title: t("stats.profit") },
+      { key: "inventory", title: t("stats.inventory") },
     ],
     [t]
   );

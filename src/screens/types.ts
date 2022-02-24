@@ -16,7 +16,9 @@ export enum RouteName {
 export interface ParamList extends ParamListBase {
   [RouteName.Main]: undefined;
   [RouteName.Dashboard]: undefined;
-  [RouteName.DashboardStats]: { tab?: "revenue" | "profit" } | undefined;
+  [RouteName.DashboardStats]:
+    | { tab?: "revenue" | "profit" | "inventory" }
+    | undefined;
   [RouteName.Orders]: undefined;
   [RouteName.OrderEditor]: { id?: number; isBuyOrder: boolean };
   [RouteName.Products]: undefined;

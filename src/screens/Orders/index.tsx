@@ -175,6 +175,7 @@ const OrdersScreen: FC<
   const { t } = useTranslation();
 
   const { data, isLoading } = useOrdersQuery();
+  const sortedData = useMemo(() => [...(data || [])].reverse(), [data]);
 
   const [addBtn, setAddBtn] = useState(false);
 
@@ -206,7 +207,7 @@ const OrdersScreen: FC<
         contentContainerStyle={screenStyles.content}
         ItemSeparatorComponent={Divider}
         ListEmptyComponent={isLoading ? <ActivityIndicator /> : null}
-        data={data}
+        data={sortedData}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
       />

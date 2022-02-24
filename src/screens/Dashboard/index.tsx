@@ -10,7 +10,6 @@ import { RouteName } from "screens/types";
 import { styles as screenStyles } from "styles/screens";
 import { DashboardBlocks } from "./components/DashboardBlocks";
 import DashboardRevenue from "./components/DashboardRevenue";
-import NegativeStockWarn from "./components/NegativeStockWarn";
 
 const styles = StyleSheet.create({
   header: {
@@ -49,7 +48,6 @@ const DashboardScreen: FC<
         style={screenStyles.fill}
         contentContainerStyle={screenStyles.content}
       >
-        <NegativeStockWarn />
         <DashboardRevenue />
         <DashboardBlocks />
       </ScrollView>

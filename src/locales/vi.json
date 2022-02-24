@@ -58,7 +58,7 @@
   "error": {
     "something_went_wrong": "Có gì đó đã xảy ra",
     "general_description": "Đã có lỗi xảy ra. Vui lòng khởi động lại ứng dụng.",
-    "negative_stock": "Một số sản phẩm có số lượng bán ra nhiều hơn mua vào. Điều này sẽ dẫn đến tính toán sai lệch."
+    "negative_stock": "Một số sản phẩm có số lượng tồn kho âm. Điều này sẽ dẫn đến tính toán sai lệch."
   },
   "entity": {
     "has_been_created": "{{ name }} đã được tạo",
@@ -98,6 +98,7 @@
     "profit": "Lợi nhuận",
     "revenue": "Doanh thu",
     "cost": "Chi phí",
+    "inventory": "Tồn kho",
     "view_detail": "Xem chi tiết"
   },
   "time": {

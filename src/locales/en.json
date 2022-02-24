@@ -58,7 +58,7 @@
   "error": {
     "something_went_wrong": "Something went wrong",
     "general_description": "Sorry, an error has occurred. Please restart this application and try again.",
-    "negative_stock": "Some products' sell amounts are greater than their buy amounts. This will lead to invalid calculations."
+    "negative_stock": "Some products' stock is negative. This will lead to invalid calculations."
   },
   "entity": {
     "has_been_created": "{{ name }} has been created",
@@ -98,6 +98,7 @@
     "profit": "Profit",
     "revenue": "Revenue",
     "cost": "Cost",
+    "inventory": "Inventory",
     "view_detail": "View Detail"
   },
   "time": {

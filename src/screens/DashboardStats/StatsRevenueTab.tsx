@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card } from "react-native-paper";
+import type { SliceData } from "services/calculate";
 import { useRevenueQuery, useRevenueSlices } from "services/calculate";
 import MoneyChartView from "./components/MoneyChartView";
 import ProductRankList from "./components/ProductRankList";
@@ -25,6 +26,13 @@ const ChartView: FC<RangeProps> = ({ range, setRange }) => {
     return slices.some((slice) => slice.isLoading);
   }, [slices, isLoading, isLoadingPrev]);
 
+  const filteredSlices = useMemo<SliceData[]>(() => {
+    if (fetching) return [];
+    return (slices || [])
+      .filter((v) => !!v.data)
+      .map((slice) => slice.data) as SliceData[];
+  }, [fetching, slices]);
+
   return (
     <Card>
       <Card.Content>
@@ -32,13 +40,7 @@ const ChartView: FC<RangeProps> = ({ range, setRange }) => {
           title={t("stats.revenue")}
           range={range}
           setRange={setRange}
-          data={
-            (slices.filter((v) => !!v.data).map((slice) => slice.data) as {
-              from: number;
-              to: number;
-              value: number;
-            }[]) || []
-          }
+          data={filteredSlices}
           total={data || 0}
           previousTotal={previousData || 0}
           fetching={fetching}

@@ -7,6 +7,7 @@ import { Button, Card } from "react-native-paper";
 import MoneyChartView from "screens/DashboardStats/components/MoneyChartView";
 import { thisMonthDateInit } from "screens/DashboardStats/shared";
 import { RouteName } from "screens/types";
+import type { SliceData } from "services/calculate";
 import { useRevenueQuery, useRevenueSlices } from "services/calculate";
 
 const styles = StyleSheet.create({
@@ -37,6 +38,13 @@ const DashboardRevenue: FC = () => {
     return slices.some((slice) => slice.isLoading);
   }, [slices, isLoading, isLoadingPrev]);
 
+  const filteredSlices = useMemo<SliceData[]>(() => {
+    if (fetching) return [];
+    return (slices || [])
+      .filter((v) => !!v.data)
+      .map((slice) => slice.data) as SliceData[];
+  }, [fetching, slices]);
+
   const navigation = useNavigation();
 
   return (
@@ -46,13 +54,7 @@ const DashboardRevenue: FC = () => {
           title={t("stats.revenue")}
           range={range}
           setRange={setRange}
-          data={
-            (slices.filter((v) => !!v.data).map((slice) => slice.data) as {
-              from: number;
-              to: number;
-              value: number;
-            }[]) || []
-          }
+          data={filteredSlices}
           total={data || 0}
           previousTotal={previousData || 0}
           fetching={fetching}

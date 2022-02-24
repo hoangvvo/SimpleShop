@@ -1,6 +1,7 @@
 import { useSQLite } from "db";
 import type { QueryFunctionContext } from "react-query";
 import { useQueries, useQuery } from "react-query";
+import type { SliceData } from ".";
 import { CalculateService } from "./service";
 
 const ONE_DAY = 86400000;
@@ -20,7 +21,7 @@ export function useProfitSlices(from: Date, to: Date) {
         toTimestamp: number;
       }[]
     >
-  ) => ({
+  ): Promise<SliceData> => ({
     from: ctx.queryKey[2].fromTimestamp,
     to: ctx.queryKey[2].toTimestamp,
     value: await CalculateService.getProfit(
@@ -125,5 +126,12 @@ export function useOrderProductsStatsQuery(
   return useQuery(
     ["calculate", "order-products-stats", { fromTimestamp, toTimestamp }],
     () => CalculateService.getOrderProductsStats(db, fromTimestamp, toTimestamp)
+  );
+}
+
+export function useInventoryCostsQuery() {
+  const db = useSQLite();
+  return useQuery(["calculate", "inventory-costs"], () =>
+    CalculateService.getInventoryCost(db)
   );
 }

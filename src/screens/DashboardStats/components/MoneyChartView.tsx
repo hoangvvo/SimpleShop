@@ -14,6 +14,7 @@ import {
 import { DatePickerModal } from "react-native-paper-dates";
 import type { RangeChange } from "react-native-paper-dates/lib/typescript/Date/Calendar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import type { SliceData } from "services/calculate";
 import { useNumberFormatCurrency } from "utils/currency";
 import {
   VictoryAxis,
@@ -58,11 +59,7 @@ const profitFormatOptions: Intl.NumberFormatOptions = {
 
 const MoneyChartView: FC<
   RangeProps & {
-    data: {
-      from: number;
-      to: number;
-      value: number;
-    }[];
+    data: SliceData[];
     total: number;
     previousTotal: number;
     title: string;
@@ -99,6 +96,7 @@ const MoneyChartView: FC<
   );
 
   const diffPerc = useMemo(() => {
+    if (previousTotal === 0 && total === 0) return 0;
     if (previousTotal === 0) return 1;
     return (total - previousTotal) / previousTotal;
   }, [total, previousTotal]);
