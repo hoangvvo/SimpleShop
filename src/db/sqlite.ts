@@ -45,6 +45,7 @@ VALUES (1, ?)`,
         [migrations.length - 1]
       );
     });
+    await db.executeSql(`PRAGMA foreign_keys = ON`);
   } catch (e) {
     return { db, error: e };
   }

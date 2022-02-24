@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS order_product (
   product_id INTEGER NOT NULL,
   per_price DECIMAL(12, 2) NOT NULL CHECK(per_price >= 0),
   amount INTEGER NOT NULL CHECK(amount >= 0),
-  FOREIGN KEY (order_id) REFERENCES "order(id)" ON DELETE CASCADE,
+  FOREIGN KEY (order_id) REFERENCES "order"(id) ON DELETE CASCADE,
   FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE,
   UNIQUE(order_id,product_id)
 )
