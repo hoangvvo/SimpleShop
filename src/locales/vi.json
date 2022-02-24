@@ -25,6 +25,8 @@
     "order_no_products": "Đơn hàng này không có sản phẩm",
     "product_list": "Danh sách sản phẩm",
     "search_prompt": "Tìm kiếm sản phẩm để thêm vào danh sách",
+    "show_all": "Hiện tất cả",
+    "show_all_off": "Chỉ hiện đã thêm",
     "add": "Thêm"
   },
   "product": {

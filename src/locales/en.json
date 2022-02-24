@@ -25,6 +25,8 @@
     "order_no_products": "This order has no products",
     "product_list": "Product List",
     "search_prompt": "Search a product to add it to the list",
+    "show_all": "Show all",
+    "show_all_off": "Show added only",
     "add": "Add"
   },
   "product": {

@@ -255,6 +255,8 @@ const ProductList: FC<{
   const { t } = useTranslation();
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [showAll, setShowAll] = useState(false);
+  const toggleShowAll = () => setShowAll(!showAll);
 
   const { data: dataProducts, status: statusGetProducts } = useProductsQuery();
   const fuse = useMemo(
@@ -288,10 +290,12 @@ const ProductList: FC<{
     if (trimmedSQ !== "") {
       return fuse.search(trimmedSQ).map((result) => result.item);
     }
-    return dataProducts?.filter((p) =>
-      orderProducts.some((oP) => oP.product_id === p.id)
-    );
-  }, [dataProducts, searchQuery, orderProducts, fuse]);
+    if (showAll) return dataProducts;
+    else
+      return dataProducts?.filter((p) =>
+        orderProducts.some((oP) => oP.product_id === p.id)
+      );
+  }, [dataProducts, searchQuery, orderProducts, fuse, showAll]);
 
   const onDone = () => {
     for (const hasError of formMapRef.current.values()) {
@@ -325,9 +329,18 @@ const ProductList: FC<{
             <ProductListEmpty />
           ) : null
         }
+        ListFooterComponent={
+          searchQuery === "" ? (
+            <Button labelStyle={{ fontSize: 12 }} onPress={toggleShowAll}>
+              {t(
+                showAll ? "order_editor.show_all_off" : "order_editor.show_all"
+              )}
+            </Button>
+          ) : null
+        }
       />
       <Dialog.Actions>
-        <Button mode="text" onPress={onDone} style={styles.btnDone}>
+        <Button mode="contained" onPress={onDone} style={styles.btnDone}>
           {t("action.done")}
         </Button>
       </Dialog.Actions>
