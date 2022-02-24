@@ -7,6 +7,7 @@ import type { ListRenderItem } from "react-native";
 import { BackHandler, Linking, Platform, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import {
+  ActivityIndicator,
   Card,
   Colors,
   Divider,
@@ -87,7 +88,12 @@ const OrderItem: FC<{ order: Order & { customer_name?: string } }> = ({
             accessibilityLabel={t("order.loc_text")}
             onPress={openMap}
           >
-            <Icon style={{ marginTop: 12 }} name="map" size={24} />
+            <Icon
+              color={Colors.blue400}
+              style={{ marginTop: 12 }}
+              name="map"
+              size={24}
+            />
           </Card>
         )}
         <Card
@@ -168,7 +174,7 @@ const OrdersScreen: FC<
 > = ({ navigation }) => {
   const { t } = useTranslation();
 
-  const { data } = useOrdersQuery();
+  const { data, isLoading } = useOrdersQuery();
 
   const [addBtn, setAddBtn] = useState(false);
 
@@ -199,6 +205,7 @@ const OrdersScreen: FC<
         style={screenStyles.fill}
         contentContainerStyle={screenStyles.content}
         ItemSeparatorComponent={Divider}
+        ListEmptyComponent={isLoading ? <ActivityIndicator /> : null}
         data={data}
         renderItem={renderItem}
         keyExtractor={keyExtractor}

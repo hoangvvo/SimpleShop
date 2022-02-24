@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import type { FC } from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import { Button, Card } from "react-native-paper";
@@ -23,11 +23,19 @@ const DashboardRevenue: FC = () => {
   }>(thisMonthDateInit);
 
   const slices = useRevenueSlices(range.from, range.to);
-  const { data } = useRevenueQuery(range.from.getTime(), range.to.getTime());
-  const { data: previousData } = useRevenueQuery(
+  const { data, isLoading } = useRevenueQuery(
+    range.from.getTime(),
+    range.to.getTime()
+  );
+  const { data: previousData, isLoading: isLoadingPrev } = useRevenueQuery(
     range.from.getTime() - (range.to.getTime() - range.from.getTime()),
     range.from.getTime()
   );
+
+  const fetching = useMemo(() => {
+    if (isLoading || isLoadingPrev) return true;
+    return slices.some((slice) => slice.isLoading);
+  }, [slices, isLoading, isLoadingPrev]);
 
   const navigation = useNavigation();
 
@@ -47,6 +55,7 @@ const DashboardRevenue: FC = () => {
           }
           total={data || 0}
           previousTotal={previousData || 0}
+          fetching={fetching}
         />
       </Card.Content>
       <Card.Actions style={styles.actions}>

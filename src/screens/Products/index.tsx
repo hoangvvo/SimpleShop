@@ -8,6 +8,7 @@ import type { ListRenderItem } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import {
+  ActivityIndicator,
   Caption,
   Colors,
   Divider,
@@ -99,7 +100,7 @@ const ProductsScreen: FC<
   const { t } = useTranslation();
   const onAdd = () => navigation.navigate(RouteName.ProductEditor);
 
-  const { data } = useProductsQuery();
+  const { data, isLoading } = useProductsQuery();
   const fuse = useMemo(
     () =>
       new Fuse(data || [], {
@@ -124,6 +125,7 @@ const ProductsScreen: FC<
         style={screenStyles.fill}
         contentContainerStyle={screenStyles.content}
         ItemSeparatorComponent={Divider}
+        ListEmptyComponent={isLoading ? <ActivityIndicator /> : null}
         stickyHeaderIndices={[0]}
         ListHeaderComponent={
           <View style={{ backgroundColor: theme.colors.background }}>

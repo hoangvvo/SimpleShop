@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card } from "react-native-paper";
 import { useRevenueQuery, useRevenueSlices } from "services/calculate";
@@ -11,11 +11,19 @@ import { thisMonthDateInit } from "./shared";
 const ChartView: FC<RangeProps> = ({ range, setRange }) => {
   const { t } = useTranslation();
   const slices = useRevenueSlices(range.from, range.to);
-  const { data } = useRevenueQuery(range.from.getTime(), range.to.getTime());
-  const { data: previousData } = useRevenueQuery(
+  const { data, isLoading } = useRevenueQuery(
+    range.from.getTime(),
+    range.to.getTime()
+  );
+  const { data: previousData, isLoading: isLoadingPrev } = useRevenueQuery(
     range.from.getTime() - (range.to.getTime() - range.from.getTime()),
     range.from.getTime()
   );
+
+  const fetching = useMemo(() => {
+    if (isLoading || isLoadingPrev) return true;
+    return slices.some((slice) => slice.isLoading);
+  }, [slices, isLoading, isLoadingPrev]);
 
   return (
     <Card>
@@ -33,6 +41,7 @@ const ChartView: FC<RangeProps> = ({ range, setRange }) => {
           }
           total={data || 0}
           previousTotal={previousData || 0}
+          fetching={fetching}
         />
       </Card.Content>
     </Card>

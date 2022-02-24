@@ -3,7 +3,14 @@ import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { ListRenderItem } from "react-native";
 import { FlatList, StyleSheet, View } from "react-native";
-import { Caption, Colors, Divider, List, Text } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Caption,
+  Colors,
+  Divider,
+  List,
+  Text,
+} from "react-native-paper";
 import type { OrderProductsStats } from "services/calculate";
 import { useOrderProductsStatsQuery } from "services/calculate";
 import { useProductQuery } from "services/product";
@@ -97,7 +104,7 @@ const ProductRankList: FC<{
 }> = ({ property, range, ListHeaderNode }) => {
   const { t } = useTranslation();
 
-  const { data: orderProductsStats } = useOrderProductsStatsQuery(
+  const { data: orderProductsStats, isLoading } = useOrderProductsStatsQuery(
     range.from.getTime(),
     range.to.getTime()
   );
@@ -126,6 +133,7 @@ const ProductRankList: FC<{
     <FlatList
       style={styles.list}
       contentContainerStyle={styles.listContainer}
+      ListEmptyComponent={isLoading ? <ActivityIndicator /> : null}
       ListHeaderComponent={
         <>
           {ListHeaderNode}

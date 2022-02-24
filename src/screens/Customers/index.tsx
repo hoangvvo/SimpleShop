@@ -7,7 +7,15 @@ import { useTranslation } from "react-i18next";
 import type { ListRenderItem } from "react-native";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { Divider, FAB, List, Searchbar, Text, Title } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Divider,
+  FAB,
+  List,
+  Searchbar,
+  Text,
+  Title,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { ParamList } from "screens/types";
 import { RouteName } from "screens/types";
@@ -54,7 +62,7 @@ const CustomersScreen: FC<
   const { t } = useTranslation();
   const onAdd = () => navigation.navigate(RouteName.CustomerEditor);
 
-  const { data } = useCustomersQuery();
+  const { data, isLoading } = useCustomersQuery();
   const fuse = useMemo(
     () =>
       new Fuse(data || [], {
@@ -77,6 +85,7 @@ const CustomersScreen: FC<
         style={screenStyles.fill}
         contentContainerStyle={screenStyles.content}
         ItemSeparatorComponent={Divider}
+        ListEmptyComponent={isLoading ? <ActivityIndicator /> : null}
         stickyHeaderIndices={[0]}
         ListHeaderComponent={
           <>

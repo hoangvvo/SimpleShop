@@ -3,7 +3,14 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { LayoutChangeEvent } from "react-native";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { Button, Chip, Colors, Text, Title } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Button,
+  Chip,
+  Colors,
+  Text,
+  Title,
+} from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 import type { RangeChange } from "react-native-paper-dates/lib/typescript/Date/Calendar";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -24,6 +31,12 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontSize: 14,
     fontWeight: "bold",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(255,255,255,.3)",
+    justifyContent: "center",
+    zIndex: 1,
   },
   statValue: {
     color: Colors.blue400,
@@ -53,8 +66,9 @@ const MoneyChartView: FC<
     total: number;
     previousTotal: number;
     title: string;
+    fetching?: boolean;
   }
-> = ({ range, setRange, data, total, previousTotal, title }) => {
+> = ({ range, setRange, data, total, previousTotal, title, fetching }) => {
   const { t, i18n } = useTranslation();
 
   const numberFormatProfit = useNumberFormatCurrency(profitFormatOptions);
@@ -91,6 +105,11 @@ const MoneyChartView: FC<
 
   return (
     <>
+      {fetching && (
+        <View style={styles.overlay} pointerEvents="none">
+          <ActivityIndicator animating={true} />
+        </View>
+      )}
       <DatePickerModal
         locale="en"
         mode="range"
