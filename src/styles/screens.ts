@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  content: { paddingHorizontal: 16 },
+  content: { flex: 1, paddingHorizontal: 16 },
   fab: {
     bottom: 16,
     position: "absolute",

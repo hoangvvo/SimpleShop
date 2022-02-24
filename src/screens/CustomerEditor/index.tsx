@@ -6,8 +6,8 @@ import type { FC } from "react";
 import { useEffect, useLayoutEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { ScrollView, View } from "react-native";
-import { Appbar, TextInput } from "react-native-paper";
+import { View } from "react-native";
+import { Appbar, Divider, TextInput } from "react-native-paper";
 import type { ParamList, RouteName } from "screens/types";
 import type { Customer } from "services/customer";
 import {
@@ -17,6 +17,7 @@ import {
 } from "services/customer";
 import { styles as screenStyles } from "styles/screens";
 import { CustomerDelete } from "./components/CustomerDelete";
+import CustomerOrders from "./components/CustomerOrders";
 
 const rules = {
   name: {
@@ -125,7 +126,7 @@ const CustomerEditorScreen: FC<
       {statusGetEdit === "loading" ? (
         <LoadingScreen />
       ) : (
-        <ScrollView style={screenStyles.content}>
+        <View style={screenStyles.content}>
           <Controller
             control={control}
             rules={rules.name}
@@ -179,30 +180,10 @@ const CustomerEditorScreen: FC<
             }}
             name="loc_text"
           />
-          <Controller
-            control={control}
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { error },
-            }) => (
-              <View>
-                <TextInput
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  maxLength={256}
-                  label={t("customer.note")}
-                  multiline
-                  numberOfLines={3}
-                  disabled={isLoading}
-                />
-                <FormHelperText error={error} name={t("customer.note")} />
-              </View>
-            )}
-            name="note"
-          />
+          <Divider />
+          {dataGetEdit && <CustomerOrders customer={dataGetEdit} />}
           {dataGetEdit && <CustomerDelete customer={dataGetEdit} />}
-        </ScrollView>
+        </View>
       )}
     </View>
   );

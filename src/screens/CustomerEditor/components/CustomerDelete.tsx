@@ -11,6 +11,7 @@ import { useCustomerDeleteMutation } from "services/customer";
 const styles = StyleSheet.create({
   button: {
     backgroundColor: Colors.red400,
+    marginVertical: 8,
   },
 });
 

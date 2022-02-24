@@ -23,6 +23,17 @@ export const useOrdersQuery = () => {
   );
 };
 
+export const useOrdersQueryByCustomerId = (customerId: number) => {
+  const db = useSQLite();
+  return useQuery<(Order & { customer_name?: string })[]>(
+    "orders",
+    async () => {
+      const orders = await OrderService.findAll(db);
+      return orders.filter((order) => order.customer_id === customerId);
+    }
+  );
+};
+
 export const useOrderProductsQuery = () => {
   const db = useSQLite();
   return useQuery<OrderProduct[]>("order-products", () =>
