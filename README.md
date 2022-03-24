@@ -6,7 +6,7 @@ I made this for a family member who runs her own small shop,
 so it would not be suitable for large scale operations, in which case
 you should consider a more advanced solution like Shopify or [Saleor](https://github.com/mirumee/saleor).
 
-See [Screenshots](./resources/screenshots) to learn more.
+Google Play: https://play.google.com/store/apps/details?id=com.hoangvvo.simpleshop
 
 ## Features
 
